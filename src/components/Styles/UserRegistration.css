@@ -1,4 +1,4 @@
-.doctor-info-root img{
+.user-info-root img{
   height: 150px;
   width: 150px;
 }
@@ -24,7 +24,7 @@
   color: red;
 }
 
-.doctor-profile-edit label{
+.user-profile-edit label{
   color: #F969A4;
   padding: 0 !important;
 }

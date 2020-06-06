@@ -58,6 +58,7 @@ export default class UserPersona extends Component {
                     <Callout
                         target={this._personaButtonElementRef.current}
                         setInitialFocus
+                        onDismiss={this.onDismiss}
                     >
                         <span role="list">
                             <span role="listitem" onClick={() => {this.showModals("Register")}}>
