@@ -23,20 +23,24 @@ export default class UserPersona extends Component {
         });
     }
 
-    userRegisterModal = () => {
+    showModals = (modalType) => {
+        modalType === "Register" ?
         this.setState({
             showRegistrationModal: true,
             isCalloutVisible: false,
             showLoginModal:false
-        });
-    }
-
-    userLoginModal = () => {
+        }) :
+        modalType === "Login" ?
         this.setState({
-            showLoginModal: true,
+            showRegistrationModal: false,
             isCalloutVisible: false,
-            showRegistrationModal: false
-        });
+            showLoginModal:true
+        }) :
+        this.setState({
+            showRegistrationModal: false,
+            isCalloutVisible: false,
+            showLoginModal:false
+        })
     }
 
     render() {
@@ -56,11 +60,11 @@ export default class UserPersona extends Component {
                         setInitialFocus
                     >
                         <span role="list">
-                            <span role="listitem" onClick={() => {this.userRegisterModal()}}>
+                            <span role="listitem" onClick={() => {this.showModals("Register")}}>
                                 Register
                             </span>
                             <hr />
-                            <span role="listitem" onClick={() => {this.userLoginModal()}}>
+                            <span role="listitem" onClick={() => {this.showModals("Login")}}>
                                 Login
                             </span>
                             <hr />
