@@ -11,6 +11,10 @@ export default class FeaturedPlaylist extends Component {
         }
     }
 
+    onMoreClick = () =>{
+        this.props.history.push('/FeaturedPlaylists');
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -18,7 +22,7 @@ export default class FeaturedPlaylist extends Component {
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Featured Playlists
-                            <button>More</button>
+                            <button onClick={this.onMoreClick}>More</button>
                         </div>
                         <div className="row">
                             {this.state.playlistItems.map(() => (
@@ -29,7 +33,6 @@ export default class FeaturedPlaylist extends Component {
                         </div>
                     </div>
                 </div>
-
             </React.Fragment>
         )
     }

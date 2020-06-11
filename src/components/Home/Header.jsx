@@ -4,6 +4,7 @@ import HeaderNavLink from "../Navigation/HeaderNavLinks"
 import UserPersona from "../Common/UserPersona"
 
 export default class Header extends Component {
+
     render() {
         return (
             <React.Fragment>
@@ -22,7 +23,7 @@ export default class Header extends Component {
 
                         </div>
                         <div className="col-md-1">
-                            <UserPersona />
+                            <UserPersona history={this.props.history} />
                         </div>
                     </div>
                 </div>

@@ -55,6 +55,7 @@ export default class UserRegistration extends Component {
         this.setState({
             showModal: false
         });
+        this.props.dismissModalProps();
     }
 
     render() {

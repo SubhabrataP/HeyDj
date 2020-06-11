@@ -6,7 +6,7 @@ export default class HeaderNavLink extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    <Link to={{ pathname: "/" }}
+                    <Link to={{ pathname: localStorage.getItem("Id") ? "/User" : "/" }}
                         href="#"
                         style={{
                             paddingRight: "13px",

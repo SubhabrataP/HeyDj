@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import CardTemplate from "../Common/CardTemplate";
+import { withRouter } from "react-router";
 
-
-export default class NewReleaseList extends Component {
+class NewReleaseList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            playlistItems: [1, 1, 1, 1]
+            playlistItems: [1, 1, 1, 1, 1, 1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         }
+    }
+
+    onMoreClick = () => {
+        this.props.history.push('/NewReleases');
     }
 
     render() {
@@ -18,10 +22,10 @@ export default class NewReleaseList extends Component {
                     <div>
                         <div style={{ paddingBottom: "10px" }}>
                             New Releases
-                            <button>More</button>
+                            <button onClick={this.onMoreClick}>More</button>
                         </div>
                         <div>
-                            {this.state.playlistItems.map(() => (
+                            {this.state.playlistItems.slice(0,5).map(() => (
                                 <div style={{ paddingBottom: "15px" }}>
                                     <CardTemplate />
                                 </div>
@@ -34,3 +38,5 @@ export default class NewReleaseList extends Component {
         )
     }
 }
+
+export default withRouter(NewReleaseList)

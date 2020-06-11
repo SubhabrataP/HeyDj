@@ -23,6 +23,14 @@ export default class UserPersona extends Component {
         });
     }
 
+    onDismissFromProps = () => {
+        this.setState({
+            isCalloutVisible: false,
+            showRegistrationModal: false,
+            showLoginModal: false
+        });
+    }
+
     showModals = (modalType) => {
         modalType === "Register" ?
         this.setState({
@@ -41,6 +49,12 @@ export default class UserPersona extends Component {
             isCalloutVisible: false,
             showLoginModal:false
         })
+    }
+
+    onLogout = () => {
+        localStorage.removeItem("Id");
+        localStorage.removeItem("PhoneNumber");
+        this.props.history.push('/');
     }
 
     render() {
@@ -69,15 +83,22 @@ export default class UserPersona extends Component {
                                 Login
                             </span>
                             <hr />
-                            <span role="listitem">
+                            <span role="listitem" onClick={this.onLogout}>
                                 Logout
                             </span>
                             <hr />
                         </span>
                     </Callout>
                 )}
-                <UserRegistration showModal={this.state.showRegistrationModal} />
-                <Login showModal={this.state.showLoginModal} />
+                <UserRegistration
+                    showModal={this.state.showRegistrationModal}
+                    dismissModalProps={() => {this.onDismissFromProps()}}
+                />
+                <Login
+                    showModal={this.state.showLoginModal}
+                    dismissModalProps={() => { this.onDismissFromProps() }}
+                    history={this.props.history}
+                />
             </React.Fragment>
         )
     }

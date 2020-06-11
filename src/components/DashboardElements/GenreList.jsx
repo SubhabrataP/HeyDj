@@ -11,6 +11,10 @@ export default class GenreList extends Component {
         }
     }
 
+    onMoreClick = () => {
+        this.props.history.push('/Genres');
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -18,7 +22,7 @@ export default class GenreList extends Component {
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Genres
-                            <button>More</button>
+                            <button onClick={this.onMoreClick}>More</button>
                         </div>
                         <div className="row">
                             {this.state.playlistItems.map(() => (
