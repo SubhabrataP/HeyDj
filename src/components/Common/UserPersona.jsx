@@ -64,22 +64,23 @@ export default class UserPersona extends Component {
                         onDismiss={this.onDismiss}
                     >
                         <span role="list">
-                            <span role="listitem" onClick={() => {this.showModals("Login")}}>
-                                Login
-                            </span>
-                            <hr />
-                            <span role="listitem">
-                                Admin Login
-                            </span>
-                            
                             {localStorage.getItem("Id") ?
                                 <React.Fragment>
-                                    <hr />
                                     <span role="listitem" onClick={this.onLogout}>
                                         Logout
                                     </span>
                                 </React.Fragment>
-                                : null}
+                                :
+                                <React.Fragment>
+                                    <span role="listitem" onClick={() => { this.showModals("Login") }}>
+                                        Login
+                                    </span>
+                                    <hr />
+                                    <span role="listitem">
+                                        Admin Login
+                                    </span>
+                                </React.Fragment>
+                            }
                         </span>
                     </Callout>
                 )}
