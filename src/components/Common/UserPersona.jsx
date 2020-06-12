@@ -3,6 +3,7 @@ import { Persona, PersonaSize, PersonaInitialsColor } from 'office-ui-fabric-rea
 import { Callout } from 'office-ui-fabric-react';
 import UserRegistration from "../Registration/UserRegistration";
 import Login from "../Common/Login";
+import AdminLogin from "../Common/AdminLogin";
 
 export default class UserPersona extends Component {
     constructor(props) {
@@ -10,39 +11,49 @@ export default class UserPersona extends Component {
         this._personaButtonElementRef = React.createRef();
         this.state = {
             isCalloutVisible: false,
-            showLoginModal: false
+            showLoginModal: false,
+            showAdminLoginModal: false
         }
     }
 
     onDismiss = () => {
         this.setState({
             isCalloutVisible: !this.state.isCalloutVisible,
-            showLoginModal: false
+            showLoginModal: false,
+            showAdminLoginModal: false
         });
     }
 
     onDismissFromProps = () => {
         this.setState({
             isCalloutVisible: false,
-            showLoginModal: false
+            showLoginModal: false,
+            showAdminLoginModal: false
         });
     }
 
     showModals = (modalType) => {
-        modalType === "Login" ?
-        this.setState({
-            isCalloutVisible: false,
-            showLoginModal:true
-        }) :
-        this.setState({
-            isCalloutVisible: false,
-            showLoginModal:false
-        })
+        modalType === "AdminLogin" ?
+            this.setState({
+                isCalloutVisible: false,
+                showLoginModal: false,
+                showAdminLoginModal: true
+            }) :
+            modalType === "Login" ?
+                this.setState({
+                    isCalloutVisible: false,
+                    showLoginModal: true,
+                    showAdminLoginModal: false
+                }) :
+                this.setState({
+                    isCalloutVisible: false,
+                    showLoginModal: false,
+                    showAdminLoginModal: false
+                })
     }
 
     onLogout = () => {
-        localStorage.removeItem("Id");
-        localStorage.removeItem("PhoneNumber");
+        localStorage.clear();
         this.props.history.push('/');
     }
 
@@ -76,7 +87,7 @@ export default class UserPersona extends Component {
                                         Login
                                     </span>
                                     <hr />
-                                    <span role="listitem">
+                                    <span role="listitem" onClick={() => { this.showModals("AdminLogin") }}>
                                         Admin Login
                                     </span>
                                 </React.Fragment>
@@ -90,6 +101,11 @@ export default class UserPersona extends Component {
                 />
                 <Login
                     showModal={this.state.showLoginModal}
+                    dismissModalProps={() => { this.onDismissFromProps() }}
+                    history={this.props.history}
+                />
+                <AdminLogin 
+                    showModal={this.state.showAdminLoginModal}
                     dismissModalProps={() => { this.onDismissFromProps() }}
                     history={this.props.history}
                 />

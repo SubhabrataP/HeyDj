@@ -134,7 +134,6 @@ export default class Login extends Component {
                 }
             )
             .then((response) => {
-                console.log(response);
                 if (response) {
                     // if (response.data.hasOwnProperty("statusCode")) {
                     //   if (response.data.statusCode === 200) {
@@ -196,51 +195,55 @@ export default class Login extends Component {
                     isModeless={false}
                     dragOptions={false}
                 >
-                    <div className="row" style={{marginTop: "2%"}}>
-                        <Label 
-                            className="col-md-3"
-                            style={{textAlign: "right", paddingRight: "2%", paddingTop: "3%"}}
-                        >
-                            Mobile: 
+                    <div className="container">
+                        <div className="row" style={{ marginTop: "2%" }}>
+                            <Label
+                                className="col-md-3"
+                                style={{ textAlign: "right", paddingRight: "2%", paddingTop: "3%" }}
+                            >
+                                Mobile:
                         </Label>
-                        <PhoneInput
-                            className= "col-md-7"
-                            country={'in'}
-                            onlyCountries={['in']}
-                            value={this.state.phoneNumber}
-                            onChange={phone => this.onPhoneNumberChange(phone)}
-                            countryCodeEditable={false}
-                        />
-                    </div>
-                    <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>
+                            <PhoneInput
+                                className="col-md-7"
+                                country={'in'}
+                                onlyCountries={['in']}
+                                value={this.state.phoneNumber}
+                                onChange={phone => this.onPhoneNumberChange(phone)}
+                                countryCodeEditable={false}
+                            />
+                        </div>
+                        <span className="col-md-12" style={{ color: "red" }}>
                             {this.state.formErrors["phone_number"]}
-                    </span>
-                    <div className="col-md-12" style={{textAlign:"center", marginTop: "5px", marginBottom: "5px"}}>
-                            <button type="button" className="btn" onClick={this.onSendOTP}>
-                                { this.state.sendOTPClicked ? 
-                                "Resend OTP" : "Send OTP"}
+                        </span>
+                        <div className="col-md-12" style={{ textAlign: "center", marginTop: "5px", marginBottom: "15px" }}>
+                            <button type="button" className="btn" onClick={this.onSendOTP} style={{padding: "1px"}}>
+                                {this.state.sendOTPClicked ?
+                                    "Resend OTP" : "Send OTP"}
                             </button>
-                    </div>
-                    <div className="row">
-                        <Label className="col-md-3" style={{textAlign:"right"}}>OTP:</Label>
-                        <TextField
-                            value={this.state.OTP}
-                            onChange={(ev, val) => (this.onOTPChange(ev, val))}
-                            className="col-md-8"
-                            style={{ padding: "0%" }}
-                        />
-                    </div>
-                    <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>
+                        </div>
+                        <div className="row">
+                            <Label className="col-md-3" style={{ textAlign: "right" }}>OTP:</Label>
+                            <TextField
+                                value={this.state.OTP}
+                                onChange={(ev, val) => (this.onOTPChange(ev, val))}
+                                className="col-md-8"
+                                style={{ padding: "0%" }}
+                            />
+                        </div>
+                        <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>
                             {this.state.formErrors["otp"]}
-                    </span>
-                    <div style={{textAlign:"center", marginTop: "5px"}}>
-                        <button type="button" className="btn" onClick={this.verifyOTP}>Verify</button>
-                        <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
-                    </div>
-                    <div className="row" style={{marginLeft: "20%", marginTop: "15px"}}>
-                        <span style={{paddingTop: "4%", paddingRight: "2%"}}>Login With:</span> 
-                        <i className="fa fa-google" onClick={this.onGoogleLogin}></i>
-                        <i className="fa fa-facebook" onClick={this.onFacebookLogin}></i>
+                        </span>
+                        <div style={{ textAlign: "center", marginTop: "5px" }}>
+                            <button type="button" className="btn" style={{padding: "1px", marginRight: "15px"}} onClick={this.verifyOTP}>Verify</button>
+                            <button type="button" className="btn" style={{padding: "1px"}} onClick={() => { this.onDismiss() }}>Cancel</button>
+                        </div>
+                        <div className="row" style={{textAlign: "center", marginTop: "4%"}}>
+                            <div className="col-md-12">
+                                <span style={{paddingTop:"3%", paddingRight: "2%"}}>Login With:</span>
+                                <i className="fa fa-google" onClick={this.onGoogleLogin}></i>
+                                <i className="fa fa-facebook" onClick={this.onFacebookLogin}></i>
+                            </div>
+                        </div>
                     </div>
                 </Modal>
             </React.Fragment>
