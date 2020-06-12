@@ -10,7 +10,6 @@ export default class UserPersona extends Component {
         this._personaButtonElementRef = React.createRef();
         this.state = {
             isCalloutVisible: false,
-            showRegistrationModal: false,
             showLoginModal: false
         }
     }
@@ -18,7 +17,6 @@ export default class UserPersona extends Component {
     onDismiss = () => {
         this.setState({
             isCalloutVisible: !this.state.isCalloutVisible,
-            showRegistrationModal: false,
             showLoginModal: false
         });
     }
@@ -26,26 +24,17 @@ export default class UserPersona extends Component {
     onDismissFromProps = () => {
         this.setState({
             isCalloutVisible: false,
-            showRegistrationModal: false,
             showLoginModal: false
         });
     }
 
     showModals = (modalType) => {
-        modalType === "Register" ?
-        this.setState({
-            showRegistrationModal: true,
-            isCalloutVisible: false,
-            showLoginModal:false
-        }) :
         modalType === "Login" ?
         this.setState({
-            showRegistrationModal: false,
             isCalloutVisible: false,
             showLoginModal:true
         }) :
         this.setState({
-            showRegistrationModal: false,
             isCalloutVisible: false,
             showLoginModal:false
         })
@@ -75,18 +64,22 @@ export default class UserPersona extends Component {
                         onDismiss={this.onDismiss}
                     >
                         <span role="list">
-                            <span role="listitem" onClick={() => {this.showModals("Register")}}>
-                                Register
-                            </span>
-                            <hr />
                             <span role="listitem" onClick={() => {this.showModals("Login")}}>
                                 Login
                             </span>
                             <hr />
-                            <span role="listitem" onClick={this.onLogout}>
-                                Logout
+                            <span role="listitem">
+                                Admin Login
                             </span>
-                            <hr />
+                            
+                            {localStorage.getItem("Id") ?
+                                <React.Fragment>
+                                    <hr />
+                                    <span role="listitem" onClick={this.onLogout}>
+                                        Logout
+                                    </span>
+                                </React.Fragment>
+                                : null}
                         </span>
                     </Callout>
                 )}

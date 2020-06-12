@@ -8,6 +8,7 @@ export default class UserDashboard extends Component {
         return (
             <Layout history={this.props.history} >
                 <div style={{ marginTop: "2%" }}>
+                    <h1>Welcome User</h1>
                     <FeaturedPlaylist history={this.props.history} />
                 </div>
             </Layout>

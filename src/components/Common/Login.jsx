@@ -4,6 +4,7 @@ import { Modal } from 'office-ui-fabric-react';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import "../Styles/Icons.css";
 
 export default class Login extends Component {
     constructor(props) {
@@ -151,14 +152,41 @@ export default class Login extends Component {
         }
     }
 
-    // onGoogleLogin = async () => {
-    //     // const response = await apiAxios.get("/api/auth/google")
+    onGoogleLogin = () => {
+        apiAxios.get(
+            "/api/auth/google"
+        )
+        .then((response) => {
+            console.log(response);
+            if (response) {
+                localStorage.setItem("Id", response.data.id);
+                localStorage.setItem("PhoneNumber", response.data.phoneNumber);
+            }
+            this.onDismiss();
+            // this.props.history.push('/User');
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
 
-    //     // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmYWFkZTFhLWE1NDAtNGI1Zi05YmNiLWNlMzBiY2Q4MGM3NyIsImVtYWlsSWQiOiJhcmlqaXRAY3JhZnR2ZWRhdGVjaG5vbG9neS5jb20iLCJpYXQiOjE1OTE3MjkwMDJ9.N06C2hW1c1lPdJ0rvXGvqGRpq36pZKsS6f4EDZ9svPk"
-
-
-        
-    // }
+    onFacebookLogin = () => {
+        apiAxios.get(
+            "/api/auth/facebook"
+        )
+        .then((response) => {
+            console.log(response);
+            if (response) {
+                localStorage.setItem("Id", response.data.id);
+                localStorage.setItem("PhoneNumber", response.data.phoneNumber);
+            }
+            this.onDismiss();
+            // this.props.history.push('/User');
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
 
     render() {
         return (
@@ -168,43 +196,52 @@ export default class Login extends Component {
                     isModeless={false}
                     dragOptions={false}
                 >
-                    <div className="row">
-                        <Label required className="col-md-4">Mobile</Label>
+                    <div className="row" style={{marginTop: "2%"}}>
+                        <Label 
+                            className="col-md-3"
+                            style={{textAlign: "right", paddingRight: "2%", paddingTop: "3%"}}
+                        >
+                            Mobile: 
+                        </Label>
                         <PhoneInput
-                            className= "col-md-8"
+                            className= "col-md-7"
                             country={'in'}
                             onlyCountries={['in']}
                             value={this.state.phoneNumber}
                             onChange={phone => this.onPhoneNumberChange(phone)}
                             countryCodeEditable={false}
                         />
-                        <span style={{ color: "red", marginLeft: "5%" }}>
-                            {this.state.formErrors["phone_number"]}
-                        </span>
                     </div>
-                    <div style={{textAlign:"right", marginTop: "15px"}}>
+                    <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>
+                            {this.state.formErrors["phone_number"]}
+                    </span>
+                    <div className="col-md-12" style={{textAlign:"center", marginTop: "5px", marginBottom: "5px"}}>
                             <button type="button" className="btn" onClick={this.onSendOTP}>
                                 { this.state.sendOTPClicked ? 
                                 "Resend OTP" : "Send OTP"}
                             </button>
                     </div>
-                    <div>
+                    <div className="row">
+                        <Label className="col-md-3" style={{textAlign:"right"}}>OTP:</Label>
                         <TextField
-                            label="OTP"
                             value={this.state.OTP}
                             onChange={(ev, val) => (this.onOTPChange(ev, val))}
+                            className="col-md-8"
+                            style={{ padding: "0%" }}
                         />
-                        <span style={{ color: "red", marginLeft: "5%" }}>
-                            {this.state.formErrors["otp"]}
-                        </span>
                     </div>
-                    <div style={{textAlign:"center", marginTop: "15px"}}>
+                    <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>
+                            {this.state.formErrors["otp"]}
+                    </span>
+                    <div style={{textAlign:"center", marginTop: "5px"}}>
                         <button type="button" className="btn" onClick={this.verifyOTP}>Verify</button>
                         <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
                     </div>
-                    {/* <div>
-                        <button type="button" className="btn" onClick={this.onGoogleLogin}>Google Login</button>
-                    </div> */}
+                    <div className="row" style={{marginLeft: "20%", marginTop: "15px"}}>
+                        <span style={{paddingTop: "4%", paddingRight: "2%"}}>Login With:</span> 
+                        <i className="fa fa-google" onClick={this.onGoogleLogin}></i>
+                        <i className="fa fa-facebook" onClick={this.onFacebookLogin}></i>
+                    </div>
                 </Modal>
             </React.Fragment>
         )
