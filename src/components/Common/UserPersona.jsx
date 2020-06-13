@@ -63,7 +63,7 @@ export default class UserPersona extends Component {
                 <span ref={ this._personaButtonElementRef } onClick={() => {this.onDismiss()}}>
                     <Persona
                         initialsColor={PersonaInitialsColor.coolGray}
-                        size={PersonaSize.size32}
+                        size={PersonaSize.size42}
                         text={"User Name"}
                         hidePersonaDetails={true}
                     />
@@ -73,21 +73,22 @@ export default class UserPersona extends Component {
                         target={this._personaButtonElementRef.current}
                         setInitialFocus
                         onDismiss={this.onDismiss}
+                        className="p-4"
                     >
                         <span role="list">
                             {localStorage.getItem("Id") ?
                                 <React.Fragment>
-                                    <span role="listitem" onClick={this.onLogout}>
+                                    <span className="loginDropdown" role="listitem" onClick={this.onLogout}>
                                         Logout
                                     </span>
                                 </React.Fragment>
                                 :
                                 <React.Fragment>
-                                    <span role="listitem" onClick={() => { this.showModals("Login") }}>
+                                    <span className="loginDropdown" role="listitem" onClick={() => { this.showModals("Login") }}>
                                         Login
                                     </span>
                                     <hr />
-                                    <span role="listitem" onClick={() => { this.showModals("AdminLogin") }}>
+                                    <span className="loginDropdown"  role="listitem" onClick={() => { this.showModals("AdminLogin") }}>
                                         Admin Login
                                     </span>
                                 </React.Fragment>

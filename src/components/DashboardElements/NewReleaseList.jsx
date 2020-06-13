@@ -18,11 +18,11 @@ class NewReleaseList extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="container">
-                    <div>
-                        <div style={{ paddingBottom: "10px" }}>
+                <div className="col-md-12 dj-play-list">
+                    <div className="p-3 featured-play">
+                        <div className="row" style={{ paddingBottom: "10px" }}>
                             New Releases
-                            <button onClick={this.onMoreClick}>More</button>
+                            <a onClick={this.onMoreClick}>More</a>
                         </div>
                         <div>
                             {this.state.playlistItems.slice(0,5).map(() => (

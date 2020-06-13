@@ -19,6 +19,7 @@ export default class CardTemplate extends Component {
                     <Card
                         aria-label="Clickable vertical card with image bleeding at the top of the card"
                         onClick={this.alertClicked}
+                        className="cardBorder"
                         // tokens={cardTokens}
                     >
                         <Card.Section
@@ -27,12 +28,13 @@ export default class CardTemplate extends Component {
                             // styles={backgroundImageCardSectionStyles}
                             // tokens={backgroundImageCardSectionTokens}
                         >
-                            <Text variant="large">
-                                NOVEMBER
-                            </Text>
-                            <Text variant="superLarge">
-                                26
-                            </Text>
+                            <img className="w-100" src={process.env.PUBLIC_URL + "/images/playlist-5.png"} alt="playlist-5" />
+                            <div className="overlayCard m-0 w-100">
+                                <div class="textCard text-left">
+                                    <h5>Playlist Name</h5>
+                                    <p>DJ Nikhil</p>
+                                </div>
+                            </div>
                         </Card.Section>
                     </Card>
                 </Stack>
