@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Persona, PersonaSize, PersonaInitialsColor } from 'office-ui-fabric-react/lib/Persona';
 import { Callout } from 'office-ui-fabric-react';
-import UserRegistration from "../Registration/UserRegistration";
-import Login from "../Common/Login";
-import AdminLogin from "../Common/AdminLogin";
+import Login from "./Login";
+import AdminLogin from "./AdminLogin";
+import EditProfile from "./EditProfile"
 
 export default class UserPersona extends Component {
     constructor(props) {
@@ -77,6 +77,10 @@ export default class UserPersona extends Component {
                         <span role="list">
                             {localStorage.getItem("Id") ?
                                 <React.Fragment>
+                                    <span role="listitem">
+                                        Edit Profile
+                                    </span>
+                                    <hr />
                                     <span role="listitem" onClick={this.onLogout}>
                                         Logout
                                     </span>
@@ -95,10 +99,6 @@ export default class UserPersona extends Component {
                         </span>
                     </Callout>
                 )}
-                <UserRegistration
-                    showModal={this.state.showRegistrationModal}
-                    dismissModalProps={() => {this.onDismissFromProps()}}
-                />
                 <Login
                     showModal={this.state.showLoginModal}
                     dismissModalProps={() => { this.onDismissFromProps() }}
@@ -109,6 +109,7 @@ export default class UserPersona extends Component {
                     dismissModalProps={() => { this.onDismissFromProps() }}
                     history={this.props.history}
                 />
+                <EditProfile history={this.props.history} />
             </React.Fragment>
         )
     }

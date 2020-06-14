@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch } from "react-router-dom";
-import { ProtectedRouteUser } from "../Util/ProtectedRoute"
+import ProtectedRouteUser from "../Util/ProtectedRoute"
 import UserDashboard from "./RegisteredUser/UserDashboard";
 
 const UserRoutes = () => {

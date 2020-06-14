@@ -6,6 +6,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import "../Styles/Icons.css";
 
+const onlyDigitRegex = RegExp(/^[0-9]+$/);
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -31,7 +33,9 @@ export default class Login extends Component {
         
         this.state.OTP.length < 4 ?
             formErrors.otp = "Please enter a valid 4 digit OTP."
-            : formErrors.otp = "";
+            : !onlyDigitRegex.test(this.state.OTP) ?
+                formErrors.otp = "Please enter numbers only."
+                : formErrors.otp = "";
 
         this.setState({
             formErrors : formErrors
@@ -100,7 +104,7 @@ export default class Login extends Component {
                 })
             })
             .catch(function (error) {
-                console.log(error);
+                alert('Error');
             });
         }
     }
@@ -146,7 +150,7 @@ export default class Login extends Component {
                 this.props.history.push('/User');
             })
             .catch(function (error) {
-                console.log(error);
+                alert('Error');
             });
         }
     }
@@ -227,7 +231,7 @@ export default class Login extends Component {
                                 value={this.state.OTP}
                                 onChange={(ev, val) => (this.onOTPChange(ev, val))}
                                 className="col-md-8"
-                                style={{ padding: "0%" }}
+                                style={{ padding: "0%", textAlign: "center" }}
                             />
                         </div>
                         <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>

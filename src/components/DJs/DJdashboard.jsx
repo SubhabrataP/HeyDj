@@ -5,7 +5,7 @@ export default class DjDashboard extends Component{
 
     render(){
         return(
-            <Layout>
+            <Layout history={this.props.history}>
                 <div style={{ marginTop: "2%" }}>
                     <h1>Welcome Dj</h1>
                 </div>

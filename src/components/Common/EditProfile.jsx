@@ -5,7 +5,7 @@ import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-export default class UserRegistration extends Component {
+export default class EditProfile extends Component {
     constructor(props) {
         super(props)
         this.state = {
