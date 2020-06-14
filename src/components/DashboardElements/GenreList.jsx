@@ -18,11 +18,11 @@ export default class GenreList extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="container">
-                    <div>
+                <div className="row col-md-12 dj-play-list">
+                    <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Genres
-                            <button onClick={this.onMoreClick}>More</button>
+                            <a onClick={this.onMoreClick}>More</a>
                         </div>
                         <div className="row">
                             {this.state.playlistItems.map(() => (

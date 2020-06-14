@@ -16,6 +16,7 @@ export default class Search extends Component {
                 }}
                 onChange={(_, newValue) => console.log('SearchBox onChange fired: ' + newValue)}
                 onSearch={newValue => console.log('SearchBox onSearch fired: ' + newValue)}
+
             />
 
         )
