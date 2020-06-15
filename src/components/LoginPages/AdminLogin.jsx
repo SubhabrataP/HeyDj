@@ -53,11 +53,11 @@ export default class AdminLogin extends Component{
             "/api/auth", data
         )
         .then((response) => {
-            console.log(response);
             if (response) {
                 localStorage.setItem("Id", response.data.id);
                 localStorage.setItem("Email", response.data.emailId);
                 localStorage.setItem("Role", response.data.role);
+                localStorage.setItem("Token", response.headers['x-auth-token']);
             }
             this.onDismiss();
             this.props.history.push('/Admin');

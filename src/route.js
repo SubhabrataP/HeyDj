@@ -8,6 +8,7 @@ import PageNotFound from "./components/ErrorPages/PageNotFound";
 import UserSection from "./components/LazyLoading/UserSection";
 import DjSection from "./components/LazyLoading/DjSection";
 import AdminSection from "./components/LazyLoading/AdminSection";
+import LoginSuccess from "./components/LoginPages/LoginSuccess";
 
 const createRoutes = (props) => (
     <Router>
@@ -16,10 +17,11 @@ const createRoutes = (props) => (
             <Route exact path="/NewReleases" component={NewReleaseFullPage} />
             <Route exact path="/FeaturedPlaylists" component={FeaturedPlaylistFullPage} />
             <Route exact path="/Genres" component={GenreListFullPage} />
+            <Route exact path="/login/success" render={(props) => <LoginSuccess history={props.history} />} />
 
-            <Route exact path="/User" component={UserSection} />} />
-            <Route exact path="/Dj" component={DjSection} />} />
-            <Route exact path="/Admin" component={AdminSection} />} />
+            <Route path="/User" component={UserSection} />} />
+            <Route path="/Dj" component={DjSection} />} />
+            <Route path="/Admin" component={AdminSection} />} />
 
             <Route path="/**" component={PageNotFound} />
         </Switch>

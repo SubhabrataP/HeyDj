@@ -14,7 +14,7 @@ export const ProtectedRouteDj = (props) => {
 };
 
 export const ProtectedRouteUser = (props) => {
-  if (localStorage.getItem("Id") && localStorage.getItem("Role") === null) return <Route {...props} />;
+  if ((localStorage.getItem("Id") || localStorage.getItem("Token")) && localStorage.getItem("Role") === null) return <Route {...props} />;
   return <LoginToView />;
 };
 

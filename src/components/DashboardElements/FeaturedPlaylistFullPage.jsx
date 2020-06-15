@@ -21,7 +21,7 @@ export default class FeaturedPlaylistFullPage extends Component {
 
     render() {
         return (
-            <Layout>
+            <Layout history={this.props.history}>
                 <div className="container" style={{ marginTop: "1%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>

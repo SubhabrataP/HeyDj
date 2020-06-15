@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Card } from '@uifabric/react-cards';
 import {
-  Stack,
-  Text,
+  Stack
 } from 'office-ui-fabric-react';
 
 

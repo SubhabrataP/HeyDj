@@ -60,26 +60,24 @@ export default class EditProfile extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 <Modal
                     isOpen={this.state.showModal}
+                    // isOpen= {true}
                     isModeless={false}
                     dragOptions={false}
                 >
-                    User Registration
-                    <div>
-                        <div
-                            className={"image-edit"}
-                            onClick={() => {
-                                this.upload.click();
-                            }}
-                        >
+                    <h4 style={{marginBottom: "2%", textAlign: "center"}}>Add User</h4>
+                    <div className="container">
+                        <div className={"image-edit circle"} style={{marginBottom: "3%", border: "solid 0.5px black"}}>
                             <span className="overlay_profile">
-                                <i>
-                                    <span className="fa fa-camera" />
+                                <i className="fa fa-plus upload-button" 
+                                    onClick={() => {
+                                this.upload.click();}} >
                                 </i>
                             </span>
                             <Image
+                                className="profile-pic"
                                 src={this.state.profile_picture.value ? this.state.profile_picture.value : ""}
                                 roundedCircle
                             />
@@ -99,16 +97,6 @@ export default class EditProfile extends Component {
 
                         <div className="row">
                             <Label className="col-md-4">LAst Name</Label>
-                            <TextField className="col-md-8" errorMessage="Error message" />
-                        </div>
-
-                        <div className="row">
-                            <Label required className="col-md-4">First Name</Label>
-                            <TextField className="col-md-8" errorMessage="Error message" />
-                        </div>
-
-                        <div className="row">
-                            <Label required className="col-md-4">First Name</Label>
                             <TextField className="col-md-8" errorMessage="Error message" />
                         </div>
 

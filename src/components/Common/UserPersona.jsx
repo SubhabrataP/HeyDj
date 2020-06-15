@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Persona, PersonaSize, PersonaInitialsColor } from 'office-ui-fabric-react/lib/Persona';
 import { Callout } from 'office-ui-fabric-react';
-import Login from "./Login";
-import AdminLogin from "./AdminLogin";
+import Login from "../LoginPages/Login";
+import AdminLogin from "../LoginPages/AdminLogin";
 import EditProfile from "./EditProfile"
 
 export default class UserPersona extends Component {
@@ -76,7 +76,7 @@ export default class UserPersona extends Component {
                         className="p-4"
                     >
                         <span role="list">
-                            {localStorage.getItem("Id") ?
+                            {localStorage.getItem("Token") ?
                                 <React.Fragment>
                                     <span role="listitem" className="loginDropdown">
                                         Edit Profile

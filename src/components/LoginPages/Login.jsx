@@ -19,7 +19,8 @@ export default class Login extends Component {
             formErrors: {
                 phone_number: "",
                 otp: "",
-            }
+            },
+            isSendOTPDisabled: false
         }
     }
 
@@ -90,6 +91,10 @@ export default class Login extends Component {
         })
 
         if (formErrors.phone_number === "") {
+            this.setState({
+                isSendOTPDisabled: true
+            })
+
             apiAxios.get(
                 "/api/auth/otp",
                 {
@@ -101,6 +106,8 @@ export default class Login extends Component {
             .then((response) => {
                 this.setState({
                     sendOTPClicked: true,
+                    isSendOTPDisabled: false
+
                 })
             })
             .catch(function (error) {
@@ -156,39 +163,11 @@ export default class Login extends Component {
     }
 
     onGoogleLogin = () => {
-        apiAxios.get(
-            "/api/auth/google"
-        )
-        .then((response) => {
-            console.log(response);
-            if (response) {
-                localStorage.setItem("Id", response.data.id);
-                localStorage.setItem("PhoneNumber", response.data.phoneNumber);
-            }
-            this.onDismiss();
-            // this.props.history.push('/User');
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        window.open("https://xug5l9nwo4.execute-api.ap-south-1.amazonaws.com/dev/api/auth/google", "_self");
     }
 
     onFacebookLogin = () => {
-        apiAxios.get(
-            "/api/auth/facebook"
-        )
-        .then((response) => {
-            console.log(response);
-            if (response) {
-                localStorage.setItem("Id", response.data.id);
-                localStorage.setItem("PhoneNumber", response.data.phoneNumber);
-            }
-            this.onDismiss();
-            // this.props.history.push('/User');
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        window.open("https://xug5l9nwo4.execute-api.ap-south-1.amazonaws.com/dev/api/auth/facebook", "_self");
     }
 
     render() {
@@ -220,7 +199,7 @@ export default class Login extends Component {
                             {this.state.formErrors["phone_number"]}
                         </span>
                         <div className="col-md-12" style={{ textAlign: "center", marginTop: "5px", marginBottom: "15px" }}>
-                            <button type="button" className="btn" onClick={this.onSendOTP} style={{padding: "1px"}}>
+                            <button type="button" className="btn" onClick={this.onSendOTP} style={{padding: "1px"}} disabled={this.state.isSendOTPDisabled}>
                                 {this.state.sendOTPClicked ?
                                     "Resend OTP" : "Send OTP"}
                             </button>

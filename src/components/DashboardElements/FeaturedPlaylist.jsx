@@ -7,7 +7,7 @@ export default class FeaturedPlaylist extends Component {
         super(props);
 
         this.state = {
-            playlistItems: [1, 1, 1, 1, 1]
+            playlistItems: [1, 1, 1, 1, 1, 1]
         }
     }
 
@@ -25,7 +25,7 @@ export default class FeaturedPlaylist extends Component {
                             <a onClick={this.onMoreClick}>More</a>
                         </div>
                         <div className="row">
-                            {this.state.playlistItems.map(() => (
+                            {this.state.playlistItems.slice(0,6).map(() => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
                                     <CardTemplate />
                                 </div>
