@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Layout from "../Home/Layout";
 import { DetailsList, SelectionMode, ColumnActionsMode } from 'office-ui-fabric-react';
 import Search from '../Common/Search';
-import EditProfile from '../Common/EditProfile';
+import AddEditProfile from '../Common/AddEditProfile';
 
 export default class DjList extends Component{
     constructor(props){
@@ -78,7 +78,12 @@ export default class DjList extends Component{
                             columns={this.columns}
                         />
                     </div>
-                    <EditProfile showModal={this.state.showAddEditDj} dismissModalProps={this.dismissAddEditModalProps} />
+                    <AddEditProfile
+                        showModal={this.state.showAddEditDj}
+                        dismissModalProps={() => (this.dismissAddEditModalProps)}
+                        isAdd={true}
+                        roleToBeAdded={"dj"}
+                    />
                 </Layout>
             </React.Fragment>
         )

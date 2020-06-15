@@ -3,7 +3,7 @@ import { Persona, PersonaSize, PersonaInitialsColor } from 'office-ui-fabric-rea
 import { Callout } from 'office-ui-fabric-react';
 import Login from "../LoginPages/Login";
 import AdminLogin from "../LoginPages/AdminLogin";
-import EditProfile from "./EditProfile"
+import AddEditProfile from "./AddEditProfile"
 
 export default class UserPersona extends Component {
     constructor(props) {
@@ -110,7 +110,9 @@ export default class UserPersona extends Component {
                     dismissModalProps={() => { this.onDismissFromProps() }}
                     history={this.props.history}
                 />
-                <EditProfile history={this.props.history} />
+                <AddEditProfile 
+                    history={this.props.history} 
+                />
             </React.Fragment>
         )
     }
