@@ -146,12 +146,10 @@ export default class Login extends Component {
             )
             .then((response) => {
                 if (response) {
-                    // if (response.data.hasOwnProperty("statusCode")) {
-                    //   if (response.data.statusCode === 200) {
-                        localStorage.setItem("Id", response.data.id);
-                        localStorage.setItem("PhoneNumber", response.data.phoneNumber);
-                    //   }
-                    // }
+                    localStorage.setItem("Id", response.data.id);
+                    localStorage.setItem("PhoneNumber", response.data.phoneNumber);
+                    localStorage.setItem("Role", response.data.role === undefined ? null : response.data.role);
+                    localStorage.setItem("Token", response.headers['x-auth-token']);
                 }
                 this.onDismiss();
                 this.props.history.push('/User');

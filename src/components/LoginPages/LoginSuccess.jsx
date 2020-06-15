@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import jwt, {jwt_decode} from 'jwt-decode'
 
 export default class LoginSuccess extends Component{
     constructor(props){
@@ -7,26 +8,19 @@ export default class LoginSuccess extends Component{
 
         var url = window.location;
         var access_token = new URLSearchParams(url.search).get('state');
+        var decoded_token = jwt(access_token);
+
+        localStorage.setItem("Id", decoded_token.id);
+        localStorage.setItem("Email", decoded_token.emailId);
+        localStorage.setItem("Role", decoded_token.role);
         localStorage.setItem("Token", access_token);
 
-        // apiAxios.get(
-        //     "/api/user"
-        // )
-        // .then((response) => {
-        //     console.log(response);
-        //     // if (response) {
-        //     //     localStorage.setItem("Id", response.data.id);
-        //     //     localStorage.setItem("PhoneNumber", response.data.phoneNumber);
-        //     // }
-        //     this.onDismiss();
-        //     // this.props.history.push('/User');
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
-
-        if(access_token){
-            this.props.history.push('/User')
+        if (access_token) {
+            decoded_token.role === "admin" ?
+                this.props.history.push('/Admin')
+                : decoded_token.role === "dj" ?
+                    this.props.history.push('/Dj')
+                    : this.props.history.push('/User')
         }
     }
 

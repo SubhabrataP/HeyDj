@@ -90,9 +90,9 @@ export default class EditProfile extends Component {
                             />
                         </div>
 
-                        <div className="row">
-                            <Label required className="col-md-4">First Name</Label>
-                            <TextField className="col-md-8" errorMessage="Error message" />
+                        <div className="row" style={{marginBottom: "1%"}}>
+                            <Label required className="col-md-4" style={{padding: "0%", paddingLeft: "3%"}}>First Name:</Label>
+                            <TextField className="col-md-8" errorMessage="Error" />
                         </div>
 
                         <div className="row">
@@ -116,7 +116,7 @@ export default class EditProfile extends Component {
                         </div>
 
                         <div style={{textAlign:"center", marginTop: "15px"}}>
-                            <button type="button" className="btn">Sign Up</button>
+                            <button type="button" className="btn">Update</button>
                             <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
                         </div>
                     </div>
