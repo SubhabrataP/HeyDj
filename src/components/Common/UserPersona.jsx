@@ -12,7 +12,8 @@ export default class UserPersona extends Component {
         this.state = {
             isCalloutVisible: false,
             showLoginModal: false,
-            showAdminLoginModal: false
+            showAdminLoginModal: false,
+            showEditProfile: false
         }
     }
 
@@ -20,7 +21,7 @@ export default class UserPersona extends Component {
         this.setState({
             isCalloutVisible: !this.state.isCalloutVisible,
             showLoginModal: false,
-            showAdminLoginModal: false
+            showAdminLoginModal: false,
         });
     }
 
@@ -28,7 +29,8 @@ export default class UserPersona extends Component {
         this.setState({
             isCalloutVisible: false,
             showLoginModal: false,
-            showAdminLoginModal: false
+            showAdminLoginModal: false,
+            showEditProfile: false
         });
     }
 
@@ -50,6 +52,12 @@ export default class UserPersona extends Component {
                     showLoginModal: false,
                     showAdminLoginModal: false
                 })
+    }
+
+    onEditProfile = () => {
+        this.setState({
+            showEditProfile: true
+        })
     }
 
     onLogout = () => {
@@ -78,7 +86,7 @@ export default class UserPersona extends Component {
                         <span role="list">
                             {localStorage.getItem("Token") ?
                                 <React.Fragment>
-                                    <span role="listitem" className="loginDropdown">
+                                    <span role="listitem" className="loginDropdown" onClick={this.onEditProfile}>
                                         Edit Profile
                                     </span>
                                     <hr />
@@ -110,9 +118,12 @@ export default class UserPersona extends Component {
                     dismissModalProps={() => { this.onDismissFromProps() }}
                     history={this.props.history}
                 />
-                <AddEditProfile 
-                    history={this.props.history} 
-                />
+                <AddEditProfile
+                        showModal={this.state.showEditProfile}
+                        dismissModalProps={() => (this.onDismissFromProps() )}
+                        isAdd={false}
+                        roleToBeAdded={localStorage.getItem('Role')}
+                    />
             </React.Fragment>
         )
     }

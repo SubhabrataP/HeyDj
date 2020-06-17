@@ -4,6 +4,7 @@ import { FormControl, Image } from "react-bootstrap";
 import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 const onlyDigitRegex = RegExp(/^[0-9]{10}$/);
 
@@ -22,7 +23,8 @@ export default class AddEditProfile extends Component {
             lastName: "",
             email: "",
             mobile: "",
-            city: ""
+            city: "",
+            isValid: false
         }
     }
 
@@ -72,7 +74,7 @@ export default class AddEditProfile extends Component {
             });
 
         var mobileNumber = this.state.mobile;
-        
+
         mobileNumber.length == 0 ?
             this.setState({
                 mobileError: "Mobile number is required."
@@ -84,6 +86,47 @@ export default class AddEditProfile extends Component {
                 this.setState({
                     mobileError: "Please enter a valid 10 digit mobile number."
                 })
+    }
+
+    onAddEditUser = async() => {
+        let isValid = false;
+        await this.formValidation();
+        if (this.state.mobileError == "" && this.state.firstNameError == "") {
+            isValid = true
+        }
+        else {
+            isValid = false
+        }
+
+        if (isValid) {
+
+            const data = {
+                "firstName": this.state.firstName,
+                "lastName": this.state.lastName,
+                "emailId": this.state.email,
+                "phoneNumber": "91" + this.state.mobile,
+                "role": this.props.roleToBeAdded,
+                "city": this.state.city
+            }
+
+            const headers = {
+                'Authorization': localStorage.getItem('Token')
+            }
+
+            if (this.props.isAdd) {
+                apiAxios.post('/api/admin/user', data, {
+                    headers: headers
+                })
+                    .then((response) => {
+                        this.onDismiss();
+                        window.location.reload();
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            }
+
+        }
     }
 
     onDismiss = () => {
@@ -184,7 +227,7 @@ export default class AddEditProfile extends Component {
                         </div>
 
                         <div style={{textAlign:"center", marginTop: "15px"}}>
-                            <button type="button" className="btn" onClick={this.formValidation}>
+                            <button type="button" className="btn" onClick={this.onAddEditUser}>
                                 {this.props.isAdd ? "Add" : "Update"}
                             </button>
                             <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
