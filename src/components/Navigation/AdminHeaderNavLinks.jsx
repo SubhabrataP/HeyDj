@@ -12,7 +12,7 @@ export default class AdminHeaderNavLinks extends Component {
                             paddingRight: "13px",
                             textDecoration: 'none'
                         }}>
-                        Home
+                        Dashboard
                     </Link>
                     <Link to={{ pathname: "/Admin/Djs" }}
                         href="#"

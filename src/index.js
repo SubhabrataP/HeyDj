@@ -7,6 +7,11 @@ import 'font-awesome/css/font-awesome.min.css';
 
 const routes = createRoutes();
 
+// window.onbeforeunload = function() {
+//   localStorage.clear();
+//   return '';
+// };
+
 ReactDOM.render(
   routes,
   document.getElementById('root')

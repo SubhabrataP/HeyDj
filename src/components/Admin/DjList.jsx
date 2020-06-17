@@ -15,41 +15,52 @@ export default class DjList extends Component{
 
         this.state={
             showAddEditDj: false,
-            djDetails: []
+            djDetails: [],
+            isAdd: true,
+            editProfileData: {}
+
         }
         this.columns= [
             {
                 key: "column1",
                 name: "Dj Name",
-                fieldName: "firstName",
-                isResizable: true
+                fieldName: "fullName",
+                isResizable: false,
+                minWidth: 200,
+                maxWidth: 200,
             },
             {
                 key: "column2",
                 name: "Mobile",
                 fieldName: "phoneNumber",
-                isResizable: true
+                isResizable: false,
+                minWidth: 200,
+                maxWidth: 200,
             },
             {
                 key: "column3",
                 name: "Email",
                 fieldName: "emailId",
-                isResizable: true
+                isResizable: false,
+                minWidth: 300,
+                maxWidth: 300,
             },
             {
                 key: "column4",
                 name: "City",
                 fieldName: "city",
-                isResizable: true
+                isResizable: false,
+                minWidth: 150,
+                maxWidth: 150,
             },
             {
                 key: "column5",
                 name: "Action",
-                isResizable: true,
+                isResizable: false,
                 onRender: (item) => {
                     return (
                         <React.Fragment>
-                            <button>Edit</button>
+                            <button onClick={() => (this.editProfile(item))}>Edit</button>
                             <button onClick={() => (this.deleteProfile(item.id))}>Delete</button>
                         </React.Fragment>
                     )
@@ -88,6 +99,9 @@ export default class DjList extends Component{
             }
         )
         .then((res) => {
+            res.data.map((val) => {
+                val.fullName = val.firstName + " " + val.lastName
+            })
             this.setState({
                 djDetails: res.data
             })
@@ -99,15 +113,26 @@ export default class DjList extends Component{
 
     onAddDjClick = () => {
         this.setState({
-            showAddEditDj: true
+            showAddEditDj: true,
+            isAdd: true
         })
     }
 
     dismissAddEditModalProps = () => {
+        this.getAllDjsList();
         this.setState({
-            showAddEditDj: false
+            showAddEditDj: false,
+            editProfileData: {},
+            isAdd: true
         })
+    }
 
+    editProfile = (item) => {
+        this.setState({
+            isAdd: false,
+            showAddEditDj: true,
+            editProfileData: item
+        })
     }
 
     render(){
@@ -119,7 +144,7 @@ export default class DjList extends Component{
                             <h5 className={"col-md-8"}>DJ Details List</h5>
                             <div className={"row col-md-4"} style={{textAlign: "right"}}>
                                 <Search />
-                                <button style={{ marginLeft: "10%", paddingLeft: "5px", paddingRight: "5px" }} onClick={this.onAddDjClick}>Add Dj</button>
+                                <button style={{ marginLeft: "10%", paddingLeft: "5px", paddingRight: "5px" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
                             </div>
                         </div>
 
@@ -132,9 +157,10 @@ export default class DjList extends Component{
                     </div>
                     <AddEditProfile
                         showModal={this.state.showAddEditDj}
-                        dismissModalProps={() => (this.dismissAddEditModalProps)}
-                        isAdd={true}
+                        dismissModalProps={() => (this.dismissAddEditModalProps())}
+                        isAdd={this.state.isAdd}
                         roleToBeAdded={"dj"}
+                        profileData={this.state.isAdd ? {} : this.state.editProfileData}
                     />
                 </Layout>
             </React.Fragment>

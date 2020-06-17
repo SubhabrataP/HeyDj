@@ -152,7 +152,9 @@ export default class Login extends Component {
                     localStorage.setItem("Token", response.headers['x-auth-token']);
                 }
                 this.onDismiss();
-                this.props.history.push('/User');
+                response.data.role === "dj" ?
+                this.props.history.push('/Dj')
+                : this.props.history.push('/User');
             })
             .catch(function (error) {
                 alert('Error');

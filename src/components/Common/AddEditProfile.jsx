@@ -6,7 +6,10 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
-const onlyDigitRegex = RegExp(/^[0-9]{10}$/);
+const onlyDigitRegex = RegExp(/^[0-9]{12}$/);
+const headers = {
+    'Authorization': localStorage.getItem('Token')
+}
 
 export default class AddEditProfile extends Component {
     constructor(props) {
@@ -22,16 +25,33 @@ export default class AddEditProfile extends Component {
             firstName: "",
             lastName: "",
             email: "",
-            mobile: "",
+            mobile: "91",
             city: "",
-            isValid: false
+            isValid: false,
+            editedUserId: ""
         }
     }
 
     UNSAFE_componentWillReceiveProps(nextProps){
         this.setState({
-            showModal: nextProps.showModal
+            showModal: nextProps.showModal,
         });
+        if (!(nextProps.profileData === undefined)) {
+            this.setState({
+                firstName: nextProps.profileData.firstName === undefined ? "" :
+                    nextProps.profileData.firstName,
+                lastName: nextProps.profileData.lastName === undefined ? "" :
+                    nextProps.profileData.lastName,
+                email: nextProps.profileData.emailId === undefined ? "" :
+                    nextProps.profileData.emailId,
+                mobile: nextProps.profileData.phoneNumber === undefined ? "91" :
+                    nextProps.profileData.phoneNumber,
+                city: nextProps.profileData.city === undefined ? "" :
+                    nextProps.profileData.city,
+                editedUserId: nextProps.profileData.id === undefined ? "" :
+                    nextProps.profileData.id,
+            })
+        }
     }
 
     editOnChangeHandler = (event, element) => {
@@ -104,13 +124,9 @@ export default class AddEditProfile extends Component {
                 "firstName": this.state.firstName,
                 "lastName": this.state.lastName,
                 "emailId": this.state.email,
-                "phoneNumber": "91" + this.state.mobile,
+                "phoneNumber": this.state.mobile,
                 "role": this.props.roleToBeAdded,
                 "city": this.state.city
-            }
-
-            const headers = {
-                'Authorization': localStorage.getItem('Token')
             }
 
             if (this.props.isAdd) {
@@ -119,13 +135,32 @@ export default class AddEditProfile extends Component {
                 })
                     .then((response) => {
                         this.onDismiss();
-                        window.location.reload();
                     })
                     .catch(function (error) {
                         console.log(error)
                     })
             }
+            else{
+                apiAxios.put(
+                    "/api/admin/user/" + this.state.editedUserId, data,
+                    {
+                        headers: headers,
+                    }
+                )
+                .then((res) => {
+                    this.onDismiss();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
 
+        }
+    }
+
+    onMobileNoChange = (ev, val) => {
+        if (val.length > 1 && val.length < 13) {
+            this.setState({ mobile: val, mobileError: "" })
         }
     }
 
@@ -213,7 +248,7 @@ export default class AddEditProfile extends Component {
                                 className="col-md-8"
                                 errorMessage={this.state.mobileError}
                                 value={this.state.mobile}
-                                onChange={(ev, mobile) => (this.setState({ mobile, mobileError: "" }))}
+                                onChange={(ev, mobile) => (this.onMobileNoChange(ev, mobile))}
                             />
                         </div>
 

@@ -19,9 +19,9 @@ const createRoutes = (props) => (
             <Route exact path="/Genres" component={GenreListFullPage} />
             <Route exact path="/login/success" render={(props) => <LoginSuccess history={props.history} />} />
 
-            <Route path="/User" component={UserSection} />} />
-            <Route path="/Dj" component={DjSection} />} />
-            <Route path="/Admin" component={AdminSection} />} />
+            <Route path="/User" component={UserSection} />
+            <Route path="/Dj" component={DjSection} />
+            <Route path="/Admin" component={AdminSection} />
 
             <Route path="/**" component={PageNotFound} />
         </Switch>
