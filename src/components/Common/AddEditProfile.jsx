@@ -175,7 +175,9 @@ export default class AddEditProfile extends Component {
                     apiAxios.put(
                         "/api/user/" + this.state.editedUserId, data,
                         {
-                            headers: headers,
+                            headers: {
+                                'Authorization': localStorage.getItem('Token')
+                            },
                         }
                     )
                         .then((res) => {
