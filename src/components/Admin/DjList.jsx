@@ -50,13 +50,15 @@ export default class DjList extends Component{
                 name: "City",
                 fieldName: "city",
                 isResizable: false,
-                minWidth: 150,
-                maxWidth: 150,
+                minWidth: 125,
+                maxWidth: 125,
             },
             {
                 key: "column5",
                 name: "Action",
                 isResizable: false,
+                minWidth: 150,
+                maxWidth: 150,
                 onRender: (item) => {
                     return (
                         <React.Fragment>
@@ -148,12 +150,13 @@ export default class DjList extends Component{
                             </div>
                         </div>
 
-                        <DetailsList
-                            className="row"
-                            selectionMode={SelectionMode.none}
-                            items={this.state.djDetails}
-                            columns={this.columns}
-                        />
+                        <div className="row">
+                            <DetailsList
+                                selectionMode={SelectionMode.none}
+                                items={this.state.djDetails}
+                                columns={this.columns}
+                            />
+                        </div>
                     </div>
                     <AddEditProfile
                         showModal={this.state.showAddEditDj}

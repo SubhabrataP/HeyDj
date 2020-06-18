@@ -7,6 +7,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 const onlyDigitRegex = RegExp(/^[0-9]{12}$/);
+const emailRegex = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.([A-Za-z]{2,})+$/);
 const headers = {
     'Authorization': localStorage.getItem('Token')
 }
@@ -22,6 +23,7 @@ export default class AddEditProfile extends Component {
             },
             firstNameError: "",
             mobileError: "",
+            emailError: "",
             firstName: "",
             lastName: "",
             email: "",
@@ -94,7 +96,6 @@ export default class AddEditProfile extends Component {
             });
 
         var mobileNumber = this.state.mobile;
-
         mobileNumber.length == 0 ?
             this.setState({
                 mobileError: "Mobile number is required."
@@ -106,12 +107,25 @@ export default class AddEditProfile extends Component {
                 this.setState({
                     mobileError: "Please enter a valid 10 digit mobile number."
                 })
+
+
+        this.state.email.trim().length < 1 ?
+            this.setState({
+                emailError: "Email is required.",
+            }) :
+            emailRegex.test(this.state.email.trim()) ?
+                this.setState({
+                    emailError: ""
+                }) :
+                this.setState({
+                    emailError: "Please enter a valid email."
+                })
     }
 
     onAddEditUser = async() => {
         let isValid = false;
         await this.formValidation();
-        if (this.state.mobileError == "" && this.state.firstNameError == "") {
+        if (this.state.mobileError == "" && this.state.firstNameError == "" && this.state.emailError == "") {
             isValid = true
         }
         else {
@@ -154,7 +168,6 @@ export default class AddEditProfile extends Component {
                     console.log(error);
                 });
             }
-
         }
     }
 
@@ -238,7 +251,8 @@ export default class AddEditProfile extends Component {
                             <TextField
                                 className="col-md-8"
                                 value={this.state.email}
-                                onChange={(ev, email) => (this.setState({ email }))}
+                                onChange={(ev, email) => (this.setState({ email, emailError: "" }))}
+                                errorMessage={this.state.emailError}
                             />
                         </div>
 
