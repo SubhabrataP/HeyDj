@@ -4,6 +4,11 @@ import { Callout } from 'office-ui-fabric-react';
 import Login from "../LoginPages/Login";
 import AdminLogin from "../LoginPages/AdminLogin";
 import AddEditProfile from "./AddEditProfile"
+import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+
+const headers = {
+    'Authorization': localStorage.getItem('Token')
+}
 
 export default class UserPersona extends Component {
     constructor(props) {
@@ -13,7 +18,8 @@ export default class UserPersona extends Component {
             isCalloutVisible: false,
             showLoginModal: false,
             showAdminLoginModal: false,
-            showEditProfile: false
+            showEditProfile: false,
+            userData: {}
         }
     }
 
@@ -30,7 +36,7 @@ export default class UserPersona extends Component {
             isCalloutVisible: false,
             showLoginModal: false,
             showAdminLoginModal: false,
-            showEditProfile: false
+            showEditProfile: false,
         });
     }
 
@@ -58,6 +64,20 @@ export default class UserPersona extends Component {
         this.setState({
             showEditProfile: true
         })
+        apiAxios.get(
+            "/api/user/" + localStorage.getItem('Id'),
+            {
+                headers: headers,
+            }
+        )
+        .then((res) => {
+            this.setState({
+                userData: res.data
+            })
+        })
+        .catch(function (error) {
+            alert('Error');
+        });
     }
 
     onLogout = () => {
@@ -86,7 +106,7 @@ export default class UserPersona extends Component {
                         <span role="list">
                             {localStorage.getItem("Token") ?
                                 <React.Fragment>
-                                    <span role="listitem" className="loginDropdown" onClick={this.onEditProfile}>
+                                    <span role="listitem" className="loginDropdown" onClick={() => (this.onEditProfile())}>
                                         Edit Profile
                                     </span>
                                     <hr />
@@ -120,10 +140,11 @@ export default class UserPersona extends Component {
                 />
                 <AddEditProfile
                         showModal={this.state.showEditProfile}
-                        dismissModalProps={() => (this.onDismissFromProps() )}
+                        dismissModalProps={() => (this.onDismissFromProps())}
                         isAdd={false}
                         roleToBeAdded={localStorage.getItem('Role')}
-                    />
+                        profileData={this.state.userData}
+                />
             </React.Fragment>
         )
     }

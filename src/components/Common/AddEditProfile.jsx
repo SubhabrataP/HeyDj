@@ -38,6 +38,8 @@ export default class AddEditProfile extends Component {
         this.setState({
             showModal: nextProps.showModal,
         });
+
+        console.log(nextProps.profileData);
         if (!(nextProps.profileData === undefined)) {
             this.setState({
                 firstName: nextProps.profileData.firstName === undefined ? "" :
@@ -179,7 +181,6 @@ export default class AddEditProfile extends Component {
 
     onDismiss = () => {
         this.setState({
-            showModal: false,
             profile_picture: {
                 value: "",
                 name: null

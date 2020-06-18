@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Layout from "../Home/Layout";
-import { DetailsList, SelectionMode, ColumnActionsMode } from 'office-ui-fabric-react';
+import { DetailsList, SelectionMode } from 'office-ui-fabric-react';
 import Search from '../Common/Search';
 import AddEditProfile from '../Common/AddEditProfile';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
@@ -69,9 +69,7 @@ export default class DjList extends Component{
                 }
             }
         ]
-    }
 
-    componentDidMount(){
         this.getAllDjsList();
     }
 
@@ -124,7 +122,6 @@ export default class DjList extends Component{
         this.getAllDjsList();
         this.setState({
             showAddEditDj: false,
-            editProfileData: {},
             isAdd: true
         })
     }
