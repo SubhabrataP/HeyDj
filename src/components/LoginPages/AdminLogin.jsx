@@ -28,6 +28,10 @@ export default class AdminLogin extends Component{
     }
 
     onDismiss = () => {
+        this.setState({
+            email: "",
+            password: ""
+        })
         this.props.dismissModalProps();
     }
 
