@@ -84,7 +84,7 @@ export default class DjList extends Component{
             this.getAllDjsList();
         })
         .catch(function (error) {
-            alert('Error');
+            alert(error.response.data);
         });
     }
 
@@ -107,23 +107,23 @@ export default class DjList extends Component{
             })
         })
         .catch(function (error) {
-            alert('Error');
+            alert(error.response.data);
         });
     }
 
     onAddDjClick = () => {
         this.setState({
             showAddEditDj: true,
-            isAdd: true
+            isAdd: true,
+            editProfileData: {}
         })
     }
 
     dismissAddEditModalProps = () => {
-        this.getAllDjsList();
         this.setState({
             showAddEditDj: false,
-            isAdd: true
         })
+        this.getAllDjsList();
     }
 
     editProfile = (item) => {
@@ -160,7 +160,7 @@ export default class DjList extends Component{
                         dismissModalProps={() => (this.dismissAddEditModalProps())}
                         isAdd={this.state.isAdd}
                         roleToBeAdded={"dj"}
-                        profileData={this.state.isAdd ? {} : this.state.editProfileData}
+                        profileData={this.state.editProfileData}
                     />
                 </Layout>
             </React.Fragment>

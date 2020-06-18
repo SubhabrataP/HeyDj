@@ -72,7 +72,8 @@ export default class Login extends Component {
             showModal: false,
             sendOTPClicked: false,
             phoneNumber: "",
-            OTP: ""
+            OTP: "",
+            isSendOTPDisabled: false
         });
         this.props.dismissModalProps();
     }
@@ -107,11 +108,14 @@ export default class Login extends Component {
                 this.setState({
                     sendOTPClicked: true,
                     isSendOTPDisabled: false
-
                 })
             })
-            .catch(function (error) {
-                alert('Error');
+            .catch((error) => {
+                alert(error.response.data);
+                this.setState({
+                    sendOTPClicked: false,
+                    isSendOTPDisabled: false
+                })
             });
         }
     }
@@ -157,7 +161,7 @@ export default class Login extends Component {
                 : this.props.history.push('/User');
             })
             .catch(function (error) {
-                alert('Error');
+                alert(error.response.data);
             });
         }
     }

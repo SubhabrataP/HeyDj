@@ -39,7 +39,6 @@ export default class AddEditProfile extends Component {
             showModal: nextProps.showModal,
         });
 
-        console.log(nextProps.profileData);
         if (!(nextProps.profileData === undefined)) {
             this.setState({
                 firstName: nextProps.profileData.firstName === undefined ? "" :
@@ -153,22 +152,39 @@ export default class AddEditProfile extends Component {
                         this.onDismiss();
                     })
                     .catch(function (error) {
-                        console.log(error)
+                        alert(error.response.data);
                     })
             }
-            else{
-                apiAxios.put(
-                    "/api/admin/user/" + this.state.editedUserId, data,
-                    {
-                        headers: headers,
-                    }
-                )
-                .then((res) => {
-                    this.onDismiss();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            else {
+                if (localStorage.getItem('Role') === "admin") {
+                    apiAxios.put(
+                        "/api/admin/user/" + this.state.editedUserId, data,
+                        {
+                            headers: headers,
+                        }
+                    )
+                        .then((res) => {
+                            this.onDismiss();
+                        })
+                        .catch(function (error) {
+                            alert(error.response.data);
+                        });
+                }
+                else
+                {
+                    apiAxios.put(
+                        "/api/user/" + this.state.editedUserId, data,
+                        {
+                            headers: headers,
+                        }
+                    )
+                        .then((res) => {
+                            this.onDismiss();
+                        })
+                        .catch(function (error) {
+                            alert(error.response.data);
+                        });
+                }
             }
         }
     }

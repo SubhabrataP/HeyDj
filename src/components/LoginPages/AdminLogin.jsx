@@ -54,7 +54,6 @@ export default class AdminLogin extends Component{
         )
         .then((response) => {
             if (response) {
-                console.log(response)
                 localStorage.setItem("Id", response.data.id);
                 localStorage.setItem("Email", response.data.emailId);
                 localStorage.setItem("Role", response.data.role);
@@ -64,7 +63,7 @@ export default class AdminLogin extends Component{
             this.props.history.push('/Admin');
         })
         .catch(function (error) {
-            console.log(error);
+            alert(error.response.data);
         });
     }
 
