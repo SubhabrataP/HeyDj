@@ -8,6 +8,7 @@ export default class DjDashboard extends Component{
             <Layout history={this.props.history}>
                 <div style={{ marginTop: "2%" }}>
                     <h1>Welcome Dj</h1>
+                    
                 </div>
             </Layout>
         )

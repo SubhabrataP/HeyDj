@@ -10,6 +10,8 @@ export default class LoginSuccess extends Component{
         var access_token = new URLSearchParams(url.search).get('state');
         var decoded_token = jwt(access_token);
 
+console.log(decoded_token);
+
         localStorage.setItem("Id", decoded_token.id);
         localStorage.setItem("Email", decoded_token.emailId);
         localStorage.setItem("Role", decoded_token.role);

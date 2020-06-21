@@ -31,7 +31,7 @@ export default class Header extends Component {
                                 <AdminHeaderNavLinks />
                             </div> :
                             localStorage.getItem('Role') === "dj" ?
-                                <div className="col-md-5 offset-md-1">
+                                <div className="col-md-6">
                                     <DjHeaderNavLinks />
                                 </div> :
                                 <div className="col-md-5 offset-md-1">

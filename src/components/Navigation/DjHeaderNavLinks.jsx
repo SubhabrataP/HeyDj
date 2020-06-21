@@ -6,37 +6,37 @@ export default class DjHeaderNavLinks extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    <Link to={{ pathname: "/Dj" }}
+                <Link to={{ pathname: "/" }}
                         href="#"
                         style={{
-                            paddingRight: "13px",
+                            paddingRight: "7px",
                             textDecoration: 'none'
                         }}>
                         Home
                     </Link>
-                    <Link to={{ pathname: "/" }}
+                    <Link to={{ pathname: "/Dj" }}
                         href="#"
                         style={{
-                            paddingRight: "13px",
+                            paddingRight: "7px",
                             textDecoration: 'none'
                         }}>
-                        Browse
+                        Dashboard
                     </Link>
-                    <Link to={{ pathname: "/" }}
+                    <Link to={{ pathname: "/Dj/Playlists" }}
                         href="#"
                         style={{
-                            paddingRight: "13px",
+                            paddingRight: "7px",
                             textDecoration: 'none'
                         }}>
-                        Podcasts
+                        My Playlists
                     </Link>
-                    <Link to={{ pathname: "/" }}
+                    <Link to={{ pathname: "/Dj/Contents" }}
                         href="#"
                         style={{
-                            paddingRight: "13px",
+                            paddingRight: "7px",
                             textDecoration: 'none'
                         }}>
-                        My Music
+                        My Contents
                     </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"

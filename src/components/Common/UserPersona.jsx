@@ -6,9 +6,6 @@ import AdminLogin from "../LoginPages/AdminLogin";
 import AddEditProfile from "./AddEditProfile"
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
-const headers = {
-    'Authorization': localStorage.getItem('Token')
-}
 
 export default class UserPersona extends Component {
     constructor(props) {
@@ -19,7 +16,8 @@ export default class UserPersona extends Component {
             showLoginModal: false,
             showAdminLoginModal: false,
             showEditProfile: false,
-            userData: {}
+            userData: {},
+            userImage: "/images/emptyUser.png"
         }
     }
 
@@ -67,7 +65,9 @@ export default class UserPersona extends Component {
         apiAxios.get(
             "/api/user/" + localStorage.getItem('Id'),
             {
-                headers: headers,
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                },
             }
         )
         .then((res) => {
@@ -92,8 +92,9 @@ export default class UserPersona extends Component {
                     <Persona
                         initialsColor={PersonaInitialsColor.coolGray}
                         size={PersonaSize.size42}
-                        text={"User Name"}
+                        text={this.state.userData.firstName + " " + this.state.userData.lastName}
                         hidePersonaDetails={true}
+                        imageUrl={process.env.PUBLIC_URL + this.state.userImage}
                     />
                 </span>
                 {this.state.isCalloutVisible && (

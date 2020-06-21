@@ -29,7 +29,7 @@ export default class CardTemplate extends Component {
                         >
                             <img className="w-100" src={process.env.PUBLIC_URL + "/images/playlist-5.png"} alt="playlist-5" />
                             <div className="overlayCard m-0 w-100">
-                                <div class="textCard text-left">
+                                <div className="textCard text-left">
                                     <h5>Playlist Name</h5>
                                     <p>DJ Nikhil</p>
                                 </div>

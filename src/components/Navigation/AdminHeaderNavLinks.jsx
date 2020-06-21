@@ -6,6 +6,14 @@ export default class AdminHeaderNavLinks extends Component {
         return (
             <React.Fragment>
                 <div className="row">
+                <Link to={{ pathname: "/" }}
+                        href="#"
+                        style={{
+                            paddingRight: "13px",
+                            textDecoration: 'none'
+                        }}>
+                        Home
+                    </Link>
                     <Link to={{ pathname: "/Admin" }}
                         href="#"
                         style={{

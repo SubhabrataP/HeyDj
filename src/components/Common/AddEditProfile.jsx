@@ -8,9 +8,6 @@ import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 const onlyDigitRegex = RegExp(/^[0-9]{12}$/);
 const emailRegex = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.([A-Za-z]{2,})+$/);
-const headers = {
-    'Authorization': localStorage.getItem('Token')
-}
 
 export default class AddEditProfile extends Component {
     constructor(props) {
@@ -18,7 +15,7 @@ export default class AddEditProfile extends Component {
         this.state = {
             showModal: false,
             profile_picture: {
-                value: "",
+                value: "/images/emptyUser.png",
                 name: null
             },
             firstNameError: "",
@@ -146,7 +143,9 @@ export default class AddEditProfile extends Component {
 
             if (this.props.isAdd) {
                 apiAxios.post('/api/admin/user', data, {
-                    headers: headers
+                    headers: {
+                        'Authorization': localStorage.getItem('Token')
+                    }
                 })
                     .then((response) => {
                         this.onDismiss();
@@ -160,7 +159,9 @@ export default class AddEditProfile extends Component {
                     apiAxios.put(
                         "/api/admin/user/" + this.state.editedUserId, data,
                         {
-                            headers: headers,
+                            headers: {
+                                'Authorization': localStorage.getItem('Token')
+                            },
                         }
                     )
                         .then((res) => {
@@ -243,6 +244,7 @@ export default class AddEditProfile extends Component {
                                 ref={(ref) => (this.upload = ref)}
                                 style={{ padding: "4px", marginBottom: "16px", width: "100%" }}
                                 onChange={(event) => this.editOnChangeHandler(event, "image")}
+                                accept={"image/*"}
                             />
                         </div>
 

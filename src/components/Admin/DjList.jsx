@@ -5,10 +5,6 @@ import Search from '../Common/Search';
 import AddEditProfile from '../Common/AddEditProfile';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
-const headers = {
-    'Authorization': localStorage.getItem('Token')
-}
-
 export default class DjList extends Component{
     constructor(props){
         super(props);
@@ -77,7 +73,9 @@ export default class DjList extends Component{
         apiAxios.delete(
             "/api/admin/user/"+id,
             {
-                headers: headers,
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                }
             }
         )
         .then((res) => {
@@ -92,7 +90,9 @@ export default class DjList extends Component{
         apiAxios.get(
             "/api/admin/user",
             {
-                headers: headers,
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                },
                 params: {
                     role: "dj"
                 }
