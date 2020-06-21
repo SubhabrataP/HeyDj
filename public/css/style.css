@@ -757,4 +757,26 @@ img {
   height: 10px;
   background: transparent;
 }
+
+.popupModal {
+    background-color: #242232;
+    margin: 0;
+}
+
+.customBtn {
+    background-color: #5cb2c6;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 40px;
+}
+
+.customBtnWhite {
+    background-color: #fff;
+    color: #5cb2c6;
+    padding: 6px 20px;
+    border-radius: 40px;
+}
+
+
+
 .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot{ display:block !important; outline:none; }

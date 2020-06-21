@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Modal } from 'office-ui-fabric-react';
-import { FormControl, Image } from "react-bootstrap";
+//import { Modal } from 'office-ui-fabric-react';
+import { FormControl, Image, Modal } from "react-bootstrap";
 import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -219,12 +219,18 @@ export default class AddEditProfile extends Component {
         return (
             <div className="container">
                 <Modal
-                    isOpen={this.state.showModal}
-                    isModeless={false}
-                    dragOptions={false}
+                    show={this.state.showModal}
+                    className="ml-3 mr-3"
+                    
                 >
-                    <h4 style={{marginBottom: "2%", textAlign: "center"}}>Add User</h4>
-                    <div className="container">
+                    <div className="row popupModal">
+                        <div className="col-sm-12 text-center mb-2" style={{borderBottom: '1px solid #fff'}}>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style={{marginBottom: "2%", textAlign: "right", color:'#fff'}} onClick={()=> {this.onDismiss()}}>
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 style={{margin: "2%", textAlign: "left", color:'#fff'}}>User Details</h4>
+                        </div>    
+                        <div className="col-sm-12">
                         <div className={"image-edit circle"} style={{marginBottom: "3%", border: "solid 0.5px black"}}>
                             <span className="overlay_profile">
                                 <i className="fa fa-plus upload-button"
@@ -249,28 +255,29 @@ export default class AddEditProfile extends Component {
                         </div>
 
                         <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>First Name:</Label>
+                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize:'18px'}}>First Name:</Label>
                             <TextField
-                                className="col-md-8"
+                                className="col-md-6"
                                 value={this.state.firstName}
                                 onChange={(ev, firstName) => (this.setState({ firstName, firstNameError: "" }))}
                                 errorMessage={this.state.firstNameError}
+
                             />
                         </div>
 
                         <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>Last Name:</Label>
+                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>Last Name:</Label>
                             <TextField
-                                className="col-md-8"
+                                className="col-md-6"
                                 value={this.state.lastName}
                                 onChange={(ev, lastName) => (this.setState({ lastName }))}
                             />
                         </div>
 
                         <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>Email:</Label>
+                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>Email:</Label>
                             <TextField
-                                className="col-md-8"
+                                className="col-md-6"
                                 value={this.state.email}
                                 onChange={(ev, email) => (this.setState({ email, emailError: "" }))}
                                 errorMessage={this.state.emailError}
@@ -278,9 +285,9 @@ export default class AddEditProfile extends Component {
                         </div>
 
                         <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>Mobile:</Label>
+                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>Mobile:</Label>
                             <TextField
-                                className="col-md-8"
+                                className="col-md-6"
                                 errorMessage={this.state.mobileError}
                                 value={this.state.mobile}
                                 onChange={(ev, mobile) => (this.onMobileNoChange(ev, mobile))}
@@ -288,21 +295,22 @@ export default class AddEditProfile extends Component {
                         </div>
 
                         <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>City:</Label>
+                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>City:</Label>
                             <TextField
-                                className="col-md-8"
+                                className="col-md-6"
                                 value={this.state.city}
                                 onChange={(ev, city) => (this.setState({ city }))}
                             />
                         </div>
 
-                        <div style={{textAlign:"center", marginTop: "15px"}}>
-                            <button type="button" className="btn" onClick={this.onAddEditUser}>
+                        <div style={{textAlign:"center", margin: "15px 0"}}>
+                            <button type="button" className="customBtn" onClick={this.onAddEditUser}>
                                 {this.props.isAdd ? "Add" : "Update"}
                             </button>
-                            <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
+                            <button type="button" className="customBtnWhite ml-4" onClick={()=> {this.onDismiss()}}>Cancel</button>
                         </div>
-                    </div>
+                        </div>
+                    </div>    
                 </Modal>
             </div>
         )

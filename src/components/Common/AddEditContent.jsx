@@ -104,6 +104,7 @@ export default class AddEditContent extends Component{
                     isOpen={true}
                     isModeless={false}
                     dragOptions={false}
+                    className="popupModal"
                 >
                     <h4 style={{marginBottom: "10%", textAlign: "center"}}>Add Content</h4>
                     <div className="container">
