@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Modal } from 'office-ui-fabric-react';
-import { FormControl, Image } from "react-bootstrap";
+import { FormControl, Image, Modal } from "react-bootstrap";
 import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -13,8 +12,11 @@ export default class AddEditContent extends Component{
 
         this.state={
             Title: "",
-            thumbnailPath: "",
-            contentPath: "",
+            thumbnail: {
+                path: "",
+                value: ""
+            },
+            content: "",
             percentComplete: 1,
             showProgress: false
         }
@@ -32,12 +34,6 @@ export default class AddEditContent extends Component{
     editOnChangeHandler = (event, type) => {
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
-            // if (!file.type.includes("image")) {
-            //     //TODO: Show Error
-            //     console.error("Image is not Selected");
-            //     return;
-            // }
-            // Encodes Image to upload and Preview
             let reader = new FileReader();
             reader.readAsDataURL(file);
 
@@ -48,17 +44,21 @@ export default class AddEditContent extends Component{
                     })
                 }
             }.bind(this)
-
             reader.onprogress = this.updateProgress.bind(this);
             reader.onloadend = function () {
+                console.log(file);
                 if (type === "image") {
+                    let image = {
+                        path: reader.result,
+                        value: file
+                    }
                     this.setState({
-                        thumbnailPath: reader.result,
+                        thumbnail: image,
                     });
                 }
                 else if (type === "multimedia") {
                     this.setState({
-                        contentPath: reader.result,
+                        content: file,
                     });
                 }
             }.bind(this);
@@ -74,39 +74,37 @@ export default class AddEditContent extends Component{
     }
 
     onAddEditContent = () => {
-        const data = {
-            "title": this.state.Title,
-            "thumbnail": this.state.thumbnailPath,
-            "content": this.state.contentPath
-        }
+        var bodyFormData = new FormData();
+        bodyFormData.set('title', this.state.Title);
+        bodyFormData.append('thumbnail', this.state.thumbnail.value);
+        bodyFormData.append('content', this.state.content);
 
-        console.log(data)
-
-        apiAxios.post('/api/dj/content', data, {
+        apiAxios.post('/api/dj/content', bodyFormData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
                 'Authorization': localStorage.getItem('Token')
             }
         })
         .then((response) => {
-            // this.onDismiss();
+            this.onDismiss();
             console.log(response)
         })
         .catch(function (error) {
-            alert(error.response.data);
+            console.log(error.response);
         })
+    }
+
+    onDismiss = () => {
+        this.props.onDismiss();
     }
 
     render(){
         return(
             <div className="container">
                 <Modal
-                    isOpen={true}
-                    isModeless={false}
-                    dragOptions={false}
-                    className="popupModal"
+                    show={this.props.showModal}
+                    className="ml-3 mr-3"
                 >
-                    <h4 style={{marginBottom: "10%", textAlign: "center"}}>Add Content</h4>
+                    <h4 style={{marginBottom: "10%", textAlign: "center", color:'black'}}>Add Content</h4>
                     <div className="container">
                         <div className="row" style={{ marginBottom: "5%" }}>
                             <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Title:</Label>
@@ -144,8 +142,7 @@ export default class AddEditContent extends Component{
                                 </i>
                             </span>
                             <Image
-                                // className="profile-pic"
-                                src={this.state.thumbnailPath ? this.state.thumbnailPath : ""}
+                                src={this.state.thumbnail.path ? this.state.thumbnail.path : ""}
                                 thumbnail
                             />
                             <FormControl
@@ -158,52 +155,11 @@ export default class AddEditContent extends Component{
                             />
                         </div>
                         
-
-                         
-
-                        {/* <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>Last Name:</Label>
-                            <TextField
-                                className="col-md-8"
-                                value={this.state.lastName}
-                                onChange={(ev, lastName) => (this.setState({ lastName }))}
-                            />
-                        </div>
-
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>Email:</Label>
-                            <TextField
-                                className="col-md-8"
-                                value={this.state.email}
-                                onChange={(ev, email) => (this.setState({ email, emailError: "" }))}
-                                errorMessage={this.state.emailError}
-                            />
-                        </div>
-
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>Mobile:</Label>
-                            <TextField
-                                className="col-md-8"
-                                errorMessage={this.state.mobileError}
-                                value={this.state.mobile}
-                                onChange={(ev, mobile) => (this.onMobileNoChange(ev, mobile))}
-                            />
-                        </div>
-
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-4" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "right"}}>City:</Label>
-                            <TextField
-                                className="col-md-8"
-                                value={this.state.city}
-                                onChange={(ev, city) => (this.setState({ city }))}
-                            />
-                        </div> */}
-
                         <div style={{textAlign:"center", marginTop: "15px"}}>
                             <button type="button" className="btn" onClick={this.onAddEditContent}>
                                 Add
                             </button>
-                            {/* <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button> */}
+                            <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
                         </div> 
                     </div>
                 </Modal>

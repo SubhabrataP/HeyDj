@@ -15,7 +15,7 @@ export default class AddEditProfile extends Component {
         this.state = {
             showModal: false,
             profile_picture: {
-                value: "/images/emptyUser.png",
+                value: "",
                 name: null
             },
             firstNameError: "",
@@ -37,6 +37,10 @@ export default class AddEditProfile extends Component {
         });
 
         if (!(nextProps.profileData === undefined)) {
+            let image={
+                value: nextProps.profileData.profileImage,
+                name: ""
+            }
             this.setState({
                 firstName: nextProps.profileData.firstName === undefined ? "" :
                     nextProps.profileData.firstName,
@@ -50,6 +54,7 @@ export default class AddEditProfile extends Component {
                     nextProps.profileData.city,
                 editedUserId: nextProps.profileData.id === undefined ? "" :
                     nextProps.profileData.id,
+                profile_picture: image
             })
         }
     }
@@ -130,19 +135,18 @@ export default class AddEditProfile extends Component {
             isValid = false
         }
 
+        var bodyFormData = new FormData();
+        bodyFormData.set('firstName', this.state.firstName);
+        bodyFormData.set('lastName', this.state.lastName);
+        bodyFormData.set('emailId', this.state.email);
+        bodyFormData.set('phoneNumber', this.state.mobile);
+        bodyFormData.set('role', this.props.roleToBeAdded);
+        bodyFormData.set('city', this.state.city);
+        bodyFormData.append('profileImage', this.state.profile_picture.value);
+
         if (isValid) {
-
-            const data = {
-                "firstName": this.state.firstName,
-                "lastName": this.state.lastName,
-                "emailId": this.state.email,
-                "phoneNumber": this.state.mobile,
-                "role": this.props.roleToBeAdded,
-                "city": this.state.city
-            }
-
             if (this.props.isAdd) {
-                apiAxios.post('/api/admin/user', data, {
+                apiAxios.post('/api/admin/user', bodyFormData, {
                     headers: {
                         'Authorization': localStorage.getItem('Token')
                     }
@@ -151,13 +155,13 @@ export default class AddEditProfile extends Component {
                         this.onDismiss();
                     })
                     .catch(function (error) {
-                        alert(error.response.data);
+                        alert(error.response === undefined ? error.response : error.response.data);
                     })
             }
             else {
                 if (localStorage.getItem('Role') === "admin") {
                     apiAxios.put(
-                        "/api/admin/user/" + this.state.editedUserId, data,
+                        "/api/admin/user/" + this.state.editedUserId, bodyFormData,
                         {
                             headers: {
                                 'Authorization': localStorage.getItem('Token')
@@ -168,13 +172,13 @@ export default class AddEditProfile extends Component {
                             this.onDismiss();
                         })
                         .catch(function (error) {
-                            alert(error.response.data);
+                            alert(error.response === undefined ? error.response : error.response.data);
                         });
                 }
                 else
                 {
                     apiAxios.put(
-                        "/api/user/" + this.state.editedUserId, data,
+                        "/api/user/" + this.state.editedUserId, bodyFormData,
                         {
                             headers: {
                                 'Authorization': localStorage.getItem('Token')
@@ -185,7 +189,7 @@ export default class AddEditProfile extends Component {
                             this.onDismiss();
                         })
                         .catch(function (error) {
-                            alert(error.response.data);
+                            alert(error.response === undefined ? error.response : error.response.data);
                         });
                 }
             }
@@ -221,11 +225,10 @@ export default class AddEditProfile extends Component {
                 <Modal
                     show={this.state.showModal}
                     className="ml-3 mr-3"
-                    
                 >
                     <div className="row popupModal">
                         <div className="col-sm-12 text-center mb-2" style={{borderBottom: '1px solid #fff'}}>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style={{marginBottom: "2%", textAlign: "right", color:'#fff'}} onClick={()=> {this.onDismiss()}}>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" style={{marginBottom: "2%", textAlign: "right", color:'#fff'}} onClick={()=> {this.onDismiss()}}>
                               <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 style={{margin: "2%", textAlign: "left", color:'#fff'}}>User Details</h4>
@@ -304,7 +307,7 @@ export default class AddEditProfile extends Component {
                         </div>
 
                         <div style={{textAlign:"center", margin: "15px 0"}}>
-                            <button type="button" className="customBtn" onClick={this.onAddEditUser}>
+                            <button type="button" className="customBtn" onClick={() => {this.onAddEditUser()}}>
                                 {this.props.isAdd ? "Add" : "Update"}
                             </button>
                             <button type="button" className="customBtnWhite ml-4" onClick={()=> {this.onDismiss()}}>Cancel</button>

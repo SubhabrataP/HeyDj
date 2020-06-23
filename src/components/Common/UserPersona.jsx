@@ -71,6 +71,7 @@ export default class UserPersona extends Component {
             }
         )
         .then((res) => {
+            console.log(res.data)
             this.setState({
                 userData: res.data
             })
