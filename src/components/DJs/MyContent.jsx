@@ -5,6 +5,8 @@ import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import Search from '../Common/Search';
 import AddEditPlayList from "./AddEditPlayList";
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import SelectContentModal from "./SelectContentModal";
 
 export default class MyContent extends Component{
     constructor(props){
@@ -13,9 +15,11 @@ export default class MyContent extends Component{
         this.state = {
             contentDetails : "",
             addEditContentModal: false,
-            selectionDetails: "",
-            addEditPlaylistModal: false,
-            itemsPerPage: 2
+            showSelectContentModal: false,
+            itemsPerPage: 2,
+            isAdd: true,
+            editContent: ""
+
         }
 
         this.columns= [
@@ -52,31 +56,53 @@ export default class MyContent extends Component{
                 isResizable: false,
                 minWidth: 150,
                 maxWidth: 150,
-                // onRender: (item) => {
-                //     return (
-                //         <React.Fragment>
-                //             <button onClick={() => (this.editProfile(item))}>Edit</button>
-                //             <button onClick={() => (this.deleteProfile(item.id))}>Delete</button>
-                //         </React.Fragment>
-                //     )
-                // }
+                onRender: (item) => {
+                    return (
+                        <React.Fragment>
+                            <button onClick={() => {this.editContent(item)}}>Edit</button>
+                            <button onClick={() => (this.deleteContent(item.id))}>Delete</button>
+                        </React.Fragment>
+                    )
+                }
             }
-        ]
+        ];
 
-        this._selection = new Selection({
-            onSelectionChanged: () => {
-                this.setState({
-                    selectionDetails: this._getSelectionDetails(),
-                });
-            },
-        });
+        // this._selection = new Selection({
+        //     onSelectionChanged: () => {
+        //         this.setState({
+        //             selectionDetails: this._getSelectionDetails(),
+        //         });
+        //     },
+        // });
         this.getContentList();
     }
 
-    _getSelectionDetails = () => {
-        const selectionCount = this._selection.getSelection();
-        return selectionCount;
-      }
+    editContent = (item) => {
+        this.setState({
+            isAdd: false,
+            editContent: item,
+            addEditContentModal: true
+        })
+    }
+
+    deleteContent = (id) => {
+        apiAxios.delete('/api/dj/content/' + id, {
+            headers: {
+                'Authorization': localStorage.getItem('Token')
+            }
+        })
+        .then((response) => {
+            this.getContentList();
+        })
+        .catch(function (error) {
+            console.log(error.response);
+        })
+    }
+
+    // _getSelectionDetails = () => {
+    //     const selectionCount = this._selection.getSelection();
+    //     return selectionCount;
+    //   }
     
 
     getContentList = () => {
@@ -93,7 +119,7 @@ export default class MyContent extends Component{
         )
         .then((res) => {
             this.setState({
-                contentDetails: res.data
+                contentDetails: res.data,
             })
         })
         .catch(function (error) {
@@ -110,16 +136,18 @@ export default class MyContent extends Component{
     onDismiss = () => {
         this.setState({
             addEditContentModal: false,
-            addEditPlaylistModal: false
+            showSelectContentModal: false,
         });
         this.getContentList();
     }
 
     onCreatePlaylist = () => {
-        if(this.state.selectionDetails.length > 0)
-        {
+        // if(this.state.selectionDetails.length > 0)
+        // {
             this.setState({
-                addEditPlaylistModal: true
+                showSelectContentModal: true,
+                // selectionMode: true,
+                // selectionDetails: []
             })
             // apiAxios.post('/api/dj/playlist', bodyFormData, {
             //     headers: {
@@ -132,15 +160,19 @@ export default class MyContent extends Component{
             //     .catch(function (error) {
             //         alert(error.response === undefined ? error.response : error.response.data);
             //     })
-        }
-        else{
-            alert('Select atleast one from content list.')
-        }
+        // }
+        // else{
+        //     alert('Select atleast one from content list.')
+        //     this.setState({
+        //         selectionMode: true,
+        //         selectionDetails: []
+        //     })
+        // }
     }
 
     onLoadMoreClick = () => {
         this.setState({
-            itemsPerPage: this.state.itemsPerPage + 2
+            itemsPerPage: this.state.itemsPerPage + 2,
         })
     }
 
@@ -160,10 +192,9 @@ export default class MyContent extends Component{
 
                         <div className="row">
                             <DetailsList
-                                selectionMode={SelectionMode.multiple}
+                                selectionMode={SelectionMode.none}
                                 items={this.state.contentDetails.slice(0,this.state.itemsPerPage)}
                                 columns={this.columns}
-                                selection={this._selection}
                             />
                         </div>
 
@@ -177,11 +208,18 @@ export default class MyContent extends Component{
                     <AddEditContent
                         showModal={this.state.addEditContentModal}
                         onDismiss={() => (this.onDismiss())}
+                        isAdd={this.state.isAdd}
+                        editContent={this.state.editContent}
                     />
-                    <AddEditPlayList
+                    {/* <AddEditPlayList
                         showModal={this.state.addEditPlaylistModal}
                         onDismiss={() => (this.onDismiss())}
                         selectedContent={this.state.addEditPlaylistModal ? this.state.selectionDetails : null}
+                    /> */}
+                    <SelectContentModal
+                        showModal={this.state.showSelectContentModal}
+                        onDismiss={() => (this.onDismiss())}
+                        contentDetails={this.state.contentDetails}
                     />
                 </Layout>
             </React.Fragment>

@@ -5,6 +5,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import axios from "axios";
 
 export default class AddEditContent extends Component{
     constructor(props){
@@ -18,7 +19,8 @@ export default class AddEditContent extends Component{
             },
             content: "",
             percentComplete: 1,
-            showProgress: false
+            showProgress: false,
+            contentId: ""
         }
     }
 
@@ -27,6 +29,22 @@ export default class AddEditContent extends Component{
             var percentLoaded = (evt.loaded / evt.total);
             this.setState({
                 percentComplete: percentLoaded
+            })
+        }
+    }
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        if (!nextProps.isAdd) {
+            this.setState({
+                Title: nextProps.editContent.title,
+                thumbnail: {
+                    path: nextProps.editContent.thumbnail,
+                    value: nextProps.editContent.thumbnail
+                },
+                contentId: nextProps.editContent.id,
+                // content: new File(nextProps.editContent.content, ""),
+                percentComplete: 1,
+                showProgress: false
             })
         }
     }
@@ -79,18 +97,36 @@ export default class AddEditContent extends Component{
         bodyFormData.append('thumbnail', this.state.thumbnail.value);
         bodyFormData.append('content', this.state.content);
 
-        apiAxios.post('/api/dj/content', bodyFormData, {
-            headers: {
-                'Authorization': localStorage.getItem('Token')
-            }
-        })
-        .then((response) => {
-            this.onDismiss();
-            console.log(response)
-        })
-        .catch(function (error) {
-            console.log(error.response);
-        })
+        if(this.props.isAdd){
+            apiAxios.post('/api/dj/content', bodyFormData, {
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                }
+            })
+            .then((response) => {
+                this.onDismiss();
+            })
+            .catch(function (error) {
+                console.log(error.response);
+            })
+        }
+        else{
+            var editData = new FormData();
+            editData.set('title', this.state.Title);
+            editData.append('thumbnail', this.state.thumbnail.value);
+
+            apiAxios.put("/api/dj/content/" + this.state.contentId, editData, {
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                }
+            })
+            .then((response) => {
+                this.onDismiss();
+            })
+            .catch(function (error) {
+                console.log(error.response);
+            })
+        }
     }
 
     onDismiss = () => {
@@ -115,22 +151,24 @@ export default class AddEditContent extends Component{
                             // errorMessage={this.state.firstNameError}
                             />
                         </div>
-                        <div style={{ marginBottom: "8%" }}>
-                            <Label className="col-md-3" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Content:</Label>
-                            <FormControl
-                                type={"file"}
-                                style={{ padding: "4px", marginBottom: "6px", width: "100%" }}
-                                onChange={(event) => this.editOnChangeHandler(event, "multimedia")}
-                                accept={"audio/*, video/*"}
-                            />
-                            {this.state.showProgress ?
-                                this.state.percentComplete === 1 ?
-                                    <label style={{ color: "green" }} >Upload Complete</label>
-                                    :
-                                    <ProgressIndicator barHeight={4} label="Upload Status" percentComplete={this.state.percentComplete} />
-                                : null
-                            }
-                        </div>
+                        {this.props.isAdd ?
+                            <div style={{ marginBottom: "8%" }}>
+                                <Label className="col-md-3" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Content:</Label>
+                                <FormControl
+                                    type={"file"}
+                                    style={{ padding: "4px", marginBottom: "6px", width: "100%" }}
+                                    onChange={(event) => this.editOnChangeHandler(event, "multimedia")}
+                                    accept={"audio/*, video/*"}
+                                />
+                                {this.state.showProgress ?
+                                    this.state.percentComplete === 1 ?
+                                        <label style={{ color: "green" }} >Upload Complete</label>
+                                        :
+                                        <ProgressIndicator barHeight={4} label="Upload Status" percentComplete={this.state.percentComplete} />
+                                    : null
+                                }
+                            </div>
+                            : null}
 
                         <div className={"image-edit"} >
                         <Label className="col-md-4" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Thumbnail:</Label>
@@ -157,7 +195,7 @@ export default class AddEditContent extends Component{
                         
                         <div style={{textAlign:"center", marginTop: "15px"}}>
                             <button type="button" className="btn" onClick={this.onAddEditContent}>
-                                Add
+                                {this.props.isAdd ? "Add" : "Update" }
                             </button>
                             <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
                         </div> 

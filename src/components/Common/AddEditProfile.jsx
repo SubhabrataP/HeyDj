@@ -27,7 +27,8 @@ export default class AddEditProfile extends Component {
             mobile: "91",
             city: "",
             isValid: false,
-            editedUserId: ""
+            editedUserId: "",
+            userNotExisting: true
         }
     }
 
@@ -125,6 +126,35 @@ export default class AddEditProfile extends Component {
                 })
     }
 
+    updateUserToDj = (userid) => {
+        apiAxios.get(
+            "/api/admin/user/" + userid,
+            {
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                },
+            }
+        )
+        .then((res) => {
+            this.setState({
+                firstName: res.data.firstName,
+                lastName: res.data.lastName,
+                email: res.data.emailId,
+                mobile: res.data.phoneNumber,
+                city: res.data.city,
+                editedUserId: res.data.id,
+                profile_picture: {
+                    value: res.data.profileImage,
+                    name: ""
+                },
+                userNotExisting: false
+            })
+        })
+        .catch(function (error) {
+                alert(error.response === undefined ? error.response : error.response.data);
+        });
+    }
+
     onAddEditUser = async() => {
         let isValid = false;
         await this.formValidation();
@@ -145,7 +175,7 @@ export default class AddEditProfile extends Component {
         bodyFormData.append('profileImage', this.state.profile_picture.value);
 
         if (isValid) {
-            if (this.props.isAdd) {
+            if (this.props.isAdd && this.state.userNotExisting) {
                 apiAxios.post('/api/admin/user', bodyFormData, {
                     headers: {
                         'Authorization': localStorage.getItem('Token')
@@ -154,8 +184,14 @@ export default class AddEditProfile extends Component {
                     .then((response) => {
                         this.onDismiss();
                     })
-                    .catch(function (error) {
-                        alert(error.response === undefined ? error.response : error.response.data);
+                    .catch((error) => {
+                        if(error.response.data.error.includes("user already exists")){
+                            alert(error.response.data.error + ". So you can update.")
+                            this.updateUserToDj(error.response.data.userId);
+                        }
+                        else{
+                            alert(error.response === undefined ? error.response : error.response.data);
+                        }
                     })
             }
             else {
@@ -214,7 +250,9 @@ export default class AddEditProfile extends Component {
             lastName: "",
             email: "",
             mobile: "",
-            city: ""
+            city: "",
+            emailError:"",
+            userNotExisting: true
         });
         this.props.dismissModalProps();
     }
@@ -308,7 +346,7 @@ export default class AddEditProfile extends Component {
 
                         <div style={{textAlign:"center", margin: "15px 0"}}>
                             <button type="button" className="customBtn" onClick={() => {this.onAddEditUser()}}>
-                                {this.props.isAdd ? "Add" : "Update"}
+                                {(this.props.isAdd && this.state.userNotExisting) ? "Add" : "Update"}
                             </button>
                             <button type="button" className="customBtnWhite ml-4" onClick={()=> {this.onDismiss()}}>Cancel</button>
                         </div>

@@ -11,12 +11,6 @@ export default class AddEditPlayList extends Component {
         this.state={
             title: ""
         }
-
-        console.log(this.props.selectedContent)
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps){
-        console.log(nextProps.selectedContent)
     }
 
     onDismiss = () => {
@@ -97,7 +91,7 @@ export default class AddEditPlayList extends Component {
                             <div style={{ textAlign: "center", marginTop: "15px" }}>
                                 <button type="button" className="btn" onClick={this.onAddEditContent}>
                                     Add
-                            </button>
+                                </button>
                                 <button type="button" className="btn" onClick={() => { this.onDismiss() }}>Cancel</button>
                             </div>
                         </div>
