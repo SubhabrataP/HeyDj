@@ -5,6 +5,7 @@ import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import AdditionalDjFields from "../Common/AdditionalDjFields"
 
 const onlyDigitRegex = RegExp(/^[0-9]{12}$/);
 const emailRegex = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.([A-Za-z]{2,})+$/);
@@ -28,17 +29,23 @@ export default class AddEditProfile extends Component {
             city: "",
             isValid: false,
             editedUserId: "",
-            userNotExisting: true
+            userNotExisting: true,
+            workExpData: [{
+                jobTitle: "",
+                company: "",
+                city: "",
+                description: "",
+            }]
         }
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState({
             showModal: nextProps.showModal,
         });
 
         if (!(nextProps.profileData === undefined)) {
-            let image={
+            let image = {
                 value: nextProps.profileData.profileImage,
                 name: ""
             }
@@ -55,7 +62,17 @@ export default class AddEditProfile extends Component {
                     nextProps.profileData.city,
                 editedUserId: nextProps.profileData.id === undefined ? "" :
                     nextProps.profileData.id,
-                profile_picture: image
+                profile_picture: image,
+                workExpData: nextProps.profileData.workExperience === undefined ?
+                    [
+                        {
+                            jobTitle: "",
+                            company: "",
+                            city: "",
+                            description: "",
+                        }
+                    ]
+                    : nextProps.profileData.workExperience
             })
         }
     }
@@ -135,27 +152,27 @@ export default class AddEditProfile extends Component {
                 },
             }
         )
-        .then((res) => {
-            this.setState({
-                firstName: res.data.firstName,
-                lastName: res.data.lastName,
-                email: res.data.emailId,
-                mobile: res.data.phoneNumber,
-                city: res.data.city,
-                editedUserId: res.data.id,
-                profile_picture: {
-                    value: res.data.profileImage,
-                    name: ""
-                },
-                userNotExisting: false
+            .then((res) => {
+                this.setState({
+                    firstName: res.data.firstName,
+                    lastName: res.data.lastName,
+                    email: res.data.emailId,
+                    mobile: res.data.phoneNumber,
+                    city: res.data.city,
+                    editedUserId: res.data.id,
+                    profile_picture: {
+                        value: res.data.profileImage,
+                        name: ""
+                    },
+                    userNotExisting: false
+                })
             })
-        })
-        .catch(function (error) {
+            .catch(function (error) {
                 alert(error.response === undefined ? error.response : error.response.data);
-        });
+            });
     }
 
-    onAddEditUser = async() => {
+    onAddEditUser = async (workData) => {
         let isValid = false;
         await this.formValidation();
         if (this.state.mobileError == "" && this.state.firstNameError == "" && this.state.emailError == "") {
@@ -185,11 +202,11 @@ export default class AddEditProfile extends Component {
                         this.onDismiss();
                     })
                     .catch((error) => {
-                        if(error.response.data.error.includes("user already exists")){
+                        if (error.response.data.error.includes("user already exists")) {
                             alert(error.response.data.error + ". So you can update.")
                             this.updateUserToDj(error.response.data.userId);
                         }
-                        else{
+                        else {
                             alert(error.response === undefined ? error.response : error.response.data);
                         }
                     })
@@ -211,8 +228,10 @@ export default class AddEditProfile extends Component {
                             alert(error.response === undefined ? error.response : error.response.data);
                         });
                 }
-                else
-                {
+                else {
+                    if (localStorage.getItem('Role') === "dj") {
+                        bodyFormData.set('workExperience', JSON.stringify(workData));
+                    }
                     apiAxios.put(
                         "/api/user/" + this.state.editedUserId, bodyFormData,
                         {
@@ -225,7 +244,7 @@ export default class AddEditProfile extends Component {
                             this.onDismiss();
                         })
                         .catch(function (error) {
-                            alert(error.response === undefined ? error.response : error.response.data);
+                            alert(error.response === undefined ? error.response : error.response.data.error);
                         });
                 }
             }
@@ -251,7 +270,7 @@ export default class AddEditProfile extends Component {
             email: "",
             mobile: "",
             city: "",
-            emailError:"",
+            emailError: "",
             userNotExisting: true
         });
         this.props.dismissModalProps();
@@ -265,93 +284,97 @@ export default class AddEditProfile extends Component {
                     className="ml-3 mr-3"
                 >
                     <div className="row popupModal">
-                        <div className="col-sm-12 text-center mb-2" style={{borderBottom: '1px solid #fff'}}>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" style={{marginBottom: "2%", textAlign: "right", color:'#fff'}} onClick={()=> {this.onDismiss()}}>
-                              <span aria-hidden="true">&times;</span>
+                        <div className="col-sm-12 text-center mb-2" style={{ borderBottom: '1px solid #fff' }}>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" style={{ marginBottom: "2%", textAlign: "right", color: '#fff' }} onClick={() => { this.onDismiss() }}>
+                                <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 style={{margin: "2%", textAlign: "left", color:'#fff'}}>User Details</h4>
-                        </div>    
+                            <h4 style={{ margin: "2%", textAlign: "left", color: '#fff' }}>User Details</h4>
+                        </div>
                         <div className="col-sm-12">
-                        <div className={"image-edit circle"} style={{marginBottom: "3%", border: "solid 0.5px black"}}>
-                            <span className="overlay_profile">
-                                <i className="fa fa-plus upload-button"
-                                    onClick={() => {
-                                        this.upload.click();
-                                    }} >
-                                </i>
-                            </span>
-                            <Image
-                                className="profile-pic"
-                                src={this.state.profile_picture.value ? this.state.profile_picture.value : ""}
-                                roundedCircle
-                            />
-                            <FormControl
-                                aria-label="Image"
-                                type={"file"}
-                                ref={(ref) => (this.upload = ref)}
-                                style={{ padding: "4px", marginBottom: "16px", width: "100%" }}
-                                onChange={(event) => this.editOnChangeHandler(event, "image")}
-                                accept={"image/*"}
-                            />
-                        </div>
+                            <div className={"image-edit circle"} style={{ marginBottom: "3%", border: "solid 0.5px black" }}>
+                                <span className="overlay_profile">
+                                    <i className="fa fa-plus upload-button"
+                                        onClick={() => {
+                                            this.upload.click();
+                                        }} >
+                                    </i>
+                                </span>
+                                <Image
+                                    className="profile-pic"
+                                    src={this.state.profile_picture.value ? this.state.profile_picture.value : ""}
+                                    roundedCircle
+                                />
+                                <FormControl
+                                    aria-label="Image"
+                                    type={"file"}
+                                    ref={(ref) => (this.upload = ref)}
+                                    style={{ padding: "4px", marginBottom: "16px", width: "100%" }}
+                                    onChange={(event) => this.editOnChangeHandler(event, "image")}
+                                    accept={"image/*"}
+                                />
+                            </div>
 
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize:'18px'}}>First Name:</Label>
-                            <TextField
-                                className="col-md-6"
-                                value={this.state.firstName}
-                                onChange={(ev, firstName) => (this.setState({ firstName, firstNameError: "" }))}
-                                errorMessage={this.state.firstNameError}
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>First Name:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.firstName}
+                                    onChange={(ev, firstName) => (this.setState({ firstName, firstNameError: "" }))}
+                                    errorMessage={this.state.firstNameError}
 
-                            />
-                        </div>
+                                />
+                            </div>
 
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>Last Name:</Label>
-                            <TextField
-                                className="col-md-6"
-                                value={this.state.lastName}
-                                onChange={(ev, lastName) => (this.setState({ lastName }))}
-                            />
-                        </div>
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Last Name:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.lastName}
+                                    onChange={(ev, lastName) => (this.setState({ lastName }))}
+                                />
+                            </div>
 
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>Email:</Label>
-                            <TextField
-                                className="col-md-6"
-                                value={this.state.email}
-                                onChange={(ev, email) => (this.setState({ email, emailError: "" }))}
-                                errorMessage={this.state.emailError}
-                            />
-                        </div>
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Email:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.email}
+                                    onChange={(ev, email) => (this.setState({ email, emailError: "" }))}
+                                    errorMessage={this.state.emailError}
+                                />
+                            </div>
 
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>Mobile:</Label>
-                            <TextField
-                                className="col-md-6"
-                                errorMessage={this.state.mobileError}
-                                value={this.state.mobile}
-                                onChange={(ev, mobile) => (this.onMobileNoChange(ev, mobile))}
-                            />
-                        </div>
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Mobile:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    errorMessage={this.state.mobileError}
+                                    value={this.state.mobile}
+                                    onChange={(ev, mobile) => (this.onMobileNoChange(ev, mobile))}
+                                />
+                            </div>
 
-                        <div className="row" style={{marginBottom: "5%"}}>
-                            <Label className="col-md-5" style={{paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff",fontSize:'18px'}}>City:</Label>
-                            <TextField
-                                className="col-md-6"
-                                value={this.state.city}
-                                onChange={(ev, city) => (this.setState({ city }))}
-                            />
-                        </div>
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>City:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.city}
+                                    onChange={(ev, city) => (this.setState({ city }))}
+                                />
+                            </div>
 
-                        <div style={{textAlign:"center", margin: "15px 0"}}>
-                            <button type="button" className="customBtn" onClick={() => {this.onAddEditUser()}}>
-                                {(this.props.isAdd && this.state.userNotExisting) ? "Add" : "Update"}
-                            </button>
-                            <button type="button" className="customBtnWhite ml-4" onClick={()=> {this.onDismiss()}}>Cancel</button>
+                            {(localStorage.getItem('Role') === "dj" && !this.props.isAdd) ?
+                                <AdditionalDjFields onUpdate={this.onAddEditUser} onDismiss={this.onDismiss} defaultData={this.state.workExpData} />
+                                :
+
+                                <div style={{ textAlign: "center", margin: "15px 0" }}>
+                                    <button type="button" className="customBtn" onClick={() => { this.onAddEditUser() }}>
+                                        {(this.props.isAdd && this.state.userNotExisting) ? "Add" : "Update"}
+                                    </button>
+                                    <button type="button" className="customBtnWhite ml-4" onClick={() => { this.onDismiss() }}>Cancel</button>
+                                </div>}
                         </div>
-                        </div>
-                    </div>    
+                    </div>
                 </Modal>
             </div>
         )
