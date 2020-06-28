@@ -4,14 +4,15 @@ import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
+import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 export default class SelectContentModal extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            contentDetails : "",
-            selectionDetails: ""
+            selectionDetails: "",
+            contentDetails: []
         }
 
         this.columns= [
@@ -43,6 +44,8 @@ export default class SelectContentModal extends Component {
                 });
             },
         });
+
+        this.getContentList();
     }
 
     _getSelectionDetails = () => {
@@ -59,6 +62,28 @@ export default class SelectContentModal extends Component {
         {
             alert('Select atleast one from content list.')
         }
+    }
+
+    getContentList = () => {
+        apiAxios.get(
+            "/api/dj/content/",
+            {
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                },
+                params: {
+                    artist: localStorage.getItem('Id')
+                }
+            }
+        )
+        .then((res) => {
+            this.setState({
+                contentDetails: res.data,
+            })
+        })
+        .catch(function (error) {
+            alert(error.response);
+        });
     }
 
     onDismiss = () => {
@@ -78,7 +103,7 @@ export default class SelectContentModal extends Component {
                             <div>
                             <DetailsList
                                 selectionMode={SelectionMode.multiple}
-                                items={this.props.contentDetails}
+                                items={this.state.contentDetails}
                                 columns={this.columns}
                                 selection={this._selection}
                             />

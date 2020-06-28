@@ -5,8 +5,6 @@ import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import Search from '../Common/Search';
 import AddEditPlayList from "./AddEditPlayList";
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import SelectContentModal from "./SelectContentModal";
 
 export default class MyContent extends Component{
     constructor(props){
@@ -186,7 +184,6 @@ export default class MyContent extends Component{
                             <div className={"row col-md-6"} style={{textAlign: "right"}}>
                                 <Search />
                                 <button style={{ marginLeft: "10%", paddingLeft: "5px", paddingRight: "5px" }} onClick={() => (this.onAddContent())}>Add Content</button>
-                                <button style={{ marginLeft: "10%", paddingLeft: "5px", paddingRight: "5px" }} onClick={() => (this.onCreatePlaylist())}>Create Playlist</button>
                             </div>
                         </div>
 
@@ -216,11 +213,6 @@ export default class MyContent extends Component{
                         onDismiss={() => (this.onDismiss())}
                         selectedContent={this.state.addEditPlaylistModal ? this.state.selectionDetails : null}
                     /> */}
-                    <SelectContentModal
-                        showModal={this.state.showSelectContentModal}
-                        onDismiss={() => (this.onDismiss())}
-                        contentDetails={this.state.contentDetails}
-                    />
                 </Layout>
             </React.Fragment>
         )
