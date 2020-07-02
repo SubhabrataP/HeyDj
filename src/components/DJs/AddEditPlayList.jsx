@@ -214,13 +214,7 @@ export default class AddEditPlaylist extends Component {
                     bodyFormData.append('thumbnail', this.state.thumbnail.value);
                     bodyFormData.append('sampleContent', this.state.sampleContent.value);
 
-                    // if(this.state.sampleContent.name === ""){
-                    // }
-                    // else{
-                        // bodyFormData.append('sampleContent', this.state.sampleContent.value);
-                    // }
-
-                    apiAxios.post("/api/dj/playlist/" + this.state.editPlaylistId, bodyFormData, {
+                    apiAxios.put("/api/dj/playlist/" + this.state.editPlaylistId, bodyFormData, {
                         headers: {
                             'Authorization': localStorage.getItem('Token')
                         }
