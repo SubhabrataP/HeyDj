@@ -12,7 +12,8 @@ export default class MyPlayList extends Component{
         this.state={
             showSelectContentModal: false,
             playlistDetails: [],
-            isAdd: true
+            isAdd: true,
+            editPlaylist: []
         }
 
         this.columns= [
@@ -63,6 +64,14 @@ export default class MyPlayList extends Component{
         this.getPlaylist();
     }
 
+    editContent = (item) => {
+        this.setState({
+            isAdd: false,
+            editPlaylist: item,
+            showSelectContentModal: true
+        })
+    }
+
     deletePlaylist = (id) => {
         apiAxios.delete('/api/dj//playlist/' + id, {
             headers: {
@@ -94,7 +103,6 @@ export default class MyPlayList extends Component{
             }
         )
             .then((res) => {
-                console.log(res.data)
                 this.setState({
                     playlistDetails: res.data.playlists,
                 })
@@ -136,6 +144,7 @@ export default class MyPlayList extends Component{
                         showModal={this.state.showSelectContentModal}
                         onDismiss={() => (this.onDismiss())}
                         isAdd={this.state.isAdd}
+                        editData={this.state.editPlaylist}
                     />
                 </Layout>
             </React.Fragment>

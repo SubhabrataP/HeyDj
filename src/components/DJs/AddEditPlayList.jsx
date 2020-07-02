@@ -14,6 +14,7 @@ export default class AddEditPlaylist extends Component {
 
         this.state = {
             selectionDetails: "",
+            editPlaylistId: "",
             contentDetails: [],
             title: "",
             price: "",
@@ -69,6 +70,25 @@ export default class AddEditPlaylist extends Component {
         return selectionCount;
     }
 
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        if (!nextProps.isAdd) {
+            this.setState({
+                title: nextProps.editData.title,
+                price: nextProps.editData.price,
+                editPlaylistId: nextProps.editData.id,
+                thumbnail: {
+                    path: nextProps.editData.thumbnail,
+                    value: nextProps.editData.thumbnail
+                },
+                sampleContent: {
+                    name: "",
+                    value: nextProps.editData.sampleContent
+                },
+                selectionDetails: nextProps.editData.content,
+            })
+        }
+    }
+
     editOnChangeHandler = (event, type) => {
         if (event.target.files.length > 0) {
             let file = event.target.files[0];
@@ -118,10 +138,15 @@ export default class AddEditPlaylist extends Component {
                 priceError: "Please enter a valid Price amount."
             })
 
-        this.state.sampleContent.name === "" ?
-            this.setState({
-                sampleContentError: "Sample track is required."
-            }) :
+        this.props.isAdd ?
+            this.state.sampleContent.name === "" ?
+                this.setState({
+                    sampleContentError: "Sample track is required."
+                }) :
+                this.setState({
+                    sampleContentError: ""
+                })
+            :
             this.setState({
                 sampleContentError: ""
             })
@@ -145,34 +170,71 @@ export default class AddEditPlaylist extends Component {
         else {
             isValid = false;
         }
+
         if (isValid) {
-            if (this.state.selectionDetails.length > 0) {
-                var contentIds = [];
-                this.state.selectionDetails.map((data) => {
-                    contentIds.push(data.id);
-                })
-
-                var bodyFormData = new FormData();
-                bodyFormData.set('title', this.state.title);
-                bodyFormData.set('price', this.state.price);
-                bodyFormData.set('content', JSON.stringify(contentIds));
-                bodyFormData.append('thumbnail', this.state.thumbnail.value);
-                bodyFormData.append('sampleContent', this.state.sampleContent.value);
-
-                apiAxios.post("/api/dj/playlist/", bodyFormData, {
-                    headers: {
-                        'Authorization': localStorage.getItem('Token')
-                    }
-                })
-                    .then((res) => {
-                        this.onDismiss();
+            if (this.props.isAdd) {
+                if (this.state.selectionDetails.length > 0) {
+                    var contentIds = [];
+                    this.state.selectionDetails.map((data) => {
+                        contentIds.push(data.id);
                     })
-                    .catch(function (error) {
-                        console.log(error.response);
+                    var bodyFormData = new FormData();
+                    bodyFormData.set('title', this.state.title);
+                    bodyFormData.set('price', this.state.price);
+                    bodyFormData.set('content', JSON.stringify(contentIds));
+                    bodyFormData.append('thumbnail', this.state.thumbnail.value);
+                    bodyFormData.append('sampleContent', this.state.sampleContent.value);
+
+                    apiAxios.post("/api/dj/playlist/", bodyFormData, {
+                        headers: {
+                            'Authorization': localStorage.getItem('Token')
+                        }
                     })
+                        .then((res) => {
+                            this.onDismiss();
+                        })
+                        .catch(function (error) {
+                            console.log(error.response);
+                        })
+                }
+                else {
+                    alert('Select atleast one from contents list.')
+                }
             }
-            else {
-                alert('Select atleast one from contents list.')
+            else{
+                if (this.state.selectionDetails.length > 0) {
+                    var contentIds = [];
+                    this.state.selectionDetails.map((data) => {
+                        contentIds.push(data.id);
+                    })
+                    var bodyFormData = new FormData();
+                    bodyFormData.set('title', this.state.title);
+                    bodyFormData.set('price', this.state.price);
+                    bodyFormData.set('content', JSON.stringify(contentIds));
+                    bodyFormData.append('thumbnail', this.state.thumbnail.value);
+                    bodyFormData.append('sampleContent', this.state.sampleContent.value);
+
+                    // if(this.state.sampleContent.name === ""){
+                    // }
+                    // else{
+                        // bodyFormData.append('sampleContent', this.state.sampleContent.value);
+                    // }
+
+                    apiAxios.post("/api/dj/playlist/" + this.state.editPlaylistId, bodyFormData, {
+                        headers: {
+                            'Authorization': localStorage.getItem('Token')
+                        }
+                    })
+                        .then((res) => {
+                            this.onDismiss();
+                        })
+                        .catch(function (error) {
+                            console.log(error.response);
+                        })
+                }
+                else {
+                    alert('Select atleast one from contents list.')
+                }
             }
         }
     }
@@ -213,7 +275,8 @@ export default class AddEditPlaylist extends Component {
             titleError: "",
             priceError: "",
             thumbnailError: "",
-            sampleContentError: ""
+            sampleContentError: "",
+            editPlaylistId: ""
         }
         this.props.onDismiss();
     }
@@ -235,7 +298,7 @@ export default class AddEditPlaylist extends Component {
                                 <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Title:</Label>
                                 <TextField
                                     className="col-md-10"
-                                    value={this.state.Title}
+                                    value={this.state.title}
                                     onChange={(ev, title) => (this.setState({ title, titleError: "" }))}
                                     errorMessage={this.state.titleError}
                                 />
@@ -245,7 +308,7 @@ export default class AddEditPlaylist extends Component {
                                 <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Price:</Label>
                                 <TextField
                                     className="col-md-10"
-                                    value={this.state.Title}
+                                    value={this.state.price}
                                     onChange={(ev, price) => (this.setState({ price, priceError: "" }))}
                                     errorMessage={this.state.priceError}
                                 />
@@ -270,6 +333,13 @@ export default class AddEditPlaylist extends Component {
                                         </React.Fragment>
                                     }
                                 </div>
+                                {this.props.isAdd ? "" :
+                                    this.state.sampleContent.name === "" ?
+                                        <React.Fragment>
+                                            <audio src={this.state.sampleContent.value} controls></audio>
+                                            <button style={{ marginLeft: "5px" }} onClick={() => { this.fileChange.click(); }}>Change</button>
+                                        </React.Fragment> : null
+                                }
                             </div>
 
                             <div className={"image-edit"} >
