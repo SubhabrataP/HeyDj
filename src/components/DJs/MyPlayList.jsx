@@ -53,7 +53,7 @@ export default class MyPlayList extends Component{
                     return (
                         <React.Fragment>
                             <button onClick={() => {this.editContent(item)}}>Edit</button>
-                            <button onClick={() => (this.deleteContent(item.id))}>Delete</button>
+                            <button onClick={() => (this.deletePlaylist(item.id))}>Delete</button>
                         </React.Fragment>
                     )
                 }
@@ -61,6 +61,20 @@ export default class MyPlayList extends Component{
         ];
 
         this.getPlaylist();
+    }
+
+    deletePlaylist = (id) => {
+        apiAxios.delete('/api/dj//playlist/' + id, {
+            headers: {
+                'Authorization': localStorage.getItem('Token')
+            }
+        })
+        .then((response) => {
+            this.getPlaylist();
+        })
+        .catch(function (error) {
+            console.log(error.response);
+        })
     }
 
     onCreatePlaylist = () => {
@@ -94,7 +108,7 @@ export default class MyPlayList extends Component{
         this.setState({
             showSelectContentModal: false,
         });
-        // this.getContentList();
+        this.getPlaylist();
     }
 
     render(){

@@ -165,7 +165,7 @@ export default class AddEditPlaylist extends Component {
                     }
                 })
                     .then((res) => {
-                        console.log(res)
+                        this.onDismiss();
                     })
                     .catch(function (error) {
                         console.log(error.response);
