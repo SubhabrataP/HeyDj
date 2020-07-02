@@ -4,7 +4,6 @@ import AddEditContent from "./AddEditContent";
 import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import Search from '../Common/Search';
-import AddEditPlayList from "./AddEditPlayList";
 
 export default class MyContent extends Component{
     constructor(props){
@@ -17,7 +16,6 @@ export default class MyContent extends Component{
             itemsPerPage: 2,
             isAdd: true,
             editContent: ""
-
         }
 
         this.columns= [
@@ -65,13 +63,6 @@ export default class MyContent extends Component{
             }
         ];
 
-        // this._selection = new Selection({
-        //     onSelectionChanged: () => {
-        //         this.setState({
-        //             selectionDetails: this._getSelectionDetails(),
-        //         });
-        //     },
-        // });
         this.getContentList();
     }
 
@@ -97,27 +88,18 @@ export default class MyContent extends Component{
         })
     }
 
-    // _getSelectionDetails = () => {
-    //     const selectionCount = this._selection.getSelection();
-    //     return selectionCount;
-    //   }
-    
-
     getContentList = () => {
         apiAxios.get(
-            "/api/dj/content/",
+            "/api/dj/content",
             {
                 headers: {
                     'Authorization': localStorage.getItem('Token')
-                },
-                params: {
-                    artist: localStorage.getItem('Id')
                 }
             }
         )
         .then((res) => {
             this.setState({
-                contentDetails: res.data,
+                contentDetails: res.data.contents,
             })
         })
         .catch(function (error) {
@@ -135,37 +117,9 @@ export default class MyContent extends Component{
         this.setState({
             addEditContentModal: false,
             showSelectContentModal: false,
+            isAdd: true
         });
         this.getContentList();
-    }
-
-    onCreatePlaylist = () => {
-        // if(this.state.selectionDetails.length > 0)
-        // {
-            this.setState({
-                showSelectContentModal: true,
-                // selectionMode: true,
-                // selectionDetails: []
-            })
-            // apiAxios.post('/api/dj/playlist', bodyFormData, {
-            //     headers: {
-            //         'Authorization': localStorage.getItem('Token')
-            //     }
-            // })
-            //     .then((response) => {
-            //         this.onDismiss();
-            //     })
-            //     .catch(function (error) {
-            //         alert(error.response === undefined ? error.response : error.response.data);
-            //     })
-        // }
-        // else{
-        //     alert('Select atleast one from content list.')
-        //     this.setState({
-        //         selectionMode: true,
-        //         selectionDetails: []
-        //     })
-        // }
     }
 
     onLoadMoreClick = () => {
@@ -208,11 +162,6 @@ export default class MyContent extends Component{
                         isAdd={this.state.isAdd}
                         editContent={this.state.editContent}
                     />
-                    {/* <AddEditPlayList
-                        showModal={this.state.addEditPlaylistModal}
-                        onDismiss={() => (this.onDismiss())}
-                        selectedContent={this.state.addEditPlaylistModal ? this.state.selectionDetails : null}
-                    /> */}
                 </Layout>
             </React.Fragment>
         )

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Layout from "../Home/Layout";
 import Search from '../Common/Search';
-import SelectContentModal from "./SelectContentModal";
+import AddEditPlaylist from "./AddEditPlaylist";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
 
@@ -11,7 +11,8 @@ export default class MyPlayList extends Component{
 
         this.state={
             showSelectContentModal: false,
-            playlistDetails: []
+            playlistDetails: [],
+            isAdd: true
         }
 
         this.columns= [
@@ -25,8 +26,8 @@ export default class MyPlayList extends Component{
             },
             {
                 key: "column2",
-                name: "Content Type",
-                fieldName: "type",
+                name: "Price",
+                fieldName: "price",
                 isResizable: false,
                 minWidth: 200,
                 maxWidth: 200,
@@ -58,39 +59,35 @@ export default class MyPlayList extends Component{
                 }
             }
         ];
+
+        this.getPlaylist();
     }
 
     onCreatePlaylist = () => {
-        // if(this.state.selectionDetails.length > 0)
-        // {
-            this.setState({
-                showSelectContentModal: true,
-                // selectionMode: true,
-                // selectionDetails: []
-            })
-            // apiAxios.post('/api/dj/playlist', bodyFormData, {
-            //     headers: {
-            //         'Authorization': localStorage.getItem('Token')
-            //     }
-            // })
-            //     .then((response) => {
-            //         this.onDismiss();
-            //     })
-            //     .catch(function (error) {
-            //         alert(error.response === undefined ? error.response : error.response.data);
-            //     })
-        // }
-        // else{
-        //     alert('Select atleast one from content list.')
-        //     this.setState({
-        //         selectionMode: true,
-        //         selectionDetails: []
-        //     })
-        // }
+        this.setState({
+            showSelectContentModal: true,
+            isAdd: true
+        })
     }
 
-    getAllPlaylist = () => {
-
+    getPlaylist = () => {
+        apiAxios.get(
+            "/api/dj/playlist",
+            {
+                headers: {
+                    'Authorization': localStorage.getItem('Token')
+                },
+            }
+        )
+            .then((res) => {
+                console.log(res.data)
+                this.setState({
+                    playlistDetails: res.data.playlists,
+                })
+            })
+            .catch(function (error) {
+                alert(error.response);
+            });
     }
 
     onDismiss = () => {
@@ -121,9 +118,10 @@ export default class MyPlayList extends Component{
                             />
                         </div>
                     </div>
-                    <SelectContentModal
+                    <AddEditPlaylist
                         showModal={this.state.showSelectContentModal}
                         onDismiss={() => (this.onDismiss())}
+                        isAdd={this.state.isAdd}
                     />
                 </Layout>
             </React.Fragment>

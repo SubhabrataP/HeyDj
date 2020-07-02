@@ -12,15 +12,21 @@ export default class AddEditContent extends Component{
         super(props);
 
         this.state={
-            Title: "",
+            title: "",
             thumbnail: {
                 path: "",
                 value: ""
             },
-            content: "",
+            content: {
+                name: "",
+                value: ""
+            },
             percentComplete: 1,
             showProgress: false,
-            contentId: ""
+            contentId: "",
+            titleError: "",
+            thumbnailError: "",
+            contentError: ""
         }
     }
 
@@ -36,13 +42,12 @@ export default class AddEditContent extends Component{
     UNSAFE_componentWillReceiveProps(nextProps) {
         if (!nextProps.isAdd) {
             this.setState({
-                Title: nextProps.editContent.title,
+                title: nextProps.editContent.title,
                 thumbnail: {
                     path: nextProps.editContent.thumbnail,
                     value: nextProps.editContent.thumbnail
                 },
                 contentId: nextProps.editContent.id,
-                // content: new File(nextProps.editContent.content, ""),
                 percentComplete: 1,
                 showProgress: false
             })
@@ -51,7 +56,7 @@ export default class AddEditContent extends Component{
 
     editOnChangeHandler = (event, type) => {
         if (event.target.files.length > 0) {
-            const file = event.target.files[0];
+            let file = event.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(file);
 
@@ -64,7 +69,6 @@ export default class AddEditContent extends Component{
             }.bind(this)
             reader.onprogress = this.updateProgress.bind(this);
             reader.onloadend = function () {
-                console.log(file);
                 if (type === "image") {
                     let image = {
                         path: reader.result,
@@ -72,11 +76,16 @@ export default class AddEditContent extends Component{
                     }
                     this.setState({
                         thumbnail: image,
+                        thumbnailError: ""
                     });
                 }
                 else if (type === "multimedia") {
                     this.setState({
-                        content: file,
+                        content: {
+                            name: file.name,
+                            value: file
+                        },
+                        contentError: ""
                     });
                 }
             }.bind(this);
@@ -86,50 +95,106 @@ export default class AddEditContent extends Component{
             if (type === "multimedia") {
                 this.setState({
                     showProgress: false
-                })
+                });
             }
         }
     }
 
-    onAddEditContent = () => {
-        var bodyFormData = new FormData();
-        bodyFormData.set('title', this.state.Title);
-        bodyFormData.append('thumbnail', this.state.thumbnail.value);
-        bodyFormData.append('content', this.state.content);
+    formValidation = () => {
+        this.state.title.trim().length < 1 ?
+            this.setState({
+                title: "",
+                titleError: "Title is required."
+            }) :
+            this.setState({
+                titleError: "",
+                title: this.state.title.trim()
+            });
 
-        if(this.props.isAdd){
-            apiAxios.post('/api/dj/content', bodyFormData, {
-                headers: {
-                    'Authorization': localStorage.getItem('Token')
-                }
+        this.state.content.name === "" ?
+            this.setState({
+                contentError: "Media file is required."
+            }) :
+            this.setState({
+                contentError: ""
             })
-            .then((response) => {
-                this.onDismiss();
+
+        this.state.thumbnail.value === "" ?
+            this.setState({
+                thumbnailError: "Thumbnail is required."
+            }) :
+            this.setState({
+                thumbnailError: ""
             })
-            .catch(function (error) {
-                console.log(error.response);
-            })
+    }
+
+    onAddEditContent = async () => {
+        let isValid = false;
+        await this.formValidation();
+        if (this.state.titleError === "" && this.state.contentError === "" && this.state.thumbnailError === "") {
+            isValid = true;
         }
-        else{
-            var editData = new FormData();
-            editData.set('title', this.state.Title);
-            editData.append('thumbnail', this.state.thumbnail.value);
+        else {
+            isValid = false;
+        }
 
-            apiAxios.put("/api/dj/content/" + this.state.contentId, editData, {
-                headers: {
-                    'Authorization': localStorage.getItem('Token')
-                }
-            })
-            .then((response) => {
-                this.onDismiss();
-            })
-            .catch(function (error) {
-                console.log(error.response);
-            })
+        if (isValid) {
+            var bodyFormData = new FormData();
+            bodyFormData.set('title', this.state.title);
+            bodyFormData.append('thumbnail', this.state.thumbnail.value);
+            bodyFormData.append('content', this.state.content.value);
+
+            if (this.props.isAdd) {
+                apiAxios.post('/api/dj/content', bodyFormData, {
+                    headers: {
+                        'Authorization': localStorage.getItem('Token')
+                    }
+                })
+                    .then((response) => {
+                        this.onDismiss();
+                    })
+                    .catch(function (error) {
+                        console.log(error.response);
+                    })
+            }
+            else {
+                var editData = new FormData();
+                editData.set('title', this.state.title);
+                editData.append('thumbnail', this.state.thumbnail.value);
+
+                apiAxios.put("/api/dj/content/" + this.state.contentId, editData, {
+                    headers: {
+                        'Authorization': localStorage.getItem('Token')
+                    }
+                })
+                    .then((response) => {
+                        this.onDismiss();
+                    })
+                    .catch(function (error) {
+                        console.log(error.response);
+                    })
+            }
         }
     }
 
     onDismiss = () => {
+        this.setState({
+            title: "",
+            thumbnail: {
+                path: "",
+                value: ""
+            },
+            content: {
+                name: "",
+                value: ""
+            },
+            percentComplete: 1,
+            showProgress: false,
+            contentId: "",
+            titleError: "",
+            thumbnailError: "",
+            contentError: ""
+        });
         this.props.onDismiss();
     }
 
@@ -140,15 +205,17 @@ export default class AddEditContent extends Component{
                     show={this.props.showModal}
                     className="ml-3 mr-3"
                 >
-                    <h4 style={{marginBottom: "10%", textAlign: "center", color:'black'}}>Add Content</h4>
+                    <h4 style={{ marginBottom: "10%", textAlign: "center", color: 'black' }}>
+                        {this.props.isAdd ? "Add Content" : "Edit Content"}
+                    </h4>
                     <div className="container">
                         <div className="row" style={{ marginBottom: "5%" }}>
                             <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Title:</Label>
                             <TextField
                                 className="col-md-10"
-                                value={this.state.Title}
-                                onChange={(ev, Title) => (this.setState({ Title }))}
-                            // errorMessage={this.state.firstNameError}
+                                value={this.state.title}
+                                onChange={(ev, title) => (this.setState({ title, titleError: "" }))}
+                                errorMessage={this.state.titleError}
                             />
                         </div>
                         {this.props.isAdd ?
@@ -156,10 +223,21 @@ export default class AddEditContent extends Component{
                                 <Label className="col-md-3" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Content:</Label>
                                 <FormControl
                                     type={"file"}
-                                    style={{ padding: "4px", marginBottom: "6px", width: "100%" }}
-                                    onChange={(event) => this.editOnChangeHandler(event, "multimedia")}
+                                    style={{ padding: "7px", marginBottom: "6px", width: "25%" }}
+                                    onChange={(event) => {this.editOnChangeHandler(event, "multimedia")}}
                                     accept={"audio/*, video/*"}
+                                    ref={(ref) => (this.fileChange = ref)}
                                 />
+                                {this.state.contentError === "" ? null :
+                                    <span style={{ color: 'red' }}>{this.state.contentError}</span>
+                                }
+                                <div style={{ color: 'black' }}>
+                                    {this.state.content.name === "" ? "" :
+                                        <React.Fragment>
+                                            {this.state.content.name}<button style={{ marginLeft: "5px" }} onClick={() => { this.fileChange.click(); }}>Change</button>
+                                        </React.Fragment>
+                                    }
+                                </div>
                                 {this.state.showProgress ?
                                     this.state.percentComplete === 1 ?
                                         <label style={{ color: "green" }} >Upload Complete</label>
@@ -171,7 +249,7 @@ export default class AddEditContent extends Component{
                             : null}
 
                         <div className={"image-edit"} >
-                        <Label className="col-md-4" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Thumbnail:</Label>
+                            <Label className="col-md-4" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Thumbnail:</Label>
                             <span className="overlay_profile">
                                 <i className="fa fa-plus upload-button"
                                     onClick={() => {
@@ -191,6 +269,9 @@ export default class AddEditContent extends Component{
                                 onChange={(event) => this.editOnChangeHandler(event, "image")}
                                 accept={"image/*"}
                             />
+                            {this.state.thumbnailError === "" ? null :
+                                <span style={{ color: 'red' }}>{this.state.thumbnailError}</span>
+                            }
                         </div>
                         
                         <div style={{textAlign:"center", marginTop: "15px"}}>
