@@ -15,7 +15,8 @@ export default class MyContent extends Component{
             showSelectContentModal: false,
             itemsPerPage: 2,
             isAdd: true,
-            editContent: ""
+            editContent: "",
+            items: []
         }
 
         this.columns= [
@@ -100,7 +101,10 @@ export default class MyContent extends Component{
         .then((res) => {
             this.setState({
                 contentDetails: res.data.contents,
+                items: res.data.contents.slice(0,this.state.itemsPerPage)
             })
+
+
         })
         .catch(function (error) {
             alert(error.response);
@@ -136,18 +140,48 @@ export default class MyContent extends Component{
                         <div className="row" style={{ marginBottom: "1%" }}>
                             <h5 className={"col-md-6"}>My Content</h5>
                             <div className={"row col-md-6"} style={{textAlign: "right"}}>
+                               {/*
                                 <Search />
-                                <button style={{ marginLeft: "10%", paddingLeft: "5px", paddingRight: "5px" }} onClick={() => (this.onAddContent())}>Add Content</button>
+                               */} 
+                                
                             </div>
                         </div>
 
                         <div className="row">
-                            <DetailsList
-                                selectionMode={SelectionMode.none}
-                                items={this.state.contentDetails.slice(0,this.state.itemsPerPage)}
-                                columns={this.columns}
-                            />
-                        </div>
+                            <div className="col-md-8 dj-play-list p-4">
+
+                                <div className="row">
+                                    {/*
+                                    <DetailsList
+                                        selectionMode={SelectionMode.none}
+                                        items={this.state.contentDetails.slice(0,this.state.itemsPerPage)}
+                                        columns={this.columns}
+                                    />
+                                    */}
+
+                                    {this.state.items.map((item, index) => {
+                                                return (
+                                                    <div className="col-md-3 text-center ml-2 mr-2" style={{color:'#fff'}}>
+                                                        <img src={item.thumbnail} style={{ width: "100%" }} />
+                                                        <h5 className="m-0 mt-2"><b>{item.title}</b></h5>
+                                                        <small>INR {item.price}</small><br/>
+                                                        <span>
+                                                            <small style={{color:'#6eb1c2'}} onClick={() => {this.editContent(item)}}>Edit</small>
+                                                            <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => (this.deletePlaylist(item.id))}>Delete</small>
+                                                        </span>
+                                                    </div>
+                                                )})
+                                    }
+
+                                </div>
+                            </div>
+                            <div className="col-md-3 ml-3 mr-3">
+                                <div className="p-4" style={{backgroundColor:'#252033', borderRadius:'15px'}}>
+                                    <h4 style={{color:'#fff'}}>Create Content</h4>
+                                    <button className="customBtn" onClick={() => (this.onAddContent())}>Add Content</button>
+                                </div>
+                            </div>
+                        </div>        
 
                         <div>
                             {this.state.contentDetails.length > this.state.itemsPerPage
