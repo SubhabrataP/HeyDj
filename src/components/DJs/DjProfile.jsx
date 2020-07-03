@@ -4,6 +4,7 @@ import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 export default class DjProfile extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
             userData: "",
         }
@@ -28,7 +29,6 @@ export default class DjProfile extends Component {
             }
         )
         .then((res) => {
-            console.log(res)
             this.setState({
                 userData: res.data
             })
