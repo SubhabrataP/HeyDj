@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import CardTemplate from "../Common/CardTemplate";
-import Layout from "../Home/Layout";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
-export default class NewReleaseFullPage extends Component {
+
+export default class Artists extends Component {
     constructor(props) {
         super(props);
 
@@ -18,17 +18,11 @@ export default class NewReleaseFullPage extends Component {
 
     getPlaylist = () => {
         apiAxios.get(
-            "/api/playlist",
-            {
-                params: {
-                    all: "true"
-                }
-            }
+            "/api/user/dj"
         )
             .then((res) => {
-                console.log(res)
                 this.setState({
-                    playlistItems: res.data.playlists,
+                    playlistItems: res.data.djs,
                 })
             })
             .catch(function (error) {
@@ -36,36 +30,34 @@ export default class NewReleaseFullPage extends Component {
             });
     }
 
-    onLoadMore = () => {
-        this.setState({
-            itemsPerPage: this.state.itemsPerPage + 5
-        })
+    onMoreClick = () => {
+        this.props.history.push('/Artists');
     }
 
     render() {
         return (
-            <Layout history={this.props.history}>
-                <div className="container" style={{ marginTop: "1%" }}>
-                    <div>
+            <React.Fragment>
+                <div className="row col-md-12 dj-play-list">
+                    <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            New Releases
+                            Artists
+                            {this.state.playlistItems.length > 4 ?
+                                <a onClick={this.onMoreClick}>More</a> : null}
                         </div>
-                        <div className="row" >
-                            {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (
+                        <div className="row">
+                            {this.state.playlistItems.slice(0,4).map((data) => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
                                     <CardTemplate
                                         playlistData={data}
-                                        type={"playlist"}
+                                        type={"artist"}
                                     />
                                 </div>
                             ))}
                         </div>
-                        {this.state.playlistItems.length > this.state.itemsPerPage
-                            ? <button onClick={this.onLoadMore}>Load More</button>
-                            : null}
                     </div>
                 </div>
-            </Layout>
+
+            </React.Fragment>
         )
     }
 }
