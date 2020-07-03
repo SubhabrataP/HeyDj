@@ -111,10 +111,15 @@ export default class AddEditContent extends Component{
                 title: this.state.title.trim()
             });
 
-        this.state.content.name === "" ?
-            this.setState({
-                contentError: "Media file is required."
-            }) :
+        this.props.isAdd ?
+            this.state.content.name === "" ?
+                this.setState({
+                    contentError: "Media file is required."
+                }) :
+                this.setState({
+                    contentError: ""
+                })
+            :
             this.setState({
                 contentError: ""
             })
@@ -278,7 +283,7 @@ export default class AddEditContent extends Component{
                         </div>
                         
                         <div className="mb-3" style={{textAlign:"center", marginTop: "15px"}}>
-                            <button type="button" className="customBtn" onClick={this.onAddEditContent}>
+                            <button type="button" className="customBtn" onClick={() => {this.onAddEditContent()}}>
                                 {this.props.isAdd ? "Add" : "Update" }
                             </button>
                             <button type="button" className="customBtnWhite ml-3" onClick={()=> {this.onDismiss()}}>Cancel</button>
