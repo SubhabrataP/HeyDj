@@ -41,11 +41,11 @@ export default class Artists extends Component {
                     <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Artists
-                            {this.state.playlistItems.length > 6 ?
+                            {this.state.playlistItems.length > 4 ?
                                 <a onClick={this.onMoreClick}>More</a> : null}
                         </div>
                         <div className="row">
-                            {this.state.playlistItems.slice(0,6).map((data) => (
+                            {this.state.playlistItems.slice(0,4).map((data) => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
                                     <CardTemplate
                                         playlistData={data}

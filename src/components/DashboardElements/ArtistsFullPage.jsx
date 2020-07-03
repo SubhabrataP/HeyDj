@@ -43,7 +43,7 @@ export default class ArtistsFullPage extends Component {
                 <div className="container" style={{ marginTop: "1%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            Genres
+                            Artists
                         </div>
                         <div className="row" >
                             {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (

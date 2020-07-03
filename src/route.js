@@ -17,7 +17,7 @@ const createRoutes = (props) => (
             <Route exact path="/" render={(props) => <GuestUserDashboard history={props.history} />} />
             <Route exact path="/NewReleases" component={NewReleaseFullPage} />
             <Route exact path="/FeaturedPlaylists" component={FeaturedPlaylistFullPage} />
-            <Route exact path="/Artists" component={FeaturedPlaylistFullPage} />
+            <Route exact path="/Artists" component={ArtistsFullPage} />
             {/* <Route exact path="/Genres" component={GenreListFullPage} /> */}
             <Route exact path="/login/success" render={(props) => <LoginSuccess history={props.history} />} />
 
