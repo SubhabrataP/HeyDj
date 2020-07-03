@@ -16,8 +16,11 @@ export default class UserPersona extends Component {
             showLoginModal: false,
             showAdminLoginModal: false,
             showEditProfile: false,
-            userData: {},
+            userData: "",
             userImage: "/images/emptyUser.png"
+        }
+        if (!(localStorage.getItem('Token') === null) && this.state.userData === "") {
+            this.onEditProfile();
         }
     }
 
@@ -36,6 +39,7 @@ export default class UserPersona extends Component {
             showAdminLoginModal: false,
             showEditProfile: false,
         });
+        window.location.reload();
     }
 
     showModals = (modalType) => {
@@ -71,7 +75,6 @@ export default class UserPersona extends Component {
             }
         )
         .then((res) => {
-            console.log(res.data)
             this.setState({
                 userData: res.data
             })
@@ -95,7 +98,7 @@ export default class UserPersona extends Component {
                         size={PersonaSize.size42}
                         text={this.state.userData.firstName + " " + this.state.userData.lastName}
                         hidePersonaDetails={true}
-                        imageUrl={process.env.PUBLIC_URL + this.state.userImage}
+                        imageUrl={this.state.userData.profileImage}
                     />
                 </span>
                 {this.state.isCalloutVisible && (
