@@ -10,9 +10,9 @@ export default class DjProfile extends Component {
     }
 
     componentDidMount(){
-        // if(this.state.userData === ""){
+        if(this.state.userData === ""){
             this.getProfile();
-        // } 
+        } 
     }
 
     getProfile = () => {
