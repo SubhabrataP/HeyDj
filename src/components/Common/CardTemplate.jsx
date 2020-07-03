@@ -28,6 +28,7 @@ export default class CardTemplate extends Component {
     }
 
     render() {
+        console.log(this.props.playlistData)
         return (
             <React.Fragment>
                 <Stack horizontal>

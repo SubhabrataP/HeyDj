@@ -13,7 +13,7 @@ export default class MyContent extends Component{
             contentDetails : "",
             addEditContentModal: false,
             showSelectContentModal: false,
-            itemsPerPage: 2,
+            itemsPerPage: 3,
             isAdd: true,
             editContent: "",
             items: []
@@ -101,10 +101,8 @@ export default class MyContent extends Component{
         .then((res) => {
             this.setState({
                 contentDetails: res.data.contents,
-                items: res.data.contents.slice(0,this.state.itemsPerPage)
+                items: res.data.contents
             })
-
-
         })
         .catch(function (error) {
             alert(error.response);
@@ -128,7 +126,7 @@ export default class MyContent extends Component{
 
     onLoadMoreClick = () => {
         this.setState({
-            itemsPerPage: this.state.itemsPerPage + 2,
+            itemsPerPage: this.state.itemsPerPage + 3,
         })
     }
 
@@ -159,7 +157,7 @@ export default class MyContent extends Component{
                                     />
                                     */}
 
-                                    {this.state.items.map((item, index) => {
+                                    {this.state.items.slice(0, this.state.itemsPerPage).map((item, index) => {
                                                 return (
                                                     <div className="col-md-3 text-center ml-2 mr-2" style={{color:'#fff'}}>
                                                         <img src={item.thumbnail} style={{ width: "100%" }} />
@@ -167,7 +165,7 @@ export default class MyContent extends Component{
                                                         <small>INR {item.price}</small><br/>
                                                         <span>
                                                             <small style={{color:'#6eb1c2'}} onClick={() => {this.editContent(item)}}>Edit</small>
-                                                            <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => (this.deletePlaylist(item.id))}>Delete</small>
+                                                            <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => {this.deleteContent(item.id)}}>Delete</small>
                                                         </span>
                                                     </div>
                                                 )})
