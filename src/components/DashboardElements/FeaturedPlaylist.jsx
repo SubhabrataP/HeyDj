@@ -26,7 +26,6 @@ export default class FeaturedPlaylist extends Component {
             }
         )
             .then((res) => {
-                console.log(res)
                 this.setState({
                     playlistItems: res.data.playlists,
                 })
