@@ -76,6 +76,9 @@ export default class CardTemplate extends Component {
                 {this.props.type === "playlist" ?
                     <MusicPlayer
                         showPlayer={this.state.playMusic}
+                        thumbnail={this.props.playlistData.thumbnail}
+                        title={this.props.playlistData.title}
+                        price={this.props.playlistData.price}
                         sampleContent={this.props.playlistData.sampleContent}
                         onDismiss={() => { this.onDismiss() }}
                     /> : null}

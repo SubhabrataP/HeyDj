@@ -47,7 +47,7 @@ export default class ArtistsFullPage extends Component {
                         </div>
                         <div className="row" >
                             {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (
-                                <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
+                                <div className="col-md-2 m-3">
                                      <CardTemplate
                                         playlistData={data}
                                         type={"artist"}

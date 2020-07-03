@@ -52,7 +52,7 @@ class NewReleaseList extends Component {
                         </div>
                         <div>
                             {this.state.playlistItems.slice(0,5).map((data) => (
-                                <div style={{ paddingBottom: "15px" }}>
+                                <div className="col-md-3 m-3">
                                     <CardTemplate
                                         playlistData={data}
                                         type={"playlist"}

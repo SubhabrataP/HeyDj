@@ -46,7 +46,7 @@ export default class Artists extends Component {
                         </div>
                         <div className="row">
                             {this.state.playlistItems.slice(0,4).map((data) => (
-                                <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
+                                <div className="col-md-3 m-3">
                                     <CardTemplate
                                         playlistData={data}
                                         type={"artist"}
