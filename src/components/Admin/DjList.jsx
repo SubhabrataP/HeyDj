@@ -13,8 +13,8 @@ export default class DjList extends Component{
             showAddEditDj: false,
             djDetails: [],
             isAdd: true,
-            editProfileData: {}
-
+            editProfileData: {},
+            itemsPerPage: 5
         }
         this.columns= [
             {
@@ -134,6 +134,12 @@ export default class DjList extends Component{
         })
     }
 
+    onLoadMoreClick = () => {
+        this.setState({
+            itemsPerPage: this.state.itemsPerPage + 5,
+        })
+    }
+
     render(){
         return(
             <React.Fragment>
@@ -150,9 +156,14 @@ export default class DjList extends Component{
                         <div className="row">
                             <DetailsList
                                 selectionMode={SelectionMode.none}
-                                items={this.state.djDetails}
+                                items={this.state.djDetails.slice(0, this.state.itemsPerPage)}
                                 columns={this.columns}
                             />
+                        </div>
+                        <div>
+                            {this.state.djDetails.length > this.state.itemsPerPage
+                                ? <button onClick={this.onLoadMoreClick}>Load More</button>
+                                : null}
                         </div>
                     </div>
                     <AddEditProfile
