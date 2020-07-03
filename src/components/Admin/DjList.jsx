@@ -58,8 +58,8 @@ export default class DjList extends Component{
                 onRender: (item) => {
                     return (
                         <React.Fragment>
-                            <button onClick={() => (this.editProfile(item))}>Edit</button>
-                            <button onClick={() => (this.deleteProfile(item.id))}>Delete</button>
+                            <button className="customBtn" onClick={() => (this.editProfile(item))}>Edit</button>
+                            <button className="customBtnWhite ml-1" onClick={() => (this.deleteProfile(item.id))}>Delete</button>
                         </React.Fragment>
                     )
                 }
