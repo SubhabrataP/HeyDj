@@ -72,7 +72,7 @@ export default class AddEditPlaylist extends Component {
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         if (!nextProps.isAdd) {
-            var myArr = JSON.parse(nextProps.editData.content);
+            var myArr = nextProps.editData.content;
             var filtered = this.state.contentDetails.filter(
                 function(e) {
                   return this.indexOf(e.id) >= 0;
@@ -94,8 +94,6 @@ export default class AddEditPlaylist extends Component {
                 },
                 selectionDetails: filtered
             })
-            console.log(filtered[0])
-            this._selection.setItems(filtered, true)
             // this._selection = filtered[0]
         }
     }
