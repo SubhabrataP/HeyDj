@@ -22,13 +22,13 @@ export default class HeaderNavLink extends Component {
                         }}>
                         Browse
                     </Link>
-                    <Link to={{ pathname: "/" }}
+                    <Link to={{ pathname: localStorage.getItem("Id") ? "/userplaylist" : "/" }}
                         href="#"
                         style={{
                             paddingRight: "13px",
                             textDecoration: 'none'
                         }}>
-                        Podcasts
+                        My Playlist
                     </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"
@@ -36,7 +36,7 @@ export default class HeaderNavLink extends Component {
                             paddingRight: "13px",
                             textDecoration: 'none'
                         }}>
-                        My Music
+                        Subscriptions
                     </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"
