@@ -19,10 +19,6 @@ export default class UserPersona extends Component {
             userData: "",
             userImage: "/images/emptyUser.png"
         }
-        
-    }
-
-    componentDidMount() {
         if (!(localStorage.getItem('Token') === null) && this.state.userData === "") {
             this.onEditProfile();
         }
