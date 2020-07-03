@@ -66,12 +66,20 @@ export default class AddEditPlaylist extends Component {
     }
 
     _getSelectionDetails = () => {
-        const selectionCount = this._selection.getSelection();
-        return selectionCount;
+        const selectionData = this._selection.getSelection();
+        return selectionData;
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         if (!nextProps.isAdd) {
+            var myArr = JSON.parse(nextProps.editData.content);
+            var filtered = this.state.contentDetails.filter(
+                function(e) {
+                  return this.indexOf(e.id) >= 0;
+                },
+                myArr
+            );
+
             this.setState({
                 title: nextProps.editData.title,
                 price: nextProps.editData.price,
@@ -84,8 +92,11 @@ export default class AddEditPlaylist extends Component {
                     name: "",
                     value: nextProps.editData.sampleContent
                 },
-                selectionDetails: nextProps.editData.content,
+                selectionDetails: filtered
             })
+            console.log(filtered[0])
+            this._selection.setItems(filtered, true)
+            // this._selection = filtered[0]
         }
     }
 
@@ -272,6 +283,7 @@ export default class AddEditPlaylist extends Component {
             sampleContentError: "",
             editPlaylistId: ""
         }
+        this._selection = new Selection({});
         this.props.onDismiss();
     }
 
@@ -301,11 +313,12 @@ export default class AddEditPlaylist extends Component {
                             <div className="row">
                                 <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Price:</Label>
                                 <TextField
-                                    className="col-md-10"
+                                    className="col-md-6"
                                     value={this.state.price}
                                     onChange={(ev, price) => (this.setState({ price, priceError: "" }))}
                                     errorMessage={this.state.priceError}
                                 />
+                                <Label className="col-md-4" style={{ paddingLeft: "1%", paddingRight: "0%", textAlign: "left" }}> / per Hour</Label>
                             </div>
 
                             <div className="row" style={{ marginBottom: "8%" }}>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import CardTemplate from "../Common/CardTemplate";
+import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 
 export default class GenreList extends Component {
@@ -7,8 +8,31 @@ export default class GenreList extends Component {
         super(props);
 
         this.state = {
-            playlistItems: [1, 1, 1, 1, 1, 1, 1, 1, 1]
+            playlistItems: []
         }
+    }
+
+    componentDidMount(){
+        this.getPlaylist();
+    }
+
+    getPlaylist = () => {
+        localStorage.getItem('Token') === null ? 
+        this.setState({
+            playlistItems: [1,1,1,1,1,1,1]
+        }) :
+        apiAxios.get(
+            "/api/user/dj"
+        )
+            .then((res) => {
+                console.log(res)
+                this.setState({
+                    playlistItems: res.data.djs,
+                })
+            })
+            .catch(function (error) {
+                alert(error.response);
+            });
     }
 
     onMoreClick = () => {
@@ -21,13 +45,14 @@ export default class GenreList extends Component {
                 <div className="row col-md-12 dj-play-list">
                     <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            Genres
-                            <a onClick={this.onMoreClick}>More</a>
+                            Artists
+                            {this.state.playlistItems.length > 6 ?
+                                <a onClick={this.onMoreClick}>More</a> : null}
                         </div>
                         <div className="row">
-                            {this.state.playlistItems.slice(0,6).map(() => (
+                            {this.state.playlistItems.slice(0,6).map((data) => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
-                                    <CardTemplate />
+                                    <CardTemplate playlistData={data} />
                                 </div>
                             ))}
                         </div>
