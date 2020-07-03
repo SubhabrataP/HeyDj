@@ -366,7 +366,6 @@ export default class AddEditProfile extends Component {
                             {(localStorage.getItem('Role') === "dj" && !this.props.isAdd) ?
                                 <AdditionalDjFields onUpdate={this.onAddEditUser} onDismiss={this.onDismiss} defaultData={this.state.workExpData} />
                                 :
-
                                 <div style={{ textAlign: "center", margin: "15px 0" }}>
                                     <button type="button" className="customBtn" onClick={() => { this.onAddEditUser() }}>
                                         {(this.props.isAdd && this.state.userNotExisting) ? "Add" : "Update"}

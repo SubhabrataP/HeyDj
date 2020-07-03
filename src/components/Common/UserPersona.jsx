@@ -87,6 +87,7 @@ export default class UserPersona extends Component {
     onLogout = () => {
         localStorage.clear();
         this.props.history.push('/');
+        window.location.reload();
     }
 
     render() {
