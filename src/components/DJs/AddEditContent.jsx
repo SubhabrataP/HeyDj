@@ -205,14 +205,14 @@ export default class AddEditContent extends Component{
                     show={this.props.showModal}
                     className="ml-3 mr-3"
                 >
-                    <h4 style={{ marginBottom: "10%", textAlign: "center", color: 'black' }}>
+                    <h4 style={{ margin:'0', paddingTop: "4%", paddingBottom: "4%", textAlign: "center", color: '#fff', backgroundColor:'#252133' }}>
                         {this.props.isAdd ? "Add Content" : "Edit Content"}
                     </h4>
-                    <div className="container">
-                        <div className="row" style={{ marginBottom: "5%" }}>
-                            <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Title:</Label>
+                    <div className="container loginBg">
+                        <div className="row mt-4" style={{ marginBottom: "5%" }}>
+                            <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right", color:'#fff' }}>Title:</Label>
                             <TextField
-                                className="col-md-10"
+                                className="col-md-8"
                                 value={this.state.title}
                                 onChange={(ev, title) => (this.setState({ title, titleError: "" }))}
                                 errorMessage={this.state.titleError}
@@ -220,21 +220,23 @@ export default class AddEditContent extends Component{
                         </div>
                         {this.props.isAdd ?
                             <div style={{ marginBottom: "8%" }}>
-                                <Label className="col-md-3" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Content:</Label>
+                                <Label className="col-md-12" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center",color:'#fff' }}>Content:</Label>
+                                <div className="col-md-12">
                                 <FormControl
                                     type={"file"}
-                                    style={{ padding: "7px", marginBottom: "6px", width: "25%" }}
+                                    style={{ padding: "7px", marginBottom: "6px", width: "100%", border:'1px solid' }}
                                     onChange={(event) => {this.editOnChangeHandler(event, "multimedia")}}
                                     accept={"audio/*, video/*"}
                                     ref={(ref) => (this.fileChange = ref)}
                                 />
+                                </div>
                                 {this.state.contentError === "" ? null :
                                     <span style={{ color: 'red' }}>{this.state.contentError}</span>
                                 }
-                                <div style={{ color: 'black' }}>
+                                <div style={{ color: '#fff' }}>
                                     {this.state.content.name === "" ? "" :
                                         <React.Fragment>
-                                            {this.state.content.name}<button style={{ marginLeft: "5px" }} onClick={() => { this.fileChange.click(); }}>Change</button>
+                                            {this.state.content.name}<button className="customBtn" style={{ marginLeft: "5px" }} onClick={() => { this.fileChange.click(); }}>Change</button>
                                         </React.Fragment>
                                     }
                                 </div>
@@ -249,14 +251,8 @@ export default class AddEditContent extends Component{
                             : null}
 
                         <div className={"image-edit"} >
-                            <Label className="col-md-4" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right" }}>Thumbnail:</Label>
-                            <span className="overlay_profile">
-                                <i className="fa fa-plus upload-button"
-                                    onClick={() => {
-                                        this.upload.click();
-                                    }} >
-                                </i>
-                            </span>
+                            <Label className="col-md-4" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center",color: '#fff' }}>Thumbnail:</Label>
+                            
                             <Image
                                 src={this.state.thumbnail.path ? this.state.thumbnail.path : ""}
                                 thumbnail
@@ -265,20 +261,27 @@ export default class AddEditContent extends Component{
                                 aria-label="Image"
                                 type={"file"}
                                 ref={(ref) => (this.upload = ref)}
-                                style={{ padding: "4px", marginBottom: "16px", width: "100%" }}
+                                style={{ padding: "1px", marginBottom: "16px", width: "100%" }}
                                 onChange={(event) => this.editOnChangeHandler(event, "image")}
                                 accept={"image/*"}
                             />
                             {this.state.thumbnailError === "" ? null :
                                 <span style={{ color: 'red' }}>{this.state.thumbnailError}</span>
                             }
+                            <span>
+                                <i className="fa fa-plus upload-button" style={{color:'#6eb1c2'}}
+                                    onClick={() => {
+                                        this.upload.click();
+                                    }} >
+                                </i>Add
+                            </span>
                         </div>
                         
-                        <div style={{textAlign:"center", marginTop: "15px"}}>
-                            <button type="button" className="btn" onClick={this.onAddEditContent}>
+                        <div className="mb-3" style={{textAlign:"center", marginTop: "15px"}}>
+                            <button type="button" className="customBtn" onClick={this.onAddEditContent}>
                                 {this.props.isAdd ? "Add" : "Update" }
                             </button>
-                            <button type="button" className="btn" onClick={()=> {this.onDismiss()}}>Cancel</button>
+                            <button type="button" className="customBtnWhite ml-3" onClick={()=> {this.onDismiss()}}>Cancel</button>
                         </div> 
                     </div>
                 </Modal>

@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import PhoneInput from 'react-phone-input-2';
-import { Modal } from 'office-ui-fabric-react';
+// import { Modal } from 'office-ui-fabric-react';
+import { FormControl, Image, Modal } from "react-bootstrap";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import "../Styles/Icons.css";
 
 const onlyDigitRegex = RegExp(/^[0-9]+$/);
-
+ 
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -178,54 +179,53 @@ export default class Login extends Component {
         return (
             <React.Fragment>
                 <Modal
-                    isOpen={this.state.showModal}
-                    isModeless={false}
-                    dragOptions={false}
+                    show={this.state.showModal}
                 >
-                    <div className="container">
+                    <div className="container loginBg" style={{color:'#fff'}}>
                         <div className="row" style={{ marginTop: "2%" }}>
                             <Label
                                 className="col-md-3"
-                                style={{ textAlign: "right", paddingRight: "2%", paddingTop: "3%" }}
+                                style={{ textAlign: "right", paddingRight: "2%", paddingTop: "4%",color:'#fff' }}
                             >
                                 Mobile:
                         </Label>
-                            <PhoneInput
-                                className="col-md-7"
-                                country={'in'}
-                                onlyCountries={['in']}
-                                value={this.state.phoneNumber}
-                                onChange={phone => this.onPhoneNumberChange(phone)}
-                                countryCodeEditable={false}
-                            />
+                            <div className="col-md-7 pt-3">
+                                <PhoneInput
+                                    country={'in'}
+                                    onlyCountries={['in']}
+                                    value={this.state.phoneNumber}
+                                    onChange={phone => this.onPhoneNumberChange(phone)}
+                                    countryCodeEditable={false}
+                                />
+                            </div>
                         </div>
                         <span className="col-md-12" style={{ color: "red" }}>
                             {this.state.formErrors["phone_number"]}
                         </span>
                         <div className="col-md-12" style={{ textAlign: "center", marginTop: "5px", marginBottom: "15px" }}>
-                            <button type="button" className="btn" onClick={this.onSendOTP} style={{padding: "1px"}} disabled={this.state.isSendOTPDisabled}>
+                            <button type="button" className="btn pl-3 pr-3 pt-2 pb-2" onClick={this.onSendOTP} style={{padding: "1px",color:'#fff',backgroundColor:'#6eb1c2',borderRadius:'40px'}} disabled={this.state.isSendOTPDisabled}>
                                 {this.state.sendOTPClicked ?
                                     "Resend OTP" : "Send OTP"}
                             </button>
                         </div>
                         <div className="row">
-                            <Label className="col-md-3" style={{ textAlign: "right" }}>OTP:</Label>
+                            <Label className="col-md-3 mt-2" style={{ textAlign: "right",color:'#fff' }}>OTP:</Label>
                             <TextField
                                 value={this.state.OTP}
                                 onChange={(ev, val) => (this.onOTPChange(ev, val))}
-                                className="col-md-8"
-                                style={{ padding: "0%", textAlign: "center" }}
+                                className="col-md-7 mt-2"
+                                style={{ padding: "0%", border:'none' }}
                             />
                         </div>
                         <span className="col-md-12" style={{ color: "red", marginLeft: "5%" }}>
                             {this.state.formErrors["otp"]}
                         </span>
                         <div style={{ textAlign: "center", marginTop: "5px" }}>
-                            <button type="button" className="btn" style={{padding: "1px", marginRight: "15px"}} onClick={this.verifyOTP}>Verify</button>
-                            <button type="button" className="btn" style={{padding: "1px"}} onClick={() => { this.onDismiss() }}>Cancel</button>
+                            <button type="button" className="customBtn" onClick={this.verifyOTP}>Verify</button>
+                            <button type="button" className="customBtnWhite ml-2" onClick={() => { this.onDismiss() }}>Cancel</button>
                         </div>
                         <div className="row" style={{textAlign: "center", marginTop: "4%"}}>
-                            <div className="col-md-12">
+                            <div className="col-md-12 mb-3">
                                 <span style={{paddingTop:"3%", paddingRight: "2%"}}>Login With:</span>
                                 <i className="fa fa-google" onClick={this.onGoogleLogin}></i>
                                 <i className="fa fa-facebook" onClick={this.onFacebookLogin}></i>

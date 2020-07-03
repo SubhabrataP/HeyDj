@@ -777,6 +777,18 @@ img {
     border-radius: 40px;
 }
 
+.loginBg {
+    background: url('../images/login.png');
+    background-size: cover;
+}
+
+.img-thumbnail {
+    padding: 0 !important;
+}
+
+.listView .ms-Viewport {
+    background: url('../images/login.jpg');
+}
 
 
 .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot{ display:block !important; outline:none; }
