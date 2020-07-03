@@ -17,19 +17,16 @@ export default class FeaturedPlaylist extends Component {
     }
 
     getPlaylist = () => {
-        localStorage.getItem('Token') === null ? 
-        this.setState({
-            playlistItems: [1,1,1,1,1]
-        }) :
         apiAxios.get(
-            "/api/dj/playlist",
+            "/api/playlist",
             {
-                headers: {
-                    'Authorization': localStorage.getItem('Token')
-                },
+                params: {
+                    all: "true"
+                }
             }
         )
             .then((res) => {
+                console.log(res)
                 this.setState({
                     playlistItems: res.data.playlists,
                 })
@@ -56,7 +53,10 @@ export default class FeaturedPlaylist extends Component {
                         <div className="row">
                             {this.state.playlistItems.slice(0,6).map((data) => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
-                                    <CardTemplate playlistData={data} />
+                                    <CardTemplate
+                                        playlistData={data}
+                                        type={"playlist"}
+                                    />
                                 </div>
                             ))}
                         </div>

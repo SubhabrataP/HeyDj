@@ -3,7 +3,8 @@ import GuestUserDashboard from './components/Users/GuestUser/GuestUserDashboard'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import NewReleaseFullPage from "./components/DashboardElements/NewReleaseFullPage";
 import FeaturedPlaylistFullPage from "./components/DashboardElements/FeaturedPlaylistFullPage";
-import GenreListFullPage from "./components/DashboardElements/GenreListFullPage";
+import ArtistsFullPage from "./components/DashboardElements/ArtistsFullPage";
+// import GenreListFullPage from "./components/DashboardElements/GenreListFullPage";
 import PageNotFound from "./components/ErrorPages/PageNotFound";
 import UserSection from "./components/LazyLoading/UserSection";
 import DjSection from "./components/LazyLoading/DjSection";
@@ -16,7 +17,8 @@ const createRoutes = (props) => (
             <Route exact path="/" render={(props) => <GuestUserDashboard history={props.history} />} />
             <Route exact path="/NewReleases" component={NewReleaseFullPage} />
             <Route exact path="/FeaturedPlaylists" component={FeaturedPlaylistFullPage} />
-            <Route exact path="/Genres" component={GenreListFullPage} />
+            <Route exact path="/Artists" component={FeaturedPlaylistFullPage} />
+            {/* <Route exact path="/Genres" component={GenreListFullPage} /> */}
             <Route exact path="/login/success" render={(props) => <LoginSuccess history={props.history} />} />
 
             <Route path="/User" component={UserSection} />

@@ -17,19 +17,16 @@ class NewReleaseList extends Component {
     }
 
     getPlaylist = () => {
-        localStorage.getItem('Token') === null ? 
-        this.setState({
-            playlistItems: [1,1,1,1,1]
-        }) :
         apiAxios.get(
-            "/api/dj/playlist",
+            "/api/playlist",
             {
-                headers: {
-                    'Authorization': localStorage.getItem('Token')
-                },
+                params: {
+                    all: "true"
+                }
             }
         )
             .then((res) => {
+                console.log(res)
                 this.setState({
                     playlistItems: res.data.playlists,
                 })
@@ -56,7 +53,10 @@ class NewReleaseList extends Component {
                         <div>
                             {this.state.playlistItems.slice(0,5).map((data) => (
                                 <div style={{ paddingBottom: "15px" }}>
-                                    <CardTemplate playlistData={data} />
+                                    <CardTemplate
+                                        playlistData={data}
+                                        type={"playlist"}
+                                    />
                                 </div>
                             ))}
                         </div>

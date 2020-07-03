@@ -3,7 +3,7 @@ import CardTemplate from "../Common/CardTemplate";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 
-export default class GenreList extends Component {
+export default class Artists extends Component {
     constructor(props) {
         super(props);
 
@@ -17,15 +17,10 @@ export default class GenreList extends Component {
     }
 
     getPlaylist = () => {
-        localStorage.getItem('Token') === null ? 
-        this.setState({
-            playlistItems: [1,1,1,1,1,1,1]
-        }) :
         apiAxios.get(
             "/api/user/dj"
         )
             .then((res) => {
-                console.log(res)
                 this.setState({
                     playlistItems: res.data.djs,
                 })
@@ -36,7 +31,7 @@ export default class GenreList extends Component {
     }
 
     onMoreClick = () => {
-        this.props.history.push('/Genres');
+        this.props.history.push('/Artists');
     }
 
     render() {
@@ -52,7 +47,10 @@ export default class GenreList extends Component {
                         <div className="row">
                             {this.state.playlistItems.slice(0,6).map((data) => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
-                                    <CardTemplate playlistData={data} />
+                                    <CardTemplate
+                                        playlistData={data}
+                                        type={"artist"}
+                                    />
                                 </div>
                             ))}
                         </div>

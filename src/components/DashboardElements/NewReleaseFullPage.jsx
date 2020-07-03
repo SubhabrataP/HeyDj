@@ -1,16 +1,39 @@
 import React, { Component } from "react";
 import CardTemplate from "../Common/CardTemplate";
 import Layout from "../Home/Layout";
-
+import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 export default class NewReleaseFullPage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            playlistItems: [1, 1, 1, 1, 1, 1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-            itemsPerPage: 20,
+            playlistItems: []
         }
+    }
+
+    componentDidMount(){
+        this.getPlaylist();
+    }
+
+    getPlaylist = () => {
+        apiAxios.get(
+            "/api/playlist",
+            {
+                params: {
+                    all: "true"
+                }
+            }
+        )
+            .then((res) => {
+                console.log(res)
+                this.setState({
+                    playlistItems: res.data.playlists,
+                })
+            })
+            .catch(function (error) {
+                alert(error.response);
+            });
     }
 
     onLoadMore = () => {
@@ -28,9 +51,12 @@ export default class NewReleaseFullPage extends Component {
                             New Releases
                         </div>
                         <div className="row" >
-                            {this.state.playlistItems.slice(0,this.state.itemsPerPage).map(() => (
+                            {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (
                                 <div style={{ paddingRight: "15px", paddingBottom: "15px" }}>
-                                    <CardTemplate />
+                                    <CardTemplate
+                                        playlistData={data}
+                                        type={"playlist"}
+                                    />
                                 </div>
                             ))}
                         </div>
