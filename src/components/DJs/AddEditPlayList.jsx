@@ -71,6 +71,7 @@ export default class AddEditPlaylist extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
+        this.getContentList();
         if (!nextProps.isAdd) {
             var myArr = nextProps.editData.content;
             var filtered = this.state.contentDetails.filter(
@@ -95,6 +96,26 @@ export default class AddEditPlaylist extends Component {
                 selectionDetails: filtered
             })
             // this._selection = filtered[0]
+        }
+        else{
+            this.setState({
+                selectionDetails: "",
+                title: "",
+                price: "",
+                thumbnail: {
+                    path: "",
+                    value: ""
+                },
+                sampleContent: {
+                    name: "",
+                    value: ""
+                },
+                titleError: "",
+                priceError: "",
+                thumbnailError: "",
+                sampleContentError: "",
+                editPlaylistId: ""
+            })
         }
     }
 
@@ -262,7 +283,7 @@ export default class AddEditPlaylist extends Component {
     }
 
     onDismiss = () => {
-        this.state = {
+        this.setState({
             selectionDetails: "",
             contentDetails: [],
             title: "",
@@ -280,9 +301,10 @@ export default class AddEditPlaylist extends Component {
             thumbnailError: "",
             sampleContentError: "",
             editPlaylistId: ""
-        }
-        this._selection = new Selection({});
-        this.props.onDismiss();
+        }, ()=> {
+            this._selection = new Selection({});
+            this.props.onDismiss();
+        });
     }
 
     render() {
