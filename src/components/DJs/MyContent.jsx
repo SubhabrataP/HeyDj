@@ -4,6 +4,8 @@ import AddEditContent from "./AddEditContent";
 import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import Search from '../Common/Search';
+import Popups from "../Common/Popups";
+import * as Constants from "../Common/Constants"
 
 export default class MyContent extends Component{
     constructor(props){
@@ -16,7 +18,10 @@ export default class MyContent extends Component{
             itemsPerPage: 3,
             isAdd: true,
             editContent: "",
-            items: []
+            items: [],
+            showAlert: false,
+            deleteId: 0,
+            alertMessage: ""
         }
 
         this.columns= [
@@ -57,7 +62,7 @@ export default class MyContent extends Component{
                     return (
                         <React.Fragment>
                             <button onClick={() => {this.editContent(item)}}>Edit</button>
-                            <button onClick={() => (this.deleteContent(item.id))}>Delete</button>
+                            <button onClick={() => (this.showDeleteAlert(item.id))}>Delete</button>
                         </React.Fragment>
                     )
                 }
@@ -75,13 +80,22 @@ export default class MyContent extends Component{
         })
     }
 
-    deleteContent = (id) => {
-        apiAxios.delete('/api/dj/content/' + id, {
+    showDeleteAlert = (id) => {
+        this.setState({
+            showAlert: true,
+            deleteId: id,
+            alertMessage: Constants.ACTION_DELETE
+        })
+    }
+
+    deleteContent = () => {
+        apiAxios.delete('/api/dj/content/' + this.state.deleteId, {
             headers: {
                 'Authorization': localStorage.getItem('Token')
             }
         })
         .then((response) => {
+            this.onDismissAlert();
             this.getContentList();
         })
         .catch(function (error) {
@@ -119,9 +133,18 @@ export default class MyContent extends Component{
         this.setState({
             addEditContentModal: false,
             showSelectContentModal: false,
-            isAdd: true
+            isAdd: true,
+            showAlert: false
         });
         this.getContentList();
+    }
+
+    onDismissAlert = () => {
+        this.setState({
+            showAlert: false,
+            deleteId: 0,
+            alertMessage: ""
+        });
     }
 
     onLoadMoreClick = () => {
@@ -165,7 +188,7 @@ export default class MyContent extends Component{
                                                         <small>INR {item.price}</small><br/>
                                                         <span>
                                                             <small style={{color:'#6eb1c2'}} onClick={() => {this.editContent(item)}}>Edit</small>
-                                                            <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => {this.deleteContent(item.id)}}>Delete</small>
+                                                            <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => {this.showDeleteAlert(item.id)}}>Delete</small>
                                                         </span>
                                                     </div>
                                                 )})
@@ -193,6 +216,13 @@ export default class MyContent extends Component{
                         onDismiss={() => (this.onDismiss())}
                         isAdd={this.state.isAdd}
                         editContent={this.state.editContent}
+                    />
+                    <Popups
+                        showModal={this.state.showAlert} 
+                        message={this.state.alertMessage}
+                        isMultiButton= {true}
+                        button1Click={() => {this.deleteContent()}}
+                        button2Click={() => {this.onDismissAlert()}}
                     />
                 </Layout>
             </React.Fragment>

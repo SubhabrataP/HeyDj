@@ -4,6 +4,8 @@ import Search from '../Common/Search';
 import AddEditPlaylist from "./AddEditPlayList";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
+import Popups from "../Common/Popups";
+import * as Constants from "../Common/Constants"
 
 export default class MyPlayList extends Component{
     constructor(props){
@@ -13,7 +15,10 @@ export default class MyPlayList extends Component{
             showSelectContentModal: false,
             playlistDetails: [],
             isAdd: true,
-            editPlaylist: []
+            editPlaylist: [],
+            showAlert: false,
+            deleteId: 0,
+            alertMessage: ""
         }
 
         this.columns= [
@@ -72,13 +77,22 @@ export default class MyPlayList extends Component{
         })
     }
 
-    deletePlaylist = (id) => {
-        apiAxios.delete('/api/dj//playlist/' + id, {
+    showDeleteAlert = (id) => {
+        this.setState({
+            showAlert: true,
+            deleteId: id,
+            alertMessage: Constants.ACTION_DELETE
+        })
+    }
+
+    deletePlaylist = () => {
+        apiAxios.delete('/api/dj//playlist/' + this.state.deleteId, {
             headers: {
                 'Authorization': localStorage.getItem('Token')
             }
         })
         .then((response) => {
+            this.onDismissAlert();
             this.getPlaylist();
         })
         .catch(function (error) {
@@ -119,6 +133,14 @@ export default class MyPlayList extends Component{
         this.getPlaylist();
     }
 
+    onDismissAlert = () => {
+        this.setState({
+            showAlert: false,
+            deleteId: 0,
+            alertMessage: ""
+        });
+    }
+
     render(){
         return(
             <React.Fragment>
@@ -154,7 +176,7 @@ export default class MyPlayList extends Component{
                                                 <small>INR {item.price}</small><br/>
                                                 <span>
                                                     <small style={{color:'#6eb1c2'}} onClick={() => {this.editContent(item)}}>Edit</small>
-                                                    <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => (this.deletePlaylist(item.id))}>Delete</small>
+                                                    <small style={{color:'#bccdd1'}} className="ml-3" onClick={() => (this.showDeleteAlert(item.id))}>Delete</small>
                                                 </span>
                                             </div>
                                         )})
@@ -176,6 +198,13 @@ export default class MyPlayList extends Component{
                         onDismiss={() => (this.onDismiss())}
                         isAdd={this.state.isAdd}
                         editData={this.state.editPlaylist}
+                    />
+                    <Popups
+                        showModal={this.state.showAlert} 
+                        message={this.state.alertMessage}
+                        isMultiButton= {true}
+                        button1Click={() => {this.deletePlaylist()}}
+                        button2Click={() => {this.onDismissAlert()}}
                     />
                 </Layout>
             </React.Fragment>
