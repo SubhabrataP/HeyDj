@@ -5,6 +5,8 @@ import Login from "../LoginPages/Login";
 import AdminLogin from "../LoginPages/AdminLogin";
 import AddEditProfile from "./AddEditProfile"
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import Popups from "./Popups";
+import * as Constants from "./Constants"
 
 
 export default class UserPersona extends Component {
@@ -17,7 +19,9 @@ export default class UserPersona extends Component {
             showAdminLoginModal: false,
             showEditProfile: false,
             userData: "",
-            userImage: "/images/emptyUser.png"
+            userImage: "/images/emptyUser.png",
+            showAlert: false,
+            alertMessage: ""
         }
         if (!(localStorage.getItem('Token') === null) && this.state.userData === "") {
             this.onEditProfile();
@@ -84,6 +88,20 @@ export default class UserPersona extends Component {
         });
     }
 
+    showAlert = () => {
+        this.setState({
+            showAlert: true,
+            alertMessage: Constants.LOGOUT
+        })
+    }
+
+    onDismissAlert = () => {
+        this.setState({
+            showAlert: false,
+            alertMessage: ""
+        })
+    }
+
     onLogout = () => {
         localStorage.clear();
         this.props.history.push('/');
@@ -116,7 +134,7 @@ export default class UserPersona extends Component {
                                         Edit Profile
                                     </span>
                                     <hr />
-                                    <span className="loginDropdown" role="listitem" onClick={this.onLogout}>
+                                    <span className="loginDropdown" role="listitem" onClick={() => { this.showAlert() }}>
                                         Logout
                                     </span>
                                 </React.Fragment>
@@ -150,6 +168,16 @@ export default class UserPersona extends Component {
                         isAdd={false}
                         roleToBeAdded={localStorage.getItem('Role')}
                         profileData={this.state.userData}
+                />
+                <Popups
+                    showModal={this.state.showAlert}
+                    message={this.state.alertMessage}
+                    secondaryMessage={Constants.SECONDARY_LOGOUT}
+                    isMultiButton={true}
+                    button1Text={"Yes"}
+                    button1Click={() => { this.onLogout() }}
+                    button2Text={"No"}
+                    button2Click={() => { this.onDismissAlert() }}
                 />
             </React.Fragment>
         )

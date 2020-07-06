@@ -14,15 +14,7 @@ export default class HeaderNavLink extends Component {
                         }}>
                         Home
                     </Link>
-                    <Link to={{ pathname: "/" }}
-                        href="#"
-                        style={{
-                            paddingRight: "13px",
-                            textDecoration: 'none'
-                        }}>
-                        Browse
-                    </Link>
-                    <Link to={{ pathname: localStorage.getItem("Id") ? "/userplaylist" : "/" }}
+                    {/* <Link to={{ pathname: localStorage.getItem("Id") ? "/userplaylist" : "/" }}
                         href="#"
                         style={{
                             paddingRight: "13px",
@@ -37,7 +29,7 @@ export default class HeaderNavLink extends Component {
                             textDecoration: 'none'
                         }}>
                         Subscriptions
-                    </Link>
+                    </Link> */}
                     <Link to={{ pathname: "/" }}
                         href="#"
                         style={{

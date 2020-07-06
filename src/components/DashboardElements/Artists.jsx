@@ -50,6 +50,7 @@ export default class Artists extends Component {
                                     <CardTemplate
                                         playlistData={data}
                                         type={"artist"}
+                                        history={this.props.history}
                                     />
                                 </div>
                             ))}

@@ -4,6 +4,8 @@ import { DetailsList, SelectionMode } from 'office-ui-fabric-react';
 import Search from '../Common/Search';
 import AddEditProfile from '../Common/AddEditProfile';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import Popups from "../Common/Popups";
+import * as Constants from "../Common/Constants"
 
 export default class DjList extends Component{
     constructor(props){
@@ -14,7 +16,10 @@ export default class DjList extends Component{
             djDetails: [],
             isAdd: true,
             editProfileData: {},
-            itemsPerPage: 5
+            itemsPerPage: 5,
+            showAlert: false,
+            deleteId: 0,
+            alertMessage: ""
         }
         this.columns= [
             {
@@ -59,19 +64,34 @@ export default class DjList extends Component{
                     return (
                         <React.Fragment>
                             <button className="customBtn" onClick={() => (this.editProfile(item))}>Edit</button>
-                            <button className="customBtnWhite ml-1" onClick={() => (this.deleteProfile(item.id))}>Delete</button>
+                            <button className="customBtnWhite ml-1" onClick={() => (this.showDeleteAlert(item.id))}>Delete</button>
                         </React.Fragment>
                     )
                 }
             }
         ]
-
         this.getAllDjsList();
     }
 
-    deleteProfile = (id) => {
+    showDeleteAlert = (id) => {
+        this.setState({
+            showAlert: true,
+            deleteId: id,
+            alertMessage: Constants.ACTION_DELETE
+        })
+    }
+
+    onDismissAlert = () => {
+        this.setState({
+            showAlert: false,
+            deleteId: 0,
+            alertMessage: ""
+        });
+    }
+
+    deleteProfile = () => {
         apiAxios.delete(
-            "/api/admin/user/"+id,
+            "/api/admin/user/" + this.state.deleteId,
             {
                 headers: {
                     'Authorization': localStorage.getItem('Token')
@@ -79,6 +99,7 @@ export default class DjList extends Component{
             }
         )
         .then((res) => {
+            this.onDismissAlert();
             this.getAllDjsList();
         })
         .catch(function (error) {
@@ -99,11 +120,13 @@ export default class DjList extends Component{
             }
         )
         .then((res) => {
+            console.log("djs: ", res.data)
             res.data.map((val) => {
                 val.fullName = val.firstName + " " + val.lastName
-            })
-            this.setState({
-                djDetails: res.data
+            }, () => {
+                this.setState({
+                    djDetails: res.data
+                })
             })
         })
         .catch(function (error) {
@@ -149,7 +172,7 @@ export default class DjList extends Component{
                             <h5 className={"col-md-8"}>DJ Details List</h5>
                             <div className={"row col-md-4"} style={{textAlign: "right"}}>
                                 <Search />
-                                <button style={{ marginLeft: "10%", paddingLeft: "5px", paddingRight: "5px" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
+                                <button className="customBtn" style={{ marginLeft: "10%" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
                             </div>
                         </div>
 
@@ -172,6 +195,13 @@ export default class DjList extends Component{
                         isAdd={this.state.isAdd}
                         roleToBeAdded={"dj"}
                         profileData={this.state.editProfileData}
+                    />
+                    <Popups
+                        showModal={this.state.showAlert} 
+                        message={this.state.alertMessage}
+                        isMultiButton= {true}
+                        button1Click={() => {this.deleteProfile()}}
+                        button2Click={() => {this.onDismissAlert()}}
                     />
                 </Layout>
             </React.Fragment>

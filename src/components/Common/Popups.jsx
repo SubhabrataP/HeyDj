@@ -19,6 +19,9 @@ export default class Popups extends Component {
                             <div style={{ textAlign: "center", margin: "15px 0" }}>
                                 {this.props.message ? this.props.message : ""}
                             </div>
+                            <div style={{ textAlign: "center", margin: "15px 0" }}>
+                                {this.props.secondaryMessage ? this.props.secondaryMessage : ""}
+                            </div>
                             {this.props.isMultiButton === true ?
                                 <div style={{ textAlign: "center", margin: "15px 0" }}>
                                     <button type="button" className="customBtn" onClick={()=>{this.props.button1Click()}}>

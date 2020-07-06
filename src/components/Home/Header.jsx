@@ -4,6 +4,7 @@ import HeaderNavLink from "../Navigation/HeaderNavLinks"
 import UserPersona from "../Common/UserPersona"
 import AdminHeaderNavLinks from "../Navigation/AdminHeaderNavLinks";
 import DjHeaderNavLinks from "../Navigation/DjHeaderNavLinks";
+import UserHeaderNavLinks from "../Navigation/UserHeaderNavLinks";
 
 export default class Header extends Component {
 
@@ -34,9 +35,13 @@ export default class Header extends Component {
                                 <div className="col-md-6">
                                     <DjHeaderNavLinks />
                                 </div> :
-                                <div className="col-md-5 offset-md-1">
-                                    <HeaderNavLink />
-                                </div>
+                                localStorage.getItem('Role') === "user" ?
+                                    <div className="col-md-6">
+                                        <UserHeaderNavLinks />
+                                    </div> :
+                                    <div className="col-md-5 offset-md-1">
+                                        <HeaderNavLink />
+                                    </div>
                         }
                         <div className="col-md-1">
                             <UserPersona history={this.props.history} />

@@ -16,9 +16,22 @@ export default class CardTemplate extends Component {
     }
 
     cardClicked = () => {
-        this.setState({
-            playMusic: true
-        })
+        if(this.props.type === "playlist"){
+            this.setState({
+                playMusic: true
+            })
+        }
+        else if(this.props.type === "artist"){
+            this.props.history.push({
+                pathname: `/${this.props.playlistData.firstName}`,
+                state: { djDetails: this.props.playlistData }
+              })
+        }
+        else{
+            this.setState({
+                playMusic: false
+            })
+        }
     };
 
     onDismiss =() => {
@@ -57,15 +70,15 @@ export default class CardTemplate extends Component {
                                 </React.Fragment>
                                 :
                                 <React.Fragment>
-                                    <img className="w-100"
+                                     <img className="w-100"
                                         src={(this.props.playlistData.profileImage === undefined || this.props.playlistData.profileImage === "undefined") ?
-                                            process.env.PUBLIC_URL + "/images/playlist-5.png" :
+                                            process.env.PUBLIC_URL + "/images/emptyUser.png" :
                                             this.props.playlistData.profileImage}
-                                        alt={process.env.PUBLIC_URL + "/images/playlist-5.png"}
+                                        alt="Profile_Image"
                                     />
                                     <div className="overlayCard m-0 w-100">
                                         <div className="textCard text-left">
-                                            <h5>{this.props.playlistData.firstName + this.props.playlistData.lastName}</h5>
+                                            <h5>{this.props.playlistData.firstName + " " + this.props.playlistData.lastName}</h5>
                                         </div>
                                     </div>
                                 </React.Fragment>
