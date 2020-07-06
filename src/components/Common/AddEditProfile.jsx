@@ -17,8 +17,9 @@ export default class AddEditProfile extends Component {
             showModal: false,
             profile_picture: {
                 value: "",
-                name: null
+                name: null,
             },
+            previewImage: "",
             firstNameError: "",
             mobileError: "",
             emailError: "",
@@ -63,6 +64,7 @@ export default class AddEditProfile extends Component {
                 editedUserId: nextProps.profileData.id === undefined ? "" :
                     nextProps.profileData.id,
                 profile_picture: image,
+                previewImage: nextProps.profileData.profileImage,
                 workExpData: nextProps.profileData.workExperience === undefined ?
                     [
                         {
@@ -79,7 +81,7 @@ export default class AddEditProfile extends Component {
 
     editOnChangeHandler = (event, element) => {
         if (element === "image") {
-            const file = event.target.files[0];
+            let file = event.target.files[0];
             if (!file.type.includes("image")) {
                 //TODO: Show Error
                 console.error("Image is not Selected");
@@ -88,15 +90,18 @@ export default class AddEditProfile extends Component {
             // Encodes Image to upload and Preview
             let reader = new FileReader();
             reader.readAsDataURL(file);
+
             reader.onloadend = function () {
                 this.setState({
                     profile_picture: {
-                        value: reader.result,
+                        value: file,
                         name: file.name
-                    }
+                    },
+                    previewImage: reader.result
                 });
             }.bind(this);
         }
+        
         // else {
         //   console.log(element, event.target.value);
         //   this.setState({
@@ -164,6 +169,7 @@ export default class AddEditProfile extends Component {
                         value: res.data.profileImage,
                         name: ""
                     },
+                    previewImage: res.data.profileImage,
                     userNotExisting: false
                 })
             })
@@ -263,6 +269,7 @@ export default class AddEditProfile extends Component {
                 value: "",
                 name: null
             },
+            previewImage: "",
             firstNameError: "",
             mobileError: "",
             firstName: "",
@@ -301,7 +308,7 @@ export default class AddEditProfile extends Component {
                                 </span>
                                 <Image
                                     className="profile-pic"
-                                    src={this.state.profile_picture.value ? this.state.profile_picture.value : ""}
+                                    src={this.state.previewImage ? this.state.previewImage : ""}
                                     roundedCircle
                                 />
                                 <FormControl
