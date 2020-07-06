@@ -35,7 +35,6 @@ export default class ArtistViewProfile extends Component {
     }
 
     render() {
-        console.log(this.state.userPlaylists)
         return (
             <Layout history={this.props.history}>
                 <div className="row" style={{ marginTop: "2%" }}>
