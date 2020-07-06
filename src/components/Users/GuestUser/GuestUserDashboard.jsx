@@ -18,9 +18,6 @@ export default class GuestUserDashboard extends Component {
                     <div className="col-md-3">
                         <NewReleaseList history={this.props.history} />
                     </div>
-
-                    
-                    
                 </div>
             </Layout>
         )

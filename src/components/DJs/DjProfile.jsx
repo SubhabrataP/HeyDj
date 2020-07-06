@@ -17,9 +17,6 @@ export default class DjProfile extends Component {
     }
 
     getProfile = () => {
-        this.setState({
-            showEditProfile: true
-        })
         apiAxios.get(
             "/api/user/" + localStorage.getItem('Id'),
             {

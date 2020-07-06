@@ -6,7 +6,7 @@ export default class DjHeaderNavLinks extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                <Link to={{ pathname: "/" }}
+                    <Link to={{ pathname: "/" }}
                         href="#"
                         style={{
                             paddingRight: "7px",

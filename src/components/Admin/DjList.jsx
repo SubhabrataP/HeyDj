@@ -69,7 +69,8 @@ export default class DjList extends Component{
                     )
                 }
             }
-        ]
+        ];
+
         this.getAllDjsList();
     }
 
@@ -119,19 +120,18 @@ export default class DjList extends Component{
                 }
             }
         )
-        .then((res) => {
-            console.log("djs: ", res.data)
-            res.data.map((val) => {
-                val.fullName = val.firstName + " " + val.lastName
-            }, () => {
+            .then((res) => {
+                console.log("djs: ", res.data)
+                res.data.map((val) => {
+                    val.fullName = val.firstName + " " + val.lastName
+                });
                 this.setState({
                     djDetails: res.data
                 })
             })
-        })
-        .catch(function (error) {
-            alert(error.response.data);
-        });
+            .catch(function (error) {
+                alert(error.response.data);
+            });
     }
 
     onAddDjClick = () => {

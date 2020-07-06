@@ -7,12 +7,18 @@ export default class ArtistViewProfile extends Component {
     constructor(props){
         super(props);
 
-        this.state={
-            userData: this.props.history.location.state.djDetails ? this.props.history.location.state.djDetails : "",
+        this.state = {
+            userData: this.props.history.location.state ? this.props.history.location.state.djDetails : "",
             userPlaylists: []
         }
+    }
 
-        this.getDjPlaylists();
+    componentDidMount(){
+        this.state.userData ? 
+        this.getDjPlaylists() :
+        this.setState({
+            userData: {}
+        });
     }
 
     getDjPlaylists = () => {
