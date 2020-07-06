@@ -12,7 +12,6 @@ export default class ArtistViewProfile extends Component {
             userPlaylists: []
         }
 
-        console.log(this.state.userData.id)
         this.getDjPlaylists();
     }
 
