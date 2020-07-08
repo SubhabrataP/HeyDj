@@ -3,8 +3,9 @@ import { FormControl, Image, Modal } from "react-bootstrap";
 import "../Styles/UserRegistration.css";
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import { Multiselect } from 'multiselect-react-dropdown';
+import Popups from "../Common/Popups"
 
 const priceRegex = RegExp(/^\s*(?=.*[1-9])\d*(?:\.\d{2})?\s*$/);
 
@@ -13,7 +14,7 @@ export default class AddEditPlaylist extends Component {
         super(props);
 
         this.state = {
-            selectionDetails: "",
+            selectedContent: [],
             editPlaylistId: "",
             contentDetails: [],
             title: "",
@@ -29,52 +30,19 @@ export default class AddEditPlaylist extends Component {
             titleError: "",
             priceError: "",
             thumbnailError: "",
-            sampleContentError: ""
+            sampleContentError: "",
+            showAlert: false,
+            alertMessage: "",
+            isMultiButton: false,
+            button1Text: ""
         }
-
-        this.columns = [
-            {
-                key: "column2",
-                name: "Thumbnail",
-                fieldName: "thumbnail",
-                isResizable: false,
-                minWidth: 150,
-                maxWidth: 150,
-                onRender: (item) => {
-                    return <img src={item.thumbnail} style={{ height: "40px", width: "40px" }} />;
-                },
-            },
-            {
-                key: "column1",
-                name: "Title",
-                fieldName: "title",
-                isResizable: false,
-                minWidth: 200,
-                maxWidth: 200,
-            }
-        ];
-
-        this._selection = new Selection({
-            onSelectionChanged: () => {
-                this.setState({
-                    selectionDetails: this._getSelectionDetails(),
-                });
-            },
-        });
-
-        this.getContentList();
-    }
-
-    _getSelectionDetails = () => {
-        const selectionData = this._selection.getSelection();
-        return selectionData;
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         this.getContentList();
         if (!nextProps.isAdd) {
             var myArr = nextProps.editData.content;
-            var filtered = this.state.contentDetails.filter(
+            var selectedContent = this.state.contentDetails.filter(
                 function(e) {
                   return this.indexOf(e.id) >= 0;
                 },
@@ -93,13 +61,11 @@ export default class AddEditPlaylist extends Component {
                     name: "",
                     value: nextProps.editData.sampleContent
                 },
-                selectionDetails: filtered
+                selectedContent: selectedContent
             })
-            // this._selection = filtered[0]
         }
         else{
             this.setState({
-                selectionDetails: "",
                 title: "",
                 price: "",
                 thumbnail: {
@@ -114,7 +80,8 @@ export default class AddEditPlaylist extends Component {
                 priceError: "",
                 thumbnailError: "",
                 sampleContentError: "",
-                editPlaylistId: ""
+                editPlaylistId: "",
+                selectedContent: []
             })
         }
     }
@@ -203,15 +170,15 @@ export default class AddEditPlaylist extends Component {
 
         if (isValid) {
             if (this.props.isAdd) {
-                if (this.state.selectionDetails.length > 0) {
+                if (this.state.selectedContent.length > 0) {
                     var contentIds = [];
-                    this.state.selectionDetails.map((data) => {
+                    this.state.selectedContent.map((data) => {
                         contentIds.push(data.id);
                     })
                     var bodyFormData = new FormData();
                     bodyFormData.set('title', this.state.title);
                     bodyFormData.set('price', this.state.price);
-                    bodyFormData.set('content', JSON.stringify(contentIds));
+                    bodyFormData.set('content', contentIds);
                     bodyFormData.append('thumbnail', this.state.thumbnail.value);
                     bodyFormData.append('sampleContent', this.state.sampleContent.value);
 
@@ -221,6 +188,10 @@ export default class AddEditPlaylist extends Component {
                         }
                     })
                         .then((res) => {
+                            this.setState({
+                                alertMessage: 'Playlist added succesfully',
+                                showAlert: true
+                            })
                             this.onDismiss();
                         })
                         .catch(function (error) {
@@ -228,19 +199,22 @@ export default class AddEditPlaylist extends Component {
                         })
                 }
                 else {
-                    alert('Select atleast one from contents list.')
+                    this.setState({
+                        alertMessage: 'Select atleast one from contents list.',
+                        showAlert: true
+                    })
                 }
             }
             else{
-                if (this.state.selectionDetails.length > 0) {
+                if (this.state.selectedContent.length > 0) {
                     var contentIds = [];
-                    this.state.selectionDetails.map((data) => {
+                    this.state.selectedContent.map((data) => {
                         contentIds.push(data.id);
                     })
                     var bodyFormData = new FormData();
                     bodyFormData.set('title', this.state.title);
                     bodyFormData.set('price', this.state.price);
-                    bodyFormData.set('content', JSON.stringify(contentIds));
+                    bodyFormData.set('content', contentIds);
                     bodyFormData.append('thumbnail', this.state.thumbnail.value);
                     bodyFormData.append('sampleContent', this.state.sampleContent.value);
 
@@ -250,6 +224,10 @@ export default class AddEditPlaylist extends Component {
                         }
                     })
                         .then((res) => {
+                            this.setState({
+                                alertMessage: 'Playlist Updated succesfully',
+                                showAlert: true
+                            })
                             this.onDismiss();
                         })
                         .catch(function (error) {
@@ -257,10 +235,19 @@ export default class AddEditPlaylist extends Component {
                         })
                 }
                 else {
-                    alert('Select atleast one from contents list.')
+                    this.setState({
+                        alertMessage: 'Select atleast one from contents list.',
+                        showAlert: true
+                    })
                 }
             }
         }
+    }
+
+    dismissAlert = () => {
+        this.setState({
+            showAlert: false,
+        })
     }
 
     getContentList = () => {
@@ -273,9 +260,15 @@ export default class AddEditPlaylist extends Component {
             }
         )
             .then((res) => {
+                var x = res.data.contents.map((data) => {
+                    return {
+                        id: data.id,
+                        name: data.title
+                    }
+                });
                 this.setState({
-                    contentDetails: res.data.contents,
-                })
+                    contentDetails: x,
+                });
             })
             .catch(function (error) {
                 alert(error.response);
@@ -284,7 +277,6 @@ export default class AddEditPlaylist extends Component {
 
     onDismiss = () => {
         this.setState({
-            selectionDetails: "",
             contentDetails: [],
             title: "",
             price: "",
@@ -300,11 +292,19 @@ export default class AddEditPlaylist extends Component {
             priceError: "",
             thumbnailError: "",
             sampleContentError: "",
-            editPlaylistId: ""
+            editPlaylistId: "",
+            selectedContent: []
         }, ()=> {
-            this._selection = new Selection({});
             this.props.onDismiss();
         });
+    }
+
+    onSelect = (selectedList, selectedItem) => {
+        this.state.selectedContent.push(selectedItem);
+    }
+
+    onRemove = (selectedList, removedItem) => {
+        this.state.selectedContent.pop(removedItem);
     }
 
     render() {
@@ -398,17 +398,14 @@ export default class AddEditPlaylist extends Component {
                                 </span>
                             </div>
 
-                            <div className="row">
-                                <Label className="col-md-12" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color:'#fff' }}>Contents:</Label>
-                                <div className="col-sm-9 offset-sm-1">
-                                <DetailsList
-                                    selectionMode={SelectionMode.multiple}
-                                    items={this.state.contentDetails}
-                                    columns={this.columns}
-                                    selection={this._selection}
-                                />
-                                </div>
-                            </div>
+                            <Label className="col-md-12" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color:'#fff' }}>Contents:</Label>
+                            <Multiselect
+                                options={this.state.contentDetails} // Options to display in the dropdown
+                                selectedValues={this.state.selectedContent} // Preselected value to persist in dropdown
+                                onSelect={this.onSelect} // Function will trigger on select event
+                                onRemove={this.onRemove} // Function will trigger on remove event
+                                displayValue="name" // Property name to display in the dropdown options
+                            />
 
                             <div className="mb-3" style={{ textAlign: "center", marginTop: "15px" }}>
                                 <button type="button" className="customBtn" onClick={() => { this.onCreateEdit() }}>
@@ -419,6 +416,13 @@ export default class AddEditPlaylist extends Component {
                         </div>
                     </Modal>
                 </div>
+                <Popups
+                    showModal={this.state.showAlert}
+                    message={this.state.alertMessage}
+                    isMultiButton={this.state.isMultiButton}
+                    button1Click={() => { this.dismissAlert() }}
+                    button1Text={this.state.button1Text}
+                />
             </React.Fragment>
         )
     }

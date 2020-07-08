@@ -14,13 +14,21 @@ export default class UserHeaderNavLinks extends Component {
                         }}>
                         Home
                     </Link>
+                    <Link to={{ pathname: "/User" }}
+                        href="#"
+                        style={{
+                            paddingRight: "7px",
+                            textDecoration: 'none'
+                        }}>
+                        Dashboard
+                    </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"
                         style={{
                             paddingRight: "7px",
                             textDecoration: 'none'
                         }}>
-                        My Subscriptions
+                        Subscriptions
                     </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"

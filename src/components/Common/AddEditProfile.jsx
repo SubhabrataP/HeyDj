@@ -328,7 +328,6 @@ export default class AddEditProfile extends Component {
                                     value={this.state.firstName}
                                     onChange={(ev, firstName) => (this.setState({ firstName, firstNameError: "" }))}
                                     errorMessage={this.state.firstNameError}
-
                                 />
                             </div>
 

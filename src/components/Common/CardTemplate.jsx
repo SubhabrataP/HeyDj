@@ -23,7 +23,7 @@ export default class CardTemplate extends Component {
         }
         else if(this.props.type === "artist"){
             this.props.history.push({
-                pathname: `/${this.props.playlistData.firstName}`,
+                pathname: `/Profile/${this.props.playlistData.firstName}`,
                 state: { djDetails: this.props.playlistData }
               })
         }

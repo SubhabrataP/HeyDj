@@ -26,7 +26,7 @@ const createRoutes = (props) => (
             <Route path="/Dj" component={DjSection} />
             <Route path="/Admin" component={AdminSection} />
 
-            <Route exact path="/:artistname" render={(props) => <ArtistViewProfile history={props.history} />} />
+            <Route exact path="/Profile/:artistname" render={(props) => <ArtistViewProfile history={props.history} />} />
 
             <Route path="/**" component={PageNotFound} />
         </Switch>
