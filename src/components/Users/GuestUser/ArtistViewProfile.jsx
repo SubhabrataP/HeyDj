@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Layout from "../../Home/Layout";
 import { apiAxios } from "../../APIaxios/ApiAxiosCalls";
 import CardTemplate from "../../Common/CardTemplate";
+import ReactPlayer from 'react-player'
 
 export default class ArtistViewProfile extends Component {
     constructor(props){
@@ -9,16 +10,43 @@ export default class ArtistViewProfile extends Component {
 
         this.state = {
             userData: this.props.history.location.state ? this.props.history.location.state.djDetails : "",
-            userPlaylists: []
+            userPlaylists: [],
+            portfolioData: {}
         }
     }
 
-    componentDidMount(){
-        this.state.userData ? 
-        this.getDjPlaylists() :
-        this.setState({
-            userData: {}
-        });
+    componentDidMount() {
+        this.getDjPortFolio();
+
+        this.state.userData ?
+            this.getDjPlaylists() :
+            this.setState({
+                userData: {}
+            });
+    }
+
+    getDjPortFolio = () => {
+        apiAxios.get(
+            "/api/portfolio/" + this.state.userData.id,
+        )
+            .then((res) => {
+                console.log(res.data)
+                if (res.data) {
+                    if (res.data.spotify) {
+                        if (res.data.spotify.indexOf('https://open.spotify.com/embed/') === -1) {
+                            if (res.data.spotify.includes('https://open.spotify.com/')) {
+                                res.data.spotify = res.data.spotify.replace('https://open.spotify.com/', 'https://open.spotify.com/embed/');
+                            }
+                        }
+                    }
+                    this.setState({
+                        portfolioData: res.data
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
     }
 
     getDjPlaylists = () => {
@@ -77,31 +105,25 @@ export default class ArtistViewProfile extends Component {
                         </div>
                     </div>
                     <div className="col-sm-8 ml-2 dj-play-list p-3">
-                        <h4>Portfolio</h4>
-                        <div className="row">
-                            <div className="col-sm-4">
-                                <iframe width="100%" src="https://www.youtube.com/embed/s08gGZ3Tn_4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div className="col-sm-4">
-                                <iframe width="100%" src="https://www.youtube.com/embed/tspNk3SwZ9s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div className="col-sm-4">
-                                <iframe width="100%" src="https://www.youtube.com/embed/gCYcHz2k5x0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div className="col-sm-4">
-                                <iframe width="100%" src="https://www.youtube.com/embed/7BG88HMRVUc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            <div className="col-sm-4">
-                                <iframe width="100%" src="https://www.youtube.com/embed/rp31_j9knMI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
+                        <h2 style={{ marginBottom: "2%" }}>Portfolio</h2>
+                        <h4>Videos</h4>
+                        <div className="row" style={{ marginBottom: "5%" }}>
+                            {Object.entries(this.state.portfolioData).length !== 0 ? this.state.portfolioData.videoUrls.map((data) => (
+                                <div className="col-sm-4">
+                                    <ReactPlayer width='100%' height='100%' controls={true} volume={1} url={data} />
+                                </div>
+                            )) : null}
                         </div>
 
-                        <div className="row mt-4">
+                        <div className="row mt-4" style={{marginBottom: "5%"}}>
                             <div className="col-sm-12">
                                 <h4>Spotify</h4>
                             </div>
                             <div className="col-sm-12">
-                                <iframe src="https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3" width="100%" height="220" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                                {Object.entries(this.state.portfolioData).length !== 0 ?
+                                    this.state.portfolioData.spotify === undefined ? null : this.state.portfolioData.spotify === "" ? null :
+                                        <iframe src={this.state.portfolioData.spotify} width="100%" height="220" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe >
+                                    : null}
                             </div>
                         </div>
 
