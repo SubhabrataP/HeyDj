@@ -21,13 +21,16 @@ export default class AddEditContent extends Component{
                 name: "",
                 value: ""
             },
+            contentType: "",
             percentComplete: 1,
             showProgress: false,
             contentId: "",
             titleError: "",
             thumbnailError: "",
-            contentError: ""
+            contentError: "",
+            previewContent: ""
         }
+        console.log(localStorage.getItem('Token'));
     }
 
     updateProgress = (evt) => {
@@ -49,7 +52,8 @@ export default class AddEditContent extends Component{
                 },
                 contentId: nextProps.editContent.id,
                 percentComplete: 1,
-                showProgress: false
+                showProgress: false,
+                previewContent: nextProps.editContent.content
             })
         }
     }
@@ -80,6 +84,22 @@ export default class AddEditContent extends Component{
                     });
                 }
                 else if (type === "multimedia") {
+                    if (file.type.includes("audio")) {
+                        this.setState({
+                            contentType: 'audio'
+                        })
+                    }
+                    else if (file.type.includes("video")) {
+                        this.setState({
+                            contentType: 'video'
+                        })
+                    }
+                    else {
+                        this.setState({
+                            contentType: ""
+                        })
+                    }
+
                     this.setState({
                         content: {
                             name: file.name,
@@ -147,16 +167,16 @@ export default class AddEditContent extends Component{
             var bodyFormData = new FormData();
             bodyFormData.set('title', this.state.title);
             bodyFormData.append('thumbnail', this.state.thumbnail.value);
-            bodyFormData.append('content', this.state.content.value);
+            bodyFormData.set('type', this.state.contentType);
 
             if (this.props.isAdd) {
-                apiAxios.post('/api/dj/content', bodyFormData, {
+                apiAxios.post('/api/dj/v2/content', bodyFormData, {
                     headers: {
                         'Authorization': localStorage.getItem('Token')
                     }
                 })
-                    .then((response) => {
-                        this.onDismiss();
+                    .then((res) => {
+                        this.addContentUrl(res.data.contentUploadUrl)
                     })
                     .catch(function (error) {
                         console.log(error.response);
@@ -182,6 +202,16 @@ export default class AddEditContent extends Component{
         }
     }
 
+    addContentUrl = (url) => {
+        apiAxios.put(url, { data: this.state.content.value })
+            .then((res) => {
+                this.onDismiss();
+            })
+            .catch(function (error) {
+                console.log(error.response);
+            })
+    }
+
     onDismiss = () => {
         this.setState({
             title: "",
@@ -193,12 +223,14 @@ export default class AddEditContent extends Component{
                 name: "",
                 value: ""
             },
+            contentType: "",
             percentComplete: 1,
             showProgress: false,
             contentId: "",
             titleError: "",
             thumbnailError: "",
-            contentError: ""
+            contentError: "",
+            previewContent: ""
         });
         this.props.onDismiss();
     }
