@@ -30,7 +30,6 @@ export default class AddEditContent extends Component{
             contentError: "",
             previewContent: ""
         }
-        console.log(localStorage.getItem('Token'));
     }
 
     updateProgress = (evt) => {
