@@ -11,6 +11,7 @@ import DjSection from "./components/LazyLoading/DjSection";
 import AdminSection from "./components/LazyLoading/AdminSection";
 import LoginSuccess from "./components/LoginPages/LoginSuccess";
 import ArtistViewProfile from "./components/Users/GuestUser/ArtistViewProfile"
+import Subscription from './components/Subscription/Subscription';
 
 const createRoutes = (props) => (
     <Router>
@@ -27,6 +28,7 @@ const createRoutes = (props) => (
             <Route path="/Admin" component={AdminSection} />
 
             <Route exact path="/Profile/:artistname" render={(props) => <ArtistViewProfile history={props.history} />} />
+            <Route exact path="/Subscription" render={(props) => <Subscription history={props.history} />} />
 
             <Route path="/**" component={PageNotFound} />
         </Switch>

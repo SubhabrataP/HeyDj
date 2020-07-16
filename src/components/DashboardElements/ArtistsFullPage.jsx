@@ -51,6 +51,7 @@ export default class ArtistsFullPage extends Component {
                                      <CardTemplate
                                         playlistData={data}
                                         type={"artist"}
+                                        history={this.props.history}
                                     />
                                 </div>
                             ))}

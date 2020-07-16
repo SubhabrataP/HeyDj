@@ -56,6 +56,7 @@ export default class FeaturedPlaylistFullPage extends Component {
                                     <CardTemplate
                                         playlistData={data}
                                         type={"playlist"}
+                                        history={this.props.history}
                                     />
                                 </div>
                             ))}

@@ -86,7 +86,7 @@ export default class MyPlayList extends Component{
     }
 
     deletePlaylist = () => {
-        apiAxios.delete('/api/dj//playlist/' + this.state.deleteId, {
+        apiAxios.delete('/api/dj/playlist/' + this.state.deleteId, {
             headers: {
                 'Authorization': localStorage.getItem('Token')
             }

@@ -88,11 +88,9 @@ export default class CardTemplate extends Component {
                 </Stack>
                 {this.props.type === "playlist" ?
                     <MusicPlayer
+                        history={this.props.history}
                         showPlayer={this.state.playMusic}
-                        thumbnail={this.props.playlistData.thumbnail}
-                        title={this.props.playlistData.title}
-                        price={this.props.playlistData.price}
-                        sampleContent={this.props.playlistData.sampleContent}
+                        playlistData={this.props.playlistData}
                         onDismiss={() => { this.onDismiss() }}
                     /> : null}
             </React.Fragment>
