@@ -19,7 +19,8 @@ export default class DjList extends Component{
             itemsPerPage: 5,
             showAlert: false,
             deleteId: 0,
-            alertMessage: ""
+            alertMessage: "",
+            filteredDjList: []
         }
         this.columns= [
             {
@@ -126,7 +127,8 @@ export default class DjList extends Component{
                     val.fullName = val.firstName + " " + val.lastName
                 });
                 this.setState({
-                    djDetails: res.data
+                    djDetails: res.data,
+                    filteredDjList: res.data
                 })
             })
             .catch(function (error) {
@@ -163,6 +165,19 @@ export default class DjList extends Component{
         })
     }
 
+    onSearchDj = (event) => {
+        if (event.target.value.trim().length > 0) {
+            this.setState({
+                filteredDjList: this.state.filteredDjList.filter(x => x.fullName.toLowerCase().includes(event.target.value.trim().toLowerCase()))
+            });
+        }
+        else {
+            this.setState({
+                filteredDjList: this.state.djDetails
+            });
+        }
+    }
+
     render(){
         return(
             <React.Fragment>
@@ -171,7 +186,7 @@ export default class DjList extends Component{
                         <div className="row" style={{ marginBottom: "1%" }}>
                             <h5 className={"col-md-8"}>DJ Details List</h5>
                             <div className={"row col-md-4"} style={{textAlign: "right"}}>
-                                <Search />
+                                <input  type="search" placeholder="Search" onChange={this.onSearchDj} />
                                 <button className="customBtn" style={{ marginLeft: "10%" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
                             </div>
                         </div>
@@ -179,12 +194,12 @@ export default class DjList extends Component{
                         <div className="row">
                             <DetailsList
                                 selectionMode={SelectionMode.none}
-                                items={this.state.djDetails.slice(0, this.state.itemsPerPage)}
+                                items={this.state.filteredDjList.slice(0, this.state.itemsPerPage)}
                                 columns={this.columns}
                             />
                         </div>
                         <div>
-                            {this.state.djDetails.length > this.state.itemsPerPage
+                            {this.state.filteredDjList.length > this.state.itemsPerPage
                                 ? <button onClick={this.onLoadMoreClick}>Load More</button>
                                 : null}
                         </div>

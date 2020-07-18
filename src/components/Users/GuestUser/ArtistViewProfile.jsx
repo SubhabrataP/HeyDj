@@ -30,7 +30,6 @@ export default class ArtistViewProfile extends Component {
             "/api/portfolio/" + this.state.userData.id,
         )
             .then((res) => {
-                console.log(res.data)
                 if (res.data) {
                     if (res.data.spotify) {
                         if (res.data.spotify.indexOf('https://open.spotify.com/embed/') === -1) {
@@ -68,6 +67,18 @@ export default class ArtistViewProfile extends Component {
             });
     }
 
+    profileLinksClick = (url) => {
+        if (url !== undefined && url !== null && url !== "") {
+            if (url.includes("https://") || url.includes("http://")) {
+                window.open(url, "_blank");
+            }
+            else {
+                let httpUrl = "https://" + url;
+                window.open(httpUrl, "_blank");
+            }
+        }
+    }
+
     render() {
         return (
             <Layout history={this.props.history}>
@@ -87,7 +98,14 @@ export default class ArtistViewProfile extends Component {
                                     </React.Fragment>}
                             </span>
                             <h4>
-                                <i class="fa fa-facebook-f"></i><i class="fa fa-twitter"></i><i class="fa fa-instagram"></i><i class="fa fa-youtube"></i>
+                                <i class="fa fa-facebook-f" onClick={() => { this.profileLinksClick(this.state.userData.facebook) }}>
+                                </i>
+                                <i class="fa fa-twitter" onClick={() => { this.profileLinksClick(this.state.userData.twitter) }}>
+                                </i>
+                                <i class="fa fa-instagram" onClick={() => { this.profileLinksClick(this.state.userData.instagram) }}>
+                                </i>
+                                <i class="fa fa-youtube" onClick={() => { this.profileLinksClick(this.state.userData.youtube) }}>
+                                </i>
                             </h4>
                             <p>{"+" + this.state.userData.phoneNumber}</p>
                             <p>{this.state.userData.emailId}</p>

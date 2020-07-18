@@ -25,10 +25,10 @@ export default class Header extends Component {
                             />
                         </div>
                         <div className="col-md-3 offset-md-1 pt-3">
-                            <Search />
+                            <Search history={this.props.history} />
                         </div>
                         {localStorage.getItem('Role') === "admin" ?
-                            <div className="col-md-5 offset-md-1">
+                            <div className="col-md-6">
                                 <AdminHeaderNavLinks />
                             </div> :
                             localStorage.getItem('Role') === "dj" ?

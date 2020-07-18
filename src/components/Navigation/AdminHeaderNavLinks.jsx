@@ -30,6 +30,22 @@ export default class AdminHeaderNavLinks extends Component {
                         }}>
                         Djs
                     </Link>
+                    <Link to={{ pathname: "/Admin/Genres" }}
+                        href="#"
+                        style={{
+                            paddingRight: "13px",
+                            textDecoration: 'none'
+                        }}>
+                        Genres
+                    </Link>
+                    <Link to={{ pathname: "/Admin/Featured" }}
+                        href="#"
+                        style={{
+                            paddingRight: "13px",
+                            textDecoration: 'none'
+                        }}>
+                        Featured
+                    </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"
                         style={{

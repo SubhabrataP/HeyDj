@@ -36,7 +36,11 @@ export default class AddEditProfile extends Component {
                 company: "",
                 city: "",
                 description: "",
-            }]
+            }],
+            facebook: "",
+            twitter: "",
+            instagram: "",
+            youtube: ""
         }
     }
 
@@ -64,6 +68,14 @@ export default class AddEditProfile extends Component {
                 editedUserId: nextProps.profileData.id === undefined ? "" :
                     nextProps.profileData.id,
                 profile_picture: image,
+                facebook: nextProps.profileData.facebook === undefined ? "" :
+                    nextProps.profileData.facebook,
+                twitter: nextProps.profileData.twitter === undefined ? "" :
+                    nextProps.profileData.twitter,
+                instagram: nextProps.profileData.instagram === undefined ? "" :
+                    nextProps.profileData.instagram,
+                youtube: nextProps.profileData.youtube === undefined ? "" :
+                    nextProps.profileData.youtube,
                 previewImage: nextProps.profileData.profileImage,
                 workExpData: nextProps.profileData.workExperience === undefined ?
                     [
@@ -195,6 +207,10 @@ export default class AddEditProfile extends Component {
         bodyFormData.set('phoneNumber', this.state.mobile);
         bodyFormData.set('role', this.props.roleToBeAdded);
         bodyFormData.set('city', this.state.city);
+        bodyFormData.set('facebook', this.state.facebook);
+        bodyFormData.set('youtube', this.state.youtube);
+        bodyFormData.set('instagram', this.state.instagram);
+        bodyFormData.set('twitter', this.state.twitter);
         bodyFormData.append('profileImage', this.state.profile_picture.value);
 
         if (isValid) {
@@ -366,6 +382,44 @@ export default class AddEditProfile extends Component {
                                     className="col-md-6"
                                     value={this.state.city}
                                     onChange={(ev, city) => (this.setState({ city }))}
+                                />
+                            </div>
+
+                            <Label className="col-md-9" style={{ paddingLeft: "5%", paddingRight: "0%", textAlign: "left", color: "#fff", fontSize: '22px' }}>Profile Links</Label>
+
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Facebook:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.facebook}
+                                    onChange={(ev, facebook) => (this.setState({ facebook }))}
+                                />
+                            </div>
+
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Twitter:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.twitter}
+                                    onChange={(ev, twitter) => (this.setState({ twitter }))}
+                                />
+                            </div>
+
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Instagram:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.instagram}
+                                    onChange={(ev, instagram) => (this.setState({ instagram }))}
+                                />
+                            </div>
+
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>You Tube:</Label>
+                                <TextField
+                                    className="col-md-6"
+                                    value={this.state.youtube}
+                                    onChange={(ev, youtube) => (this.setState({ youtube }))}
                                 />
                             </div>
 
