@@ -16,25 +16,31 @@ export default class CardTemplate extends Component {
     }
 
     cardClicked = () => {
-        if(this.props.type === "playlist"){
+        if (this.props.type === "playlist") {
             this.setState({
                 playMusic: true
             })
         }
-        else if(this.props.type === "artist"){
+        else if (this.props.type === "artist") {
             this.props.history.push({
                 pathname: `/Profile/${this.props.playlistData.firstName}`,
                 state: { djDetails: this.props.playlistData }
-              })
+            })
         }
-        else{
+        else if (this.props.type === "genre") {
+            this.props.history.push({
+                pathname: `/Genre/${this.props.playlistData.name}`,
+                state: { genreData: this.props.playlistData }
+            })
+        }
+        else {
             this.setState({
                 playMusic: false
             })
         }
     };
 
-    onDismiss =() => {
+    onDismiss = () => {
         this.setState({
             playMusic: false
         })
@@ -47,7 +53,7 @@ export default class CardTemplate extends Component {
                     <Card
                         aria-label="Clickable vertical card with image bleeding at the top of the card"
                         onClick={() => { this.cardClicked() }}
-                        className="cardBorder"
+                        className= {this.props.type === "genre" ? "" : "cardBorder"}
                     >
                         <Card.Section
                             fill
@@ -64,24 +70,36 @@ export default class CardTemplate extends Component {
                                     <div className="overlayCard m-0 w-100">
                                         <div className="textCard text-left">
                                             <h5>{this.props.playlistData.title === undefined ? "test" : this.props.playlistData.title}</h5>
-                                            <p>DJ Nikhil</p>
                                         </div>
                                     </div>
                                 </React.Fragment>
                                 :
-                                <React.Fragment>
-                                     <img className="w-100"
-                                        src={(this.props.playlistData.profileImage === undefined || this.props.playlistData.profileImage === "undefined") ?
-                                            process.env.PUBLIC_URL + "/images/emptyUser.png" :
-                                            this.props.playlistData.profileImage}
-                                        alt="Profile_Image"
-                                    />
-                                    <div className="overlayCard m-0 w-100">
-                                        <div className="textCard text-left">
-                                            <h5>{this.props.playlistData.firstName + " " + this.props.playlistData.lastName}</h5>
+                                this.props.type === "genre" ?
+                                    <React.Fragment>
+                                        <img style={{ width: "150px", height: "150px", borderRadius: "100px"}}
+                                            src={process.env.PUBLIC_URL + "/images/genre background.jpg"}
+                                            alt="image"
+                                        />
+                                        <div>
+                                            <div className="textCard">
+                                                <h5>{this.props.playlistData.name === undefined ? "test" : this.props.playlistData.name}</h5>
+                                            </div>
                                         </div>
-                                    </div>
-                                </React.Fragment>
+                                    </React.Fragment>
+                                    :
+                                    <React.Fragment>
+                                        <img className="w-100"
+                                            src={(this.props.playlistData.profileImage === undefined || this.props.playlistData.profileImage === "undefined") ?
+                                                process.env.PUBLIC_URL + "/images/emptyUser.png" :
+                                                this.props.playlistData.profileImage}
+                                            alt="Profile_Image"
+                                        />
+                                        <div className="overlayCard m-0 w-100">
+                                            <div className="textCard text-left">
+                                                <h5>{this.props.playlistData.firstName + " " + this.props.playlistData.lastName}</h5>
+                                            </div>
+                                        </div>
+                                    </React.Fragment>
                             }
                         </Card.Section>
                     </Card>

@@ -21,51 +21,6 @@ export default class MyPlayList extends Component{
             alertMessage: ""
         }
 
-        this.columns= [
-            {
-                key: "column1",
-                name: "Title",
-                fieldName: "title",
-                isResizable: false,
-                minWidth: 200,
-                maxWidth: 200,
-            },
-            {
-                key: "column2",
-                name: "Price",
-                fieldName: "price",
-                isResizable: false,
-                minWidth: 200,
-                maxWidth: 200,
-            },
-            {
-                key: "column3",
-                name: "Thumbnail",
-                fieldName: "thumbnail",
-                isResizable: false,
-                minWidth: 150,
-                maxWidth: 150,
-                onRender: (item) => {
-                    return <img src={item.thumbnail} style={{ height: "80px", width: "80px" }} />;
-                  },
-            },
-            {
-                key: "column4",
-                name: "Action",
-                isResizable: false,
-                minWidth: 150,
-                maxWidth: 150,
-                onRender: (item) => {
-                    return (
-                        <React.Fragment>
-                            <button onClick={() => {this.editContent(item)}}>Edit</button>
-                            <button onClick={() => (this.deletePlaylist(item.id))}>Delete</button>
-                        </React.Fragment>
-                    )
-                }
-            }
-        ];
-
         this.getPlaylist();
     }
 
@@ -148,26 +103,13 @@ export default class MyPlayList extends Component{
                     <div className="container" style={{ marginTop: "1%" }}>
                         <div className="row" style={{ marginBottom: "1%" }}>
                             <h5 className={"col-md-6"}>My Playlists</h5>
-                            <div className={"row col-md-6"} style={{ textAlign: "right" }}>
-                                {/*
-                                <Search />
-                                */}
-                                
-                            </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-8 dj-play-list p-4">
 
                                 <div className="row listView">
-                                    {/*
-                                    <DetailsList
-                                        selectionMode={SelectionMode.none}
-                                        items={this.state.playlistDetails}
-                                        columns={this.columns}
-                                    />
-                                    */}
-
+                                    
                                     {this.state.playlistDetails.map((item, index) => {
                                         return (
                                             <div className="col-md-3 text-center ml-2 mr-2" style={{color:'#fff'}}>

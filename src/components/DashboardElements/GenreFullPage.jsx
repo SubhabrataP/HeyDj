@@ -8,39 +8,26 @@ export default class NewReleaseFullPage extends Component {
         super(props);
 
         this.state = {
-            playlistItems: [],
-            itemsPerPage: 15
+            genreItems: []
         }
     }
 
     componentDidMount(){
-        this.getPlaylist();
+        this.getGenres();
     }
 
-    getPlaylist = () => {
+    getGenres = () => {
         apiAxios.get(
-            "/api/playlist",
-            {
-                params: {
-                    all: "true"
-                }
-            }
+            "/api/genre"
         )
             .then((res) => {
-                console.log(res)
                 this.setState({
-                    playlistItems: res.data.playlists,
+                    genreItems: res.data.genres,
                 })
             })
             .catch(function (error) {
                 alert(error.response);
             });
-    }
-
-    onLoadMore = () => {
-        this.setState({
-            itemsPerPage: this.state.itemsPerPage + 5
-        })
     }
 
     render() {
@@ -49,22 +36,19 @@ export default class NewReleaseFullPage extends Component {
                 <div className="container" style={{ marginTop: "1%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            New Releases
+                            Genres
                         </div>
                         <div className="row" >
-                            {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (
+                            {this.state.genreItems.map((data) => (
                                 <div className="col-md-2 m-3">
                                     <CardTemplate
                                         playlistData={data}
-                                        type={"playlist"}
+                                        type={"genre"}
                                         history={this.props.history}
                                     />
                                 </div>
                             ))}
                         </div>
-                        {this.state.playlistItems.length > this.state.itemsPerPage
-                            ? <button onClick={this.onLoadMore}>Load More</button>
-                            : null}
                     </div>
                 </div>
             </Layout>

@@ -186,7 +186,7 @@ export default class DjList extends Component{
                         <div className="row" style={{ marginBottom: "1%" }}>
                             <h5 className={"col-md-8"}>DJ Details List</h5>
                             <div className={"row col-md-4"} style={{textAlign: "right"}}>
-                                <input  type="search" placeholder="Search" onChange={this.onSearchDj} />
+                                <input  type="search" placeholder="Search Djs" onChange={this.onSearchDj} />
                                 <button className="customBtn" style={{ marginLeft: "10%" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
                             </div>
                         </div>

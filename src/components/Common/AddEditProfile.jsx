@@ -385,43 +385,46 @@ export default class AddEditProfile extends Component {
                                 />
                             </div>
 
-                            <Label className="col-md-9" style={{ paddingLeft: "5%", paddingRight: "0%", textAlign: "left", color: "#fff", fontSize: '22px' }}>Profile Links</Label>
+                            {localStorage.getItem('Role') === "dj" ?
+                                <React.Fragment>
+                                    <Label className="col-md-9" style={{ paddingLeft: "5%", paddingRight: "0%", textAlign: "left", color: "#fff", fontSize: '22px' }}>Profile Links</Label>
 
-                            <div className="row" style={{ marginBottom: "5%" }}>
-                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Facebook:</Label>
-                                <TextField
-                                    className="col-md-6"
-                                    value={this.state.facebook}
-                                    onChange={(ev, facebook) => (this.setState({ facebook }))}
-                                />
-                            </div>
+                                    <div className="row" style={{ marginBottom: "5%" }}>
+                                        <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Facebook:</Label>
+                                        <TextField
+                                            className="col-md-6"
+                                            value={this.state.facebook}
+                                            onChange={(ev, facebook) => (this.setState({ facebook }))}
+                                        />
+                                    </div>
 
-                            <div className="row" style={{ marginBottom: "5%" }}>
-                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Twitter:</Label>
-                                <TextField
-                                    className="col-md-6"
-                                    value={this.state.twitter}
-                                    onChange={(ev, twitter) => (this.setState({ twitter }))}
-                                />
-                            </div>
+                                    <div className="row" style={{ marginBottom: "5%" }}>
+                                        <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Twitter:</Label>
+                                        <TextField
+                                            className="col-md-6"
+                                            value={this.state.twitter}
+                                            onChange={(ev, twitter) => (this.setState({ twitter }))}
+                                        />
+                                    </div>
 
-                            <div className="row" style={{ marginBottom: "5%" }}>
-                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Instagram:</Label>
-                                <TextField
-                                    className="col-md-6"
-                                    value={this.state.instagram}
-                                    onChange={(ev, instagram) => (this.setState({ instagram }))}
-                                />
-                            </div>
+                                    <div className="row" style={{ marginBottom: "5%" }}>
+                                        <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Instagram:</Label>
+                                        <TextField
+                                            className="col-md-6"
+                                            value={this.state.instagram}
+                                            onChange={(ev, instagram) => (this.setState({ instagram }))}
+                                        />
+                                    </div>
 
-                            <div className="row" style={{ marginBottom: "5%" }}>
-                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>You Tube:</Label>
-                                <TextField
-                                    className="col-md-6"
-                                    value={this.state.youtube}
-                                    onChange={(ev, youtube) => (this.setState({ youtube }))}
-                                />
-                            </div>
+                                    <div className="row" style={{ marginBottom: "5%" }}>
+                                        <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>You Tube:</Label>
+                                        <TextField
+                                            className="col-md-6"
+                                            value={this.state.youtube}
+                                            onChange={(ev, youtube) => (this.setState({ youtube }))}
+                                        />
+                                    </div>
+                                </React.Fragment> : null}
 
                             {(localStorage.getItem('Role') === "dj" && !this.props.isAdd) ?
                                 <AdditionalDjFields onUpdate={this.onAddEditUser} onDismiss={this.onDismiss} defaultData={this.state.workExpData} />

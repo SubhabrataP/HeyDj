@@ -135,6 +135,23 @@ button:focus{
     padding: 14px 1px;
 }
 
+.genreCardBorder {
+    border: none;
+    position: relative;
+}
+
+.genreOverlayCard {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 100px;
+    right: 0;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #5cb2c660;
+  }
 
 .cardBorder {
     border: 2px solid #fff;

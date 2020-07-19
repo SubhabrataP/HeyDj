@@ -36,12 +36,6 @@ export default class FeaturedPlaylistFullPage extends Component {
             });
     }
 
-    onLoadMore = () => {
-        this.setState({
-            itemsPerPage: this.state.itemsPerPage + 5
-        })
-    }
-
     render() {
         return (
             <Layout history={this.props.history}>
@@ -51,7 +45,7 @@ export default class FeaturedPlaylistFullPage extends Component {
                             Featured Playlists
                         </div>
                         <div className="row" >
-                            {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (
+                            {this.state.playlistItems.map((data) => (
                                 <div className="col-md-2 m-3">
                                     <CardTemplate
                                         playlistData={data}
@@ -61,9 +55,6 @@ export default class FeaturedPlaylistFullPage extends Component {
                                 </div>
                             ))}
                         </div>
-                        {this.state.playlistItems.length > this.state.itemsPerPage
-                            ? <button onClick={this.onLoadMore}>Load More</button>
-                            : null}
                     </div>
                 </div>
             </Layout>

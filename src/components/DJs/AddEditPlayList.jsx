@@ -39,8 +39,32 @@ export default class AddEditPlaylist extends Component {
             alertMessage: "",
             isMultiButton: false,
             button1Text: "",
-            showSpinner: false
+            showSpinner: false,
+            genres: [],
+            selectedGenre: ""
         }
+
+        this.getAllGenre();
+    }
+
+    getAllGenre = () => {
+        apiAxios.get(
+            "/api/genre"
+        )
+            .then((res) => {
+                this.setState({
+                    genres: res.data.genres,
+                })
+            })
+            .catch(function (error) {
+                alert(error.response);
+            });
+    }
+
+    onDropDownChange = (ev) => {
+        this.setState({
+            selectedGenre: ev.target.value
+        })
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -67,7 +91,8 @@ export default class AddEditPlaylist extends Component {
                     value: nextProps.editData.sampleContent
                 },
                 selectedContent: selectedContent,
-                sampleContentType: nextProps.editData.sampleType
+                sampleContentType: nextProps.editData.sampleType,
+                selectedGenre: nextProps.editData.genre
             })
         }
         else {
@@ -88,7 +113,8 @@ export default class AddEditPlaylist extends Component {
                 thumbnailError: "",
                 sampleContentError: "",
                 editPlaylistId: "",
-                selectedContent: []
+                selectedContent: [],
+                selectedGenre: ""
             })
         }
     }
@@ -209,6 +235,7 @@ export default class AddEditPlaylist extends Component {
                     var bodyFormData = new FormData();
                     bodyFormData.set('title', this.state.title);
                     bodyFormData.set('price', this.state.price);
+                    bodyFormData.set('genre', this.state.selectedGenre);
                     bodyFormData.set('content', JSON.stringify(contentIds));
                     bodyFormData.append('thumbnail', this.state.thumbnail.value);
                     bodyFormData.set('sampleType', this.state.sampleContentType);
@@ -242,6 +269,7 @@ export default class AddEditPlaylist extends Component {
                     var bodyFormData = new FormData();
                     bodyFormData.set('title', this.state.title);
                     bodyFormData.set('price', this.state.price);
+                    bodyFormData.set('genre', this.state.selectedGenre);
                     bodyFormData.set('content', JSON.stringify(contentIds));
                     bodyFormData.append('thumbnail', this.state.thumbnail.value);
 
@@ -253,13 +281,12 @@ export default class AddEditPlaylist extends Component {
                             }
                         })
                             .then((res) => {
-                                console.log(res.data);
+                                this.onDismiss();
                                 this.setState({
                                     alertMessage: 'Playlist updated succesfully',
                                     showAlert: true,
                                     showSpinner: false
                                 })
-                                this.onDismiss();
                             })
                             .catch(function (error) {
                                 this.setState({
@@ -322,6 +349,7 @@ export default class AddEditPlaylist extends Component {
     dismissAlert = () => {
         this.setState({
             showAlert: false,
+            showSpinner: false
         })
     }
 
@@ -370,7 +398,8 @@ export default class AddEditPlaylist extends Component {
             thumbnailError: "",
             sampleContentError: "",
             editPlaylistId: "",
-            selectedContent: []
+            selectedContent: [],
+            selectedGenre: ""
         }, () => {
             this.props.onDismiss();
         });
@@ -421,7 +450,21 @@ export default class AddEditPlaylist extends Component {
                                             onChange={(ev, price) => (this.setState({ price, priceError: "" }))}
                                             errorMessage={this.state.priceError}
                                         />
-                                        <Label className="col-md-4" style={{ paddingLeft: "1%", paddingRight: "0%", textAlign: "left" }}> / per Hour</Label>
+                                        <Label className="col-md-4" style={{ paddingLeft: "1%", paddingRight: "0%", textAlign: "left", color: '#fff' }}> / per Hour</Label>
+                                    </div>
+
+                                    <div className="row mt-2">
+                                        <Label className="col-md-2" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "right", color: '#fff' }}>Genre:</Label>
+                                        <select className="col-md-5"
+                                            style={{ marginLeft: "15px" }}
+                                            value={this.state.selectedGenre}
+                                            onChange={(ev) => { this.onDropDownChange(ev) }}>
+                                            {this.state.genres.map((data) => {
+                                                return (
+                                                    <option value={data.id}>{data.name}</option>
+                                                )
+                                            })}
+                                        </select>
                                     </div>
 
                                     <div className="row mt-2 mb-2">
@@ -482,7 +525,7 @@ export default class AddEditPlaylist extends Component {
                                                     this.upload.click();
                                                 }} >
                                             </i>Add
-                                </span>
+                                        </span>
                                     </div>
 
                                     <Label className="col-md-12" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: '#fff' }}>Contents:</Label>
