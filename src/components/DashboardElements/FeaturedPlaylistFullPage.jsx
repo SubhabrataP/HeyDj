@@ -17,23 +17,16 @@ export default class FeaturedPlaylistFullPage extends Component {
         this.getPlaylist();
     }
 
-    getPlaylist = () => {
-        apiAxios.get(
-            "/api/playlist",
-            {
-                params: {
-                    all: "true"
-                }
-            }
-        )
-            .then((res) => {
-                this.setState({
-                    playlistItems: res.data.playlists,
-                })
+    getFeaturedPlaylist = () => {
+        apiAxios.get("api/featured")
+        .then((res)=>{
+            this.setState({
+                playlistItems: res.data.playlists
             })
-            .catch(function (error) {
-                alert(error.response);
-            });
+        })
+        .catch((res) => {
+            console.log(res)
+        })
     }
 
     render() {
