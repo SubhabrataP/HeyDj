@@ -13,51 +13,86 @@ export class AddFeaturedPlaylistModal extends Component {
 
         this.state = {
             playlists: [],
+            featuerdPlaylistIds: []
         }
+
+        this.getAllPlaylists();
+        this.getFeaturedPlaylistIds();
     }
 
     getAllPlaylists = () => {
-
-    }
-
-    addFeaturedPlaylist = () => {
-        apiAxios.get("api/admin/featured",
+        apiAxios.get(
+            "/api/playlist",
             {
-                headers: {
-                    'Authorization': localStorage.getItem('Token')
+                params: {
+                    all: "true"
                 }
             }
         )
             .then((res) => {
-                this.getAllFeaturedPlaylist();
+                this.setState({
+                    playlists: res.data.playlists,
+                })
             })
-            .catch((res) => { })
+            .catch(function (error) {
+                console.log(error.response);
+            });
     }
 
+    getFeaturedPlaylistIds = () => {
+        apiAxios.get("api/admin/featured",
+        {
+            headers: {
+                'Authorization': localStorage.getItem('Token')
+            }
+        }
+    )
+        .then((res) => {
+            this.setState({
+                featuerdPlaylistIds: res.data.playlists,
+            })
+        })
+        .catch((res) => { })
+    }
+
+    addFeaturedPlaylist = () => {
+        // apiAxios.post("api/admin/featured",
+        //     {
+        //         headers: {
+        //             'Authorization': localStorage.getItem('Token')
+        //         }
+        //     }
+        // )
+        //     .then((res) => {
+        //         this.getAllFeaturedPlaylist();
+        //     })
+        //     .catch((res) => { })
+    }
     
     render() {
         return (
             <div className="container">
-                {/* <Modal
-                    show={this.props.showAlert}
+                <Modal
+                    show={this.props.showModal}
                     className="ml-3 mr-3"
                 >
                     <div className="row popupModal">
                         <div className="col-sm-12 text-center mb-2" style={{ borderBottom: '1px solid #fff' }}>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" style={{ marginBottom: "2%", textAlign: "right", color: '#fff' }} onClick={() => { this.onDismiss() }}>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" style={{ marginBottom: "2%", textAlign: "right", color: '#fff' }} onClick={() => { this.props.onDismiss() }}>
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 style={{ margin: "2%", textAlign: "left", color: '#fff' }}>
-                                {this.props.isAdd ? "Add Genre" : "Edit Genre"}
+                                Add Featured Playlist
                             </h4>
                         </div>
                         <div className="col-sm-12">
                             <div className="row" style={{ marginBottom: "5%" }}>
-                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Title:</Label>
+                                <Label className="col-sm-4" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Playlists:</Label>
                                 <Multiselect
+                                    className="col-sm-8"
                                     options={this.state.playlists} // Options to display in the dropdown
-                                    onSelect={this.onSelect} // Function will trigger on select event
-                                    onRemove={this.onRemove} // Function will trigger on remove event
+                                    //onSelect={this.onSelect} // Function will trigger on select event
+                                    //onRemove={this.onRemove} // Function will trigger on remove event
                                     displayValue="name" // Property name to display in the dropdown options
                                 />
                             </div>
@@ -66,10 +101,10 @@ export class AddFeaturedPlaylistModal extends Component {
                             <button type="button" className="customBtn" onClick={() => { this.onAddEditGenre() }}>
                                 {this.props.isAdd ? "Add" : "Update"}
                             </button>
-                            <button type="button" className="customBtnWhite ml-4" onClick={() => { this.onDismiss() }}>Cancel</button>
+                            <button type="button" className="customBtnWhite ml-4" onClick={() => { this.props.onDismiss() }}>Cancel</button>
                         </div>
                     </div>
-                </Modal> */}
+                </Modal>
             </div>
         )
     }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Layout from "../Home/Layout";
 import Popups from "../Common/Popups";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import { AddFeaturedPlaylistModal } from "./AddFeaturedPlaylistModal";
 
 
 
@@ -10,7 +11,8 @@ export default class FeaturedList extends Component {
         super(props);
 
         this.state={
-            playlists: []
+            playlists: [],
+            showModal: false
         }
 
         this.getAllFeaturedPlaylist();
@@ -27,7 +29,15 @@ export default class FeaturedList extends Component {
     }
 
     addFeaturedPlaylist = () => {
-        
+        this.setState({
+            showModal: true
+        })
+    }
+
+    onDismiss = () => {
+        this.setState({
+            showModal: false
+        })
     }
 
     deleteFeatured = (id) => {
@@ -80,6 +90,10 @@ export default class FeaturedList extends Component {
                             </div>
                         </div>
                     </div>
+                    <AddFeaturedPlaylistModal
+                        showModal={this.state.showModal}
+                        onDismiss={() => { this.onDismiss() }}
+                    />
                     {/* <Popups
                         showModal={this.state.showAlert}
                         message={this.state.alertMessage}
