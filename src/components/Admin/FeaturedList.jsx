@@ -3,8 +3,7 @@ import Layout from "../Home/Layout";
 import Popups from "../Common/Popups";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import { AddFeaturedPlaylistModal } from "./AddFeaturedPlaylistModal";
-
-
+import * as Constants from "../Common/Constants"
 
 export default class FeaturedList extends Component {
     constructor(props) {
@@ -12,7 +11,10 @@ export default class FeaturedList extends Component {
 
         this.state={
             playlists: [],
-            showModal: false
+            showModal: false,
+            showAlert: false,
+            alertMessage: "",
+            deleteId: ""
         }
 
         this.getAllFeaturedPlaylist();
@@ -37,11 +39,29 @@ export default class FeaturedList extends Component {
     onDismiss = () => {
         this.setState({
             showModal: false
+        });
+        this.getAllFeaturedPlaylist();
+    }
+
+    deleteFeaturedAlert = (id) => {
+        this.setState({
+            showAlert: true,
+            alertMessage: Constants.ACTION_DELETE,
+            deleteId: id
         })
     }
 
-    deleteFeatured = (id) => {
-        apiAxios.delete("api/admin/featured/" + id,
+    onDismissAlert = () => {
+        this.setState({
+            showAlert: false,
+            alertMessage: "",
+            deleteId: ""
+        })
+    }
+
+    deleteFeatured = () => {
+        this.onDismissAlert();
+        apiAxios.delete("api/admin/featured/" + this.state.deleteId,
             {
                 headers: {
                     'Authorization': localStorage.getItem('Token')
@@ -70,10 +90,10 @@ export default class FeaturedList extends Component {
 
                                     {this.state.playlists.map((item, index) => {
                                         return (
-                                            <div className="col-md-3 text-center ml-2 mr-2" style={{ color: '#fff' }}>
+                                            <div className="col-md-3 text-center ml-2 mr-2" style={{ color: '#fff', marginBottom: "15px" }}>
                                                 <img src={item.thumbnail} style={{ width: "100%" }} />
                                                 <h5 className="m-0 mt-2"><b>{item.title}</b></h5>
-                                                <button className="customBtnWhite" onClick={() => (this.deleteFeatured(item.id))}>Remove</button>
+                                                <button className="customBtnWhite" onClick={() => {this.deleteFeaturedAlert(item.id)}}>Remove</button>
                                             </div>
                                         )
                                     })
@@ -85,7 +105,7 @@ export default class FeaturedList extends Component {
                             <div className="col-md-3 ml-3 mr-3">
                                 <div className="p-4" style={{ backgroundColor: '#252033', borderRadius: '15px' }}>
                                     <h4 style={{ color: '#fff' }}>Add To Featured</h4>
-                                    <button className="customBtn" onClick={() => (this.addFeaturedPlaylist())}>Add</button>
+                                    <button className="customBtn" onClick={() => {this.addFeaturedPlaylist()}}>Add</button>
                                 </div>
                             </div>
                         </div>
@@ -94,13 +114,13 @@ export default class FeaturedList extends Component {
                         showModal={this.state.showModal}
                         onDismiss={() => { this.onDismiss() }}
                     />
-                    {/* <Popups
+                    <Popups
                         showModal={this.state.showAlert}
                         message={this.state.alertMessage}
                         isMultiButton={true}
-                        button1Click={() => { this.deletePlaylist() }}
+                        button1Click={() => { this.deleteFeatured() }}
                         button2Click={() => { this.onDismissAlert() }}
-                    /> */}
+                    />
                 </Layout>
             </React.Fragment>
         )

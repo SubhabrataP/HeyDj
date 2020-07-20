@@ -84,7 +84,7 @@ export default class UserPersona extends Component {
             })
         })
         .catch(function (error) {
-            alert(error.response.data);
+            console.log(error.response);
         });
     }
 

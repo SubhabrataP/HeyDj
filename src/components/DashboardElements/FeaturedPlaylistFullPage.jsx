@@ -14,7 +14,7 @@ export default class FeaturedPlaylistFullPage extends Component {
     }
 
     componentDidMount(){
-        this.getPlaylist();
+        this.getFeaturedPlaylist();
     }
 
     getFeaturedPlaylist = () => {
