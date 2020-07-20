@@ -1,34 +1,28 @@
 import React, { Component } from "react";
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 
 
 export default class Search extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
-    onSearch = (data) => {
-        this.props.history.push({
-            pathname: `/Search`,
-            state: { serachKey: data }
-        })
+    onSearch = (e) => {
+        if (e.key === 'Enter') {
+            this.props.history.push({
+                pathname: `/Search`,
+                state: { serachKey: e.target.value }
+            })
+        }
     }
 
     render() {
         return (
-            <SearchBox
+            <input
+                style={{ width: "90%" }}
+                type="search"
                 placeholder="Search"
-                // onEscape={ev => {
-                    
-                //     console.log('Custom onEscape Called');
-                // }}
-                // onClear={ev => {
-                //     console.log('Custom onClear Called');
-                // }}
-                // onChange={(_, newValue) => console.log('SearchBox onChange fired: ' + newValue)}
-                onSearch={(newValue) => { this.onSearch(newValue) }}
+                onKeyDown={(event) => { this.onSearch(event) }}
             />
-
         )
     }
 }

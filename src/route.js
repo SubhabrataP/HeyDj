@@ -19,7 +19,7 @@ const createRoutes = (props) => (
     <Router>
         <Switch>
             <Route exact path="/" render={(props) => <GuestUserDashboard history={props.history} />} />
-            <Route exact path="/NewReleases" component={NewReleaseFullPage} />
+            <Route exact path="/AllPlaylists" component={NewReleaseFullPage} />
             <Route exact path="/FeaturedPlaylists" component={FeaturedPlaylistFullPage} />
             <Route exact path="/Artists" component={ArtistsFullPage} />
             <Route exact path="/Genres" component={GenreFullPage} />

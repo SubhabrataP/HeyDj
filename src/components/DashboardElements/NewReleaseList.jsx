@@ -31,12 +31,12 @@ class NewReleaseList extends Component {
                 })
             })
             .catch(function (error) {
-                alert(error.response);
+                console.log(error.response);
             });
     }
 
     onMoreClick = () => {
-        this.props.history.push('/NewReleases');
+        this.props.history.push('/AllPlaylists');
     }
 
     render() {
@@ -45,7 +45,7 @@ class NewReleaseList extends Component {
                 <div className="col-md-12 dj-play-list">
                     <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            New Releases
+                            Playlists
                             {this.state.playlistItems.length > 6 ?
                                 <a onClick={this.onMoreClick}>More</a> : null}
                         </div>

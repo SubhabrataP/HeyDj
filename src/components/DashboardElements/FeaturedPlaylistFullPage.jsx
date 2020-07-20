@@ -35,7 +35,7 @@ export default class FeaturedPlaylistFullPage extends Component {
                 <div className="container" style={{ marginTop: "1%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            Featured Playlists
+                            <h3>Featured Playlists</h3>
                         </div>
                         <div className="row" >
                             {this.state.playlistItems.map((data) => (

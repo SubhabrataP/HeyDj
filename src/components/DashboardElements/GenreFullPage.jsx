@@ -26,7 +26,7 @@ export default class NewReleaseFullPage extends Component {
                 })
             })
             .catch(function (error) {
-                alert(error.response);
+                console.log(error.response);
             });
     }
 
@@ -36,7 +36,7 @@ export default class NewReleaseFullPage extends Component {
                 <div className="container" style={{ marginTop: "1%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            Genres
+                            <h3>Genres</h3>
                         </div>
                         <div className="row" >
                             {this.state.genreItems.map((data) => (

@@ -42,6 +42,9 @@ export default class GenrePlaylists extends Component {
         return (
             <Layout history={this.props.history}>
                 <div className="container" style={{ marginTop: "1%" }}>
+                    <div className="row" style={{ paddingBottom: "10px" }}>
+                        <h3>Playlists</h3>
+                    </div>
                     <div className="row">
                         {this.state.playlists.map((data) => (
                             <div className="col-md-2 m-3">

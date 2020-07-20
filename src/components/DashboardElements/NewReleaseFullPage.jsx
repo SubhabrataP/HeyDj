@@ -33,7 +33,7 @@ export default class NewReleaseFullPage extends Component {
                 })
             })
             .catch(function (error) {
-                alert(error.response);
+                console.log(error.response);
             });
     }
 
@@ -49,7 +49,7 @@ export default class NewReleaseFullPage extends Component {
                 <div className="container" style={{ marginTop: "1%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
-                            New Releases
+                            <h3>All Playlists</h3>
                         </div>
                         <div className="row" >
                             {this.state.playlistItems.slice(0,this.state.itemsPerPage).map((data) => (

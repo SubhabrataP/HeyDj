@@ -26,7 +26,7 @@ export default class Artists extends Component {
                 })
             })
             .catch(function (error) {
-                alert(error.response);
+                console.log(error.response);
             });
     }
 

@@ -26,7 +26,7 @@ export default class Genre extends Component {
                 })
             })
             .catch(function (error) {
-                alert(error.response);
+                console.log(error.response);
             });
     }
 
