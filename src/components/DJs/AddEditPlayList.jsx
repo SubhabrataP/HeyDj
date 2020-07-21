@@ -54,6 +54,7 @@ export default class AddEditPlaylist extends Component {
             .then((res) => {
                 this.setState({
                     genres: res.data.genres,
+                    selectedGenre: res.data.genres.length > 0 ? res.data.genres[0].id : ""
                 })
             })
             .catch((error) => {
@@ -114,7 +115,6 @@ export default class AddEditPlaylist extends Component {
                 sampleContentError: "",
                 editPlaylistId: "",
                 selectedContent: [],
-                selectedGenre: ""
             })
         }
     }
@@ -250,6 +250,9 @@ export default class AddEditPlaylist extends Component {
                             this.addSampleContentUrl(res.data.sampleContentUploadUrl, 'Playlist added succesfully');
                         })
                         .catch((error) => {
+                            this.setState({
+                                showSpinner: false
+                            })
                             console.log(error.response);
                         })
                 }
@@ -398,8 +401,7 @@ export default class AddEditPlaylist extends Component {
             thumbnailError: "",
             sampleContentError: "",
             editPlaylistId: "",
-            selectedContent: [],
-            selectedGenre: ""
+            selectedContent: []
         }, () => {
             this.props.onDismiss();
         });
