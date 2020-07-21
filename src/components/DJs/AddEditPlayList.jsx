@@ -265,10 +265,11 @@ export default class AddEditPlaylist extends Component {
             }
             else {
                 if (this.state.selectedContent.length > 0) {
-                    var contentIds = [];
+                    let contentIds = [];
                     this.state.selectedContent.map((data) => {
                         contentIds.push(data.id);
                     })
+
                     var bodyFormData = new FormData();
                     bodyFormData.set('title', this.state.title);
                     bodyFormData.set('price', this.state.price);
@@ -412,7 +413,11 @@ export default class AddEditPlaylist extends Component {
     }
 
     onRemove = (selectedList, removedItem) => {
-        this.state.selectedContent.pop(removedItem);
+        this.setState({
+            selectedContent: this.state.selectedContent.filter(x=> x.id !== removedItem.id)
+        }, ()=>{
+            console.log(this.state.selectedContent)
+        })
     }
 
     render() {

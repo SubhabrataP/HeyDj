@@ -6,7 +6,7 @@ export default class UserHeaderNavLinks extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                <Link to={{ pathname: "/" }}
+                <Link to={{ pathname: "/User" }}
                         href="#"
                         style={{
                             paddingRight: "7px",
@@ -14,21 +14,13 @@ export default class UserHeaderNavLinks extends Component {
                         }}>
                         Home
                     </Link>
-                    <Link to={{ pathname: "/User" }}
+                    <Link to={{ pathname: "/User/MySubscriptions" }}
                         href="#"
                         style={{
                             paddingRight: "7px",
                             textDecoration: 'none'
                         }}>
-                        Dashboard
-                    </Link>
-                    <Link to={{ pathname: "/" }}
-                        href="#"
-                        style={{
-                            paddingRight: "7px",
-                            textDecoration: 'none'
-                        }}>
-                        Subscriptions
+                        My Subscriptions
                     </Link>
                     <Link to={{ pathname: "/" }}
                         href="#"

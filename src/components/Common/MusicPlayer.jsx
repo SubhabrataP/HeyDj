@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import Popups from './Popups';
 import TextField from '@material-ui/core/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import * as Constants from "./Constants";
 
 export default class MusicPlayer extends Component {
     constructor(props) {
@@ -94,7 +95,21 @@ export default class MusicPlayer extends Component {
 
     continueToPay = () => {
         if (this.state.isPay) {
-            this.onDismiss();
+            let options = {
+                "key": Constants.PAY_KEY_ID,
+                "amount": this.state.paymentDetails.amount,
+                "name": "this.props.playlistData.title",
+                "order_id": this.state.paymentDetails.id,
+                "handler": function (response) {
+                    alert(response.razorpay_payment_id);
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+
+            let rzp = new window.Razorpay(options);
+            rzp.open();
         }
         else {
             if (this.state.subscribeLater) {
@@ -175,60 +190,63 @@ export default class MusicPlayer extends Component {
                                     :
                                     <video style={{ height: "90%", width: "100%" }} src={this.props.playlistData.sampleContent} controls></video>}
                             </span>
-                            {this.state.isSubscribeClicked ?
-                                <React.Fragment>
-                                    <div className="col-md-12 text-right mt-3 mb-3">
-                                        <div className="col-md-12 text-left" style={{ marginTop: "15px" }}>
-                                            {this.state.isPay ?
-                                                <React.Fragment>
-                                                    <h5>Payment Details</h5>
-                                                    <h6><b>
-                                                        <span style={{ color: '#6eb1c2' }}>Total Amount: </span>
-                                                        {this.state.paymentDetails.currency + " " + this.state.paymentDetails.amount}
-                                                    </b></h6>
-                                                </React.Fragment>
-                                                :
-                                                <React.Fragment>
-                                                    <h5>Subscription Details</h5>
-                                                    {this.state.subscribeLater ?
+                            {localStorage.getItem('Role') === "user" ?
+                                this.state.isSubscribeClicked ?
+                                    <React.Fragment>
+                                        <div className="col-md-12 text-right mt-3 mb-3">
+                                            <div className="col-md-12 text-left" style={{ marginTop: "15px" }}>
+                                                {this.state.isPay ?
+                                                    <React.Fragment>
+                                                        <h5>Payment Details</h5>
                                                         <h6><b>
-                                                            <span style={{ color: '#6eb1c2' }}>From: </span>
-                                                            <TextField
-                                                                id="datetime-local"
-                                                                type="datetime-local"
-                                                                defaultValue={this.state.subscriptionDateTime}
-                                                                style={{ background: "#fff", height: "100%", marginLeft: "15px" }}
-                                                                onChange={(ev) => { this.onDateChange(ev) }}
-                                                            />
-                                                        </b></h6> : null}
-                                                    <h6><b>
-                                                        <span style={{ color: '#6eb1c2' }}>Duration: </span>
-                                                        <select className="col-md-2"
-                                                            style={{ marginLeft: "15px" }}
-                                                            value={this.state.selectedHours}
-                                                            onChange={(ev) => { this.onDropDownChange(ev) }}>
-                                                            {this.subscriptionHours.map((data) => {
-                                                                return (
-                                                                    <option value={data.id}>{data.name}</option>
-                                                                )
-                                                            })}
-                                                        </select>
-                                                        <span style={{ marginLeft: "15px", color: 'white' }}> Hours</span>
-                                                    </b></h6>
-                                                </React.Fragment>
-                                            }
-                                        </div>
+                                                            <span style={{ color: '#6eb1c2' }}>Total Amount: </span>
+                                                            {this.state.paymentDetails.currency + " " + (this.state.paymentDetails.amount / 100)}
+                                                        </b></h6>
+                                                    </React.Fragment>
+                                                    :
+                                                    <React.Fragment>
+                                                        <h5>Subscription Details</h5>
+                                                        {this.state.subscribeLater ?
+                                                            <h6><b>
+                                                                <span style={{ color: '#6eb1c2' }}>From: </span>
+                                                                <TextField
+                                                                    id="datetime-local"
+                                                                    type="datetime-local"
+                                                                    defaultValue={this.state.subscriptionDateTime}
+                                                                    style={{ background: "#fff", height: "100%", marginLeft: "15px" }}
+                                                                    onChange={(ev) => { this.onDateChange(ev) }}
+                                                                />
+                                                            </b></h6> : null}
+                                                        <h6><b>
+                                                            <span style={{ color: '#6eb1c2' }}>Duration: </span>
+                                                            <select className="col-md-2"
+                                                                style={{ marginLeft: "15px" }}
+                                                                value={this.state.selectedHours}
+                                                                onChange={(ev) => { this.onDropDownChange(ev) }}>
+                                                                {this.subscriptionHours.map((data) => {
+                                                                    return (
+                                                                        <option value={data.id}>{data.name}</option>
+                                                                    )
+                                                                })}
+                                                            </select>
+                                                            <span style={{ marginLeft: "15px", color: 'white' }}> Hours</span>
+                                                        </b></h6>
+                                                    </React.Fragment>
+                                                }
+                                            </div>
 
-                                        <button className="customBtn" style={{ marginTop: "2%" }} onClick={() => { this.continueToPay() }}>
-                                            {this.state.isPay ? "Pay" : "Continue To Pay"}
-                                        </button>
+                                            <button className="customBtn" style={{ marginTop: "2%" }} onClick={() => { this.continueToPay() }}>
+                                                {this.state.isPay ? "Pay" : "Continue To Pay"}
+                                            </button>
+                                        </div>
+                                    </React.Fragment>
+                                    :
+                                    <div className="col-md-12 text-right mt-3 mb-3">
+                                        <button className="customBtn" disabled={this.state.showAlert} onClick={() => { this.onSubscribe("now") }}>Subscribe Now</button>
+                                        <button className="customBtn" disabled={this.state.showAlert} onClick={() => { this.onSubscribe("later") }}>Subscribe Later</button>
                                     </div>
-                                </React.Fragment>
-                                :
-                                <div className="col-md-12 text-right mt-3 mb-3">
-                                    <button className="customBtn" disabled={this.state.showAlert} onClick={() => { this.onSubscribe("now") }}>Subscribe Now</button>
-                                    <button className="customBtn" disabled={this.state.showAlert} onClick={() => { this.onSubscribe("later") }}>Subscribe Later</button>
-                                </div>}
+                                : null
+                            }
                         </div>
                     </Modal>
                 </div>
