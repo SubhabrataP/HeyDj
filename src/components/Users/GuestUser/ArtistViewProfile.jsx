@@ -43,7 +43,7 @@ export default class ArtistViewProfile extends Component {
                     })
                 }
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error)
             });
     }
@@ -62,8 +62,8 @@ export default class ArtistViewProfile extends Component {
                     userPlaylists: res.data.playlists,
                 })
             })
-            .catch(function (error) {
-                alert(error.response);
+            .catch((error) => {
+                console.log(error.response);
             });
     }
 

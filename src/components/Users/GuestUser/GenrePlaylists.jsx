@@ -33,7 +33,7 @@ export default class GenrePlaylists extends Component {
                     playlists: res.data.playlists
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }

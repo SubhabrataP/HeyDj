@@ -66,8 +66,8 @@ export default class AdminLogin extends Component{
             this.onDismiss();
             this.props.history.push('/Admin');
         })
-        .catch(function (error) {
-            alert(error.response.data);
+        .catch((error) => {
+            console.log(error.response.data);
         });
     }
 

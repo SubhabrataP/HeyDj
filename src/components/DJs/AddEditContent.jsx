@@ -30,7 +30,8 @@ export default class AddEditContent extends Component {
             thumbnailError: "",
             contentError: "",
             previewContent: "",
-            showSpinner: false
+            showSpinner: false,
+            duration: 0
         }
     }
 
@@ -64,6 +65,22 @@ export default class AddEditContent extends Component {
             let file = event.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(file);
+
+            reader.onload = function(e) {
+                if (type === "multimedia") {
+                    let blobData = new Blob([file]);
+                    let video = document.createElement("video"); 
+                    let url = (URL).createObjectURL(blobData);
+
+                    video.preload = "metadata";                               
+                    video.addEventListener("loadedmetadata", function() {  
+                        this.setState({
+                            duration: Math.round(video.duration / 60)
+                        })   
+                    }.bind(this));
+                    video.src = url;
+                }
+            }.bind(this)
 
             reader.onloadstart = function () {
                 if (type === "multimedia") {
@@ -175,6 +192,7 @@ export default class AddEditContent extends Component {
             bodyFormData.set('title', this.state.title);
             bodyFormData.append('thumbnail', this.state.thumbnail.value);
             bodyFormData.set('type', this.state.contentType);
+            bodyFormData.set('duration', this.state.duration);
 
             if (this.props.isAdd) {
                 apiAxios.post('/api/dj/content', bodyFormData, {
@@ -183,10 +201,9 @@ export default class AddEditContent extends Component {
                     }
                 })
                     .then((res) => {
-                        console.log(res.data)
                         this.addContentUrl(res.data.contentUploadUrl)
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.log(error.response);
                         this.setState({
                             showSpinner: false
@@ -209,7 +226,7 @@ export default class AddEditContent extends Component {
                         })
                         this.onDismiss();
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         this.setState({
                             showSpinner: false
                         })
@@ -222,13 +239,12 @@ export default class AddEditContent extends Component {
     addContentUrl = (url) => {
         apiAxios.put(url, this.state.contentBlob)
             .then((res) => {
-                console.log(res)
                 this.setState({
                     showSpinner: false
                 })
                 this.onDismiss();
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
                 this.setState({
                     showSpinner: false

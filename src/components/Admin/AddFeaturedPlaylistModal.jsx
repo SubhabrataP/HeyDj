@@ -54,7 +54,7 @@ export class AddFeaturedPlaylistModal extends Component {
                     this.getFeaturedPlaylistIds();
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }

@@ -112,7 +112,7 @@ export default class Login extends Component {
                 })
             })
             .catch((error) => {
-                alert(error.response.data);
+                console.log(error.response.data);
                 this.setState({
                     sendOTPClicked: false,
                     isSendOTPDisabled: false
@@ -161,8 +161,8 @@ export default class Login extends Component {
                 this.props.history.push('/Dj')
                 : this.props.history.push('/User');
             })
-            .catch(function (error) {
-                alert(error.response.data);
+            .catch((error) => {
+                console.log(error.response.data);
             });
         }
     }

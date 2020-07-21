@@ -56,8 +56,8 @@ export default class AddEditPlaylist extends Component {
                     genres: res.data.genres,
                 })
             })
-            .catch(function (error) {
-                alert(error.response);
+            .catch((error) => {
+                console.log(error.response);
             });
     }
 
@@ -249,7 +249,7 @@ export default class AddEditPlaylist extends Component {
                             console.log(res.data);
                             this.addSampleContentUrl(res.data.sampleContentUploadUrl, 'Playlist added succesfully');
                         })
-                        .catch(function (error) {
+                        .catch((error) => {
                             console.log(error.response);
                         })
                 }
@@ -288,7 +288,7 @@ export default class AddEditPlaylist extends Component {
                                     showSpinner: false
                                 })
                             })
-                            .catch(function (error) {
+                            .catch((error) => {
                                 this.setState({
                                     showSpinner: false
                                 })
@@ -309,7 +309,7 @@ export default class AddEditPlaylist extends Component {
                                 console.log(res.data);
                                 this.addSampleContentUrl(res.data.sampleContentUploadUrl, 'Playlist updated succesfully')
                             })
-                            .catch(function (error) {
+                            .catch((error) => {
                                 this.setState({
                                     showSpinner: false
                                 })
@@ -338,7 +338,7 @@ export default class AddEditPlaylist extends Component {
                 })
                 this.onDismiss();
             })
-            .catch(function (error) {
+            .catch((error) => {
                 this.setState({
                     showSpinner: false
                 })
@@ -373,8 +373,8 @@ export default class AddEditPlaylist extends Component {
                     contentDetails: x,
                 });
             })
-            .catch(function (error) {
-                alert(error.response);
+            .catch((error) => {
+                console.log(error.response);
             });
     }
 

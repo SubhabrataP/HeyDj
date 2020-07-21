@@ -54,7 +54,7 @@ export default class DjDashboard extends Component {
                     })
                 }
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error);
             });
     }
@@ -123,7 +123,7 @@ export default class DjDashboard extends Component {
                     })
                 }
             })
-            .catch(function (error) {
+            .catch((error) => {
             });
     }
 

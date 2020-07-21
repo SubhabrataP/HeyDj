@@ -104,8 +104,8 @@ export default class DjList extends Component{
             this.onDismissAlert();
             this.getAllDjsList();
         })
-        .catch(function (error) {
-            alert(error.response.data);
+        .catch((error) => {
+            console.log(error.response);
         });
     }
 
@@ -131,8 +131,8 @@ export default class DjList extends Component{
                     filteredDjList: res.data
                 })
             })
-            .catch(function (error) {
-                alert(error.response.data);
+            .catch((error) => {
+                console.log(error.response);
             });
     }
 

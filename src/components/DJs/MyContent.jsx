@@ -98,7 +98,7 @@ export default class MyContent extends Component{
             this.onDismissAlert();
             this.getContentList();
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.log(error.response);
         })
     }
@@ -118,8 +118,8 @@ export default class MyContent extends Component{
                 items: res.data.contents
             })
         })
-        .catch(function (error) {
-            alert(error.response);
+        .catch((error) => {
+            console.log(error.response);
         });
     }
 

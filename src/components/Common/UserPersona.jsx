@@ -83,7 +83,7 @@ export default class UserPersona extends Component {
                 userData: res.data
             })
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.log(error.response);
         });
     }

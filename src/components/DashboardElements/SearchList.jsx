@@ -52,7 +52,7 @@ export default class SearchList extends Component {
                     })
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }
@@ -70,7 +70,7 @@ export default class SearchList extends Component {
                     })
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }
@@ -88,7 +88,7 @@ export default class SearchList extends Component {
                     })
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }

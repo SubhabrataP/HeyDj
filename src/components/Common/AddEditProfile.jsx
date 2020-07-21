@@ -185,8 +185,8 @@ export default class AddEditProfile extends Component {
                     userNotExisting: false
                 })
             })
-            .catch(function (error) {
-                alert(error.response === undefined ? error.response : error.response.data);
+            .catch((error) => {
+                console.log(error.response === undefined ? error.response : error.response.data);
             });
     }
 
@@ -225,11 +225,11 @@ export default class AddEditProfile extends Component {
                     })
                     .catch((error) => {
                         if (error.response.data.error.includes("user already exists")) {
-                            alert(error.response.data.error + ". So you can update.")
+                            console.log(error.response.data.error + ". So you can update.")
                             this.updateUserToDj(error.response.data.userId);
                         }
                         else {
-                            alert(error.response === undefined ? error.response : error.response.data);
+                            console.log(error.response === undefined ? error.response : error.response.data);
                         }
                     })
             }
@@ -246,8 +246,8 @@ export default class AddEditProfile extends Component {
                         .then((res) => {
                             this.onDismiss();
                         })
-                        .catch(function (error) {
-                            alert(error.response === undefined ? error.response : error.response.data);
+                        .catch((error) => {
+                            console.log(error.response === undefined ? error.response : error.response.data);
                         });
                 }
                 else {
@@ -265,8 +265,8 @@ export default class AddEditProfile extends Component {
                         .then((res) => {
                             this.onDismiss();
                         })
-                        .catch(function (error) {
-                            alert(error.response === undefined ? error.response : error.response.data.error);
+                        .catch((error) => {
+                            console.log(error.response === undefined ? error.response : error.response.data.error);
                         });
                 }
             }

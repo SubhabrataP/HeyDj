@@ -78,7 +78,9 @@ export default class MusicPlayer extends Component {
                             <div className="col-md-7 text-left">
                                 <h2><b>{this.props.playlistData.title}</b></h2>
                                 <h6><b><span style={{ color: '#6eb1c2' }}>Subscription Cost: </span>Rs {this.props.playlistData.price}</b></h6>
-                                <h6><b><span style={{ color: '#6eb1c2' }}>Duration: </span>58 mins</b></h6>
+                                <h6><b><span style={{ color: '#6eb1c2' }}>Duration: </span>
+                                    {this.props.playlistData.duration ? this.props.playlistData.duration : "1"} mins
+                                </b></h6>
                             </div>
                             <span className="col-md-7 offset-md-3 text-left">
                                 <h6><b><span style={{ color: '#6eb1c2' }}>Play Sample: </span></b></h6>
@@ -100,10 +102,6 @@ export default class MusicPlayer extends Component {
                                                     defaultValue={this.state.subscriptionDateTime}
                                                     style={{background: "#fff", height: "100%"}}
                                                     onChange={(ev) => { this.onDateChange(ev) }}
-                                                    // className={classes.textField}
-                                                    // InputLabelProps={{
-                                                    //     shrink: true,
-                                                    // }}
                                                 />
                                             </b></h6>
                                             <h6><b>

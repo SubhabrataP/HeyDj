@@ -25,7 +25,7 @@ export default class NewReleaseFullPage extends Component {
                     genreItems: res.data.genres,
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }

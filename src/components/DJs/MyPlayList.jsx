@@ -50,7 +50,7 @@ export default class MyPlayList extends Component{
             this.onDismissAlert();
             this.getPlaylist();
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.log(error.response);
         })
     }
@@ -76,8 +76,8 @@ export default class MyPlayList extends Component{
                     playlistDetails: res.data.playlists,
                 })
             })
-            .catch(function (error) {
-                alert(error.response);
+            .catch((error) => {
+                console.log(error.response);
             });
     }
 

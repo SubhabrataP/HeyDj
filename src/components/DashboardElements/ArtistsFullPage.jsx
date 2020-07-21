@@ -26,7 +26,7 @@ export default class ArtistsFullPage extends Component {
                     playlistItems: res.data.djs,
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }

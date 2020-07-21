@@ -32,7 +32,7 @@ export default class NewReleaseFullPage extends Component {
                     playlistItems: res.data.playlists,
                 })
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error.response);
             });
     }
