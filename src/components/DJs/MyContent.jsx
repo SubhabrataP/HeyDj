@@ -21,7 +21,9 @@ export default class MyContent extends Component{
             items: [],
             showAlert: false,
             deleteId: 0,
-            alertMessage: ""
+            alertMessage: "",
+            isMultiButton: false,
+            secondaryMessage: ""
         }
 
         this.columns= [
@@ -84,7 +86,9 @@ export default class MyContent extends Component{
         this.setState({
             showAlert: true,
             deleteId: id,
-            alertMessage: Constants.ACTION_DELETE
+            alertMessage: Constants.ACTION_DELETE,
+            isMultiButton: true,
+            secondaryMessage: ""
         })
     }
 
@@ -99,7 +103,15 @@ export default class MyContent extends Component{
             this.getContentList();
         })
         .catch((error) => {
-            console.log(error.response);
+            this.onDismissAlert();
+            if(error.response.data.includes("cannot delete")){
+                this.setState({
+                    showAlert: true,
+                    alertMessage: "Sorry!! Cannot Delete",
+                    secondaryMessage: "This Content is part of active playlists.",
+                    multiButton: false
+                })
+            }
         })
     }
 
@@ -134,7 +146,9 @@ export default class MyContent extends Component{
             addEditContentModal: false,
             showSelectContentModal: false,
             isAdd: true,
-            showAlert: false
+            showAlert: false,
+            isMultiButton: false,
+            secondaryMessage: ""
         });
         this.getContentList();
     }
@@ -143,7 +157,9 @@ export default class MyContent extends Component{
         this.setState({
             showAlert: false,
             deleteId: 0,
-            alertMessage: ""
+            alertMessage: "",
+            isMultiButton: false,
+            secondaryMessage: ""
         });
     }
 
@@ -157,7 +173,7 @@ export default class MyContent extends Component{
         return(
             <React.Fragment>
                 <Layout history={this.props.history}>
-                    <div className="container" style={{ marginTop: "1%" }}>
+                    <div className="container" style={{ marginTop: "1%", marginBottom: "2%" }}>
                         <div className="row" style={{ marginBottom: "1%" }}>
                             <h5 className={"col-md-6"}>My Content</h5>
                             <div className={"row col-md-6"} style={{textAlign: "right"}}>
@@ -217,13 +233,24 @@ export default class MyContent extends Component{
                         isAdd={this.state.isAdd}
                         editContent={this.state.editContent}
                     />
-                    <Popups
-                        showModal={this.state.showAlert} 
-                        message={this.state.alertMessage}
-                        isMultiButton= {true}
-                        button1Click={() => {this.deleteContent()}}
-                        button2Click={() => {this.onDismissAlert()}}
-                    />
+                    
+                    {this.state.isMultiButton ?
+                        <Popups
+                            showModal={this.state.showAlert}
+                            message={this.state.alertMessage}
+                            isMultiButton={true}
+                            button1Click={() => { this.deleteContent() }}
+                            button2Click={() => { this.onDismissAlert() }}
+                        />
+                        :
+                        <Popups
+                            showModal={this.state.showAlert}
+                            message={this.state.alertMessage}
+                            secondaryMessage={this.state.secondaryMessage}
+                            isMultiButton={false}
+                            button1Click={() => { this.onDismissAlert() }}
+                        />
+                    }
                 </Layout>
             </React.Fragment>
         )

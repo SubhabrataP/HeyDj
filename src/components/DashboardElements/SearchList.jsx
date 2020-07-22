@@ -115,7 +115,7 @@ export default class SearchList extends Component {
         return (
             <React.Fragment>
                 <Layout history={this.props.history}>
-                    <div className="container" style={{ marginTop: "1%" }}>
+                    <div className="container" style={{ marginTop: "1%", marginBottom: "2%" }}>
                         <div style={{ marginBottom: "1%" }}>
                             Results for "{this.state.searchKey}"
                         </div>

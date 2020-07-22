@@ -33,7 +33,7 @@ export default class NewReleaseFullPage extends Component {
     render() {
         return (
             <Layout history={this.props.history}>
-                <div className="container" style={{ marginTop: "1%" }}>
+                <div className="container" style={{ marginTop: "1%", marginBottom: "2%" }}>
                     <div>
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             <h3>Genres</h3>

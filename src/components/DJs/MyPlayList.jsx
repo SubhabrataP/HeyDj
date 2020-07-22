@@ -18,7 +18,9 @@ export default class MyPlayList extends Component{
             editPlaylist: [],
             showAlert: false,
             deleteId: 0,
-            alertMessage: ""
+            alertMessage: "",
+            isMultiButton: false,
+            secondaryMessage: ""
         }
 
         this.getPlaylist();
@@ -36,7 +38,8 @@ export default class MyPlayList extends Component{
         this.setState({
             showAlert: true,
             deleteId: id,
-            alertMessage: Constants.ACTION_DELETE
+            alertMessage: Constants.ACTION_DELETE,
+            isMultiButton: true
         })
     }
 
@@ -51,7 +54,15 @@ export default class MyPlayList extends Component{
             this.getPlaylist();
         })
         .catch((error) => {
-            console.log(error.response);
+            this.onDismissAlert();
+            if(error.response.data.includes("Cannot delete")){
+                this.setState({
+                    showAlert: true,
+                    alertMessage: "Sorry!! Cannot Delete",
+                    secondaryMessage: "This Playlist is having active subscriptions.",
+                    isMultiButton: false
+                })
+            }
         })
     }
 
@@ -92,7 +103,9 @@ export default class MyPlayList extends Component{
         this.setState({
             showAlert: false,
             deleteId: 0,
-            alertMessage: ""
+            alertMessage: "",
+            isMultiButton: false,
+            secondaryMessage: ""
         });
     }
 
@@ -100,7 +113,7 @@ export default class MyPlayList extends Component{
         return(
             <React.Fragment>
                 <Layout history={this.props.history}>
-                    <div className="container" style={{ marginTop: "1%" }}>
+                    <div className="container" style={{ marginTop: "1%", marginBottom: "2%" }}>
                         <div className="row" style={{ marginBottom: "1%" }}>
                             <h5 className={"col-md-6"}>My Playlists</h5>
                         </div>
@@ -141,13 +154,24 @@ export default class MyPlayList extends Component{
                         isAdd={this.state.isAdd}
                         editData={this.state.editPlaylist}
                     />
-                    <Popups
-                        showModal={this.state.showAlert} 
-                        message={this.state.alertMessage}
-                        isMultiButton= {true}
-                        button1Click={() => {this.deletePlaylist()}}
-                        button2Click={() => {this.onDismissAlert()}}
-                    />
+                    {this.state.isMultiButton ?
+                        <Popups
+                            showModal={this.state.showAlert}
+                            message={this.state.alertMessage}
+                            isMultiButton={true}
+                            button1Click={() => { this.deletePlaylist() }}
+                            button2Click={() => { this.onDismissAlert() }}
+                        />
+                        :
+                        <Popups
+                            showModal={this.state.showAlert}
+                            message={this.state.alertMessage}
+                            secondaryMessage={this.state.secondaryMessage}
+                            isMultiButton={false}
+                            button1Click={() => { this.onDismissAlert() }}
+                        />
+                    }
+                    
                 </Layout>
             </React.Fragment>
         )
