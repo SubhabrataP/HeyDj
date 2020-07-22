@@ -22,6 +22,7 @@ export default class MusicPlayer extends Component {
         }
 
         this.subscriptionHours = [
+            { id: 1, name: 1 },
             { id: 4, name: 4 },
             { id: 8, name: 8 },
             { id: 12, name: 12 },
@@ -98,10 +99,10 @@ export default class MusicPlayer extends Component {
             let options = {
                 "key": Constants.PAY_KEY_ID,
                 "amount": this.state.paymentDetails.amount,
-                "name": "this.props.playlistData.title",
+                "name": this.props.playlistData.title,
                 "order_id": this.state.paymentDetails.id,
                 "handler": function (response) {
-                    alert(response.razorpay_payment_id);
+                    alert("Payment Success.")
                 },
                 "theme": {
                     "color": "#F37254"
@@ -113,10 +114,12 @@ export default class MusicPlayer extends Component {
         }
         else {
             if (this.state.subscribeLater) {
+                let dateTime = this.state.subscriptionDateTime.concat(":00+05:30");
+
                 apiAxios.put('/api/playlist/' + this.props.playlistData.id + '/subscribe',
                     {
                         "hours": this.state.selectedHours,
-                        "dateTime": this.state.subscriptionDateTime
+                        "dateTime": dateTime
                     },
                     {
                         headers: {
@@ -190,7 +193,7 @@ export default class MusicPlayer extends Component {
                                     :
                                     <video style={{ height: "90%", width: "100%" }} src={this.props.playlistData.sampleContent} controls></video>}
                             </span>
-                            {localStorage.getItem('Role') === "user" ?
+                            {(localStorage.getItem('Role') === "user" || localStorage.getItem('Role') === null) ?
                                 this.state.isSubscribeClicked ?
                                     <React.Fragment>
                                         <div className="col-md-12 text-right mt-3 mb-3">

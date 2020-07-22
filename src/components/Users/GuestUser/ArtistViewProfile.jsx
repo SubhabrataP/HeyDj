@@ -90,7 +90,7 @@ export default class ArtistViewProfile extends Component {
                                 alt="logo"
                                 style={{ borderRadius: '50%', padding: '5% 15%' }}
                             />
-                            <h4>{this.state.userData.firstName + this.state.userData.lastName}</h4>
+                            <h4>{this.state.userData.firstName + " " + this.state.userData.lastName}</h4>
                             <span>
                                 {this.state.userData.city === "" ? "" :
                                     <React.Fragment>

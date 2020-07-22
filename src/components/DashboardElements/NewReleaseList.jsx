@@ -42,14 +42,14 @@ class NewReleaseList extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="col-md-12 dj-play-list">
+                <div className="row col-md-12 dj-play-list">
                     <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Playlists
                             {this.state.playlistItems.length > 6 ?
                                 <a onClick={this.onMoreClick}>More</a> : null}
                         </div>
-                        <div>
+                        <div className="row">
                             {this.state.playlistItems.slice(0,6).map((data) => (
                                 <div className="col-md-3 m-3">
                                     <CardTemplate

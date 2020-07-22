@@ -30,8 +30,8 @@ export default class DjProfile extends Component {
                 userData: res.data
             })
         })
-        .catch((error) => {
-            console.log(error.response.data);
+        .catch(function (error) {
+            alert(error.response.data);
         });
     }
 
@@ -56,7 +56,7 @@ export default class DjProfile extends Component {
                         alt="logo"
                         style={{ borderRadius: '50%', padding: '5% 15%' }}
                     />
-                    <h4>{this.state.userData.firstName + this.state.userData.lastName}</h4>
+                    <h4>{this.state.userData.firstName + " " + this.state.userData.lastName}</h4>
                     <span>
                         {this.state.userData.city === "" ? "" :
                             <React.Fragment>

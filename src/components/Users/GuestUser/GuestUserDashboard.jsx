@@ -13,12 +13,12 @@ export default class GuestUserDashboard extends Component {
             <Layout history={this.props.history} >
                 <div className="row" style={{ marginTop: "2%" }}>
                     <div className="col-md-7 offset-md-1">
-                        <FeaturedPlaylist history={this.props.history} />
+                        <NewReleaseList history={this.props.history} />
                         <Artists history={this.props.history} />
                         <Genre history={this.props.history} />
                     </div>
                     <div className="col-md-3">
-                        <NewReleaseList history={this.props.history} />
+                        <FeaturedPlaylist history={this.props.history} />
                     </div>
                 </div>
             </Layout>
