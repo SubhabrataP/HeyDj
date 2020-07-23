@@ -66,7 +66,7 @@ export default class SearchList extends Component {
                     artists: res.data.djs,
                 }, () => {
                     this.setState({
-                        filteredArtists: this.state.artists.filter(x => x.firstName.toLowerCase().includes(this.state.searchKey.toLowerCase()))
+                        filteredArtists: this.state.artists.filter(x => (x.firstName.toLowerCase().includes(this.state.searchKey.toLowerCase())) || (x.lastName.toLowerCase().includes(this.state.searchKey.toLowerCase())))
                     })
                 })
             })

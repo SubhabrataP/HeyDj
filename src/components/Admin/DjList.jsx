@@ -6,6 +6,7 @@ import AddEditProfile from '../Common/AddEditProfile';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import Popups from "../Common/Popups";
 import * as Constants from "../Common/Constants"
+import { SelectDjModal } from "./SelectDjModal";
 
 export default class DjList extends Component{
     constructor(props){
@@ -20,7 +21,9 @@ export default class DjList extends Component{
             showAlert: false,
             deleteId: 0,
             alertMessage: "",
-            filteredDjList: []
+            filteredDjList: [],
+            showDjModal: false,
+            alertType: ""
         }
         this.columns= [
             {
@@ -178,16 +181,31 @@ export default class DjList extends Component{
         }
     }
 
+    showDjModal = (type) => {
+        this.setState({
+            showDjModal: true,
+            alertType: type
+        })
+    }
+
+    dismissDjModal = () => {
+        this.setState({
+            showDjModal: false
+        })
+    }
+
     render(){
         return(
             <React.Fragment>
                 <Layout history={this.props.history}>
                     <div className="container" style={{ marginTop: "1%" }}>
                         <div className="row" style={{ marginBottom: "1%" }}>
-                            <h5 className={"col-md-8"}>DJ Details List</h5>
-                            <div className={"row col-md-4"} style={{textAlign: "right"}}>
+                            <h5 className={"col-md-5"}>DJ Details List</h5>
+                            <div className={"row col-md-7"} style={{textAlign: "right"}}>
                                 <input type="search" placeholder="Search Djs" onChange={this.onSearchDj} />
-                                <button className="customBtn" style={{ marginLeft: "10%" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
+                                <button className="customBtn" style={{ marginLeft: "5%" }} onClick={() => (this.onAddDjClick())}>Add Dj</button>
+                                <button className="customBtn" style={{ marginLeft: "2%" }} onClick={() => (this.showDjModal("playlist"))}>Add Playlist</button>
+                                <button className="customBtn" style={{ marginLeft: "2%" }} onClick={() => (this.showDjModal("content"))}>Add Content</button>
                             </div>
                         </div>
 
@@ -217,6 +235,12 @@ export default class DjList extends Component{
                         isMultiButton= {true}
                         button1Click={() => {this.deleteProfile()}}
                         button2Click={() => {this.onDismissAlert()}}
+                    />
+                    <SelectDjModal 
+                        showAlert={this.state.showDjModal} 
+                        onDismiss={() => (this.dismissDjModal())}
+                        djDetails={this.state.djDetails}
+                        type={this.state.alertType}
                     />
                 </Layout>
             </React.Fragment>
