@@ -199,7 +199,7 @@ export default class MyContent extends Component{
                                     {this.state.items.slice(0, this.state.itemsPerPage).map((item, index) => {
                                                 return (
                                                     <div className="col-md-3 text-center ml-2 mr-2" style={{color:'#fff'}}>
-                                                        <img src={item.thumbnail} style={{ width: "100%" }} />
+                                                        <img src={item.thumbnail} style={{ height: "160px", width: "100%" }} />
                                                         <h5 className="m-0 mt-2"><b>{item.title}</b></h5>
                                                         <small>INR {item.price}</small><br/>
                                                         <span>
