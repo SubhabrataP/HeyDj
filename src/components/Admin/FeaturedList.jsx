@@ -91,7 +91,7 @@ export default class FeaturedList extends Component {
                                     {this.state.playlists.map((item, index) => {
                                         return (
                                             <div className="col-md-3 text-center ml-2 mr-2" style={{ color: '#fff', marginBottom: "15px" }}>
-                                                <img src={item.thumbnail} style={{ width: "100%" }} />
+                                                <img src={item.thumbnail} style={{ height: "160px", width: "100%" }} />
                                                 <h5 className="m-0 mt-2"><b>{item.title}</b></h5>
                                                 <button className="customBtnWhite" onClick={() => {this.deleteFeaturedAlert(item.id)}}>Remove</button>
                                             </div>
