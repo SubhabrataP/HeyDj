@@ -18,7 +18,8 @@ export default class MusicPlayer extends Component {
             subscriptionDateTime: "",
             selectedHours: 4,
             isPay: false,
-            paymentDetails: ""
+            paymentDetails: "",
+            djName: ""
         }
 
         this.subscriptionHours = [
@@ -28,6 +29,24 @@ export default class MusicPlayer extends Component {
             { id: 12, name: 12 },
             { id: 24, name: 24 }
         ];
+    }
+
+    UNSAFE_componentWillReceiveProps(){
+        this.getDjName();
+    }
+
+    getDjName = () => {
+        if (this.props.playlistData !== undefined) {
+            apiAxios.get("api/user/" + this.props.playlistData.createdBy)
+                .then((res) => {
+                    this.setState({
+                        djName: res.data.firstName + " " + res.data.lastName
+                    })
+                })
+                .catch((error) => {
+                    console.log(error.data)
+                })
+        }
     }
 
     onSubscribe = (type) => {
@@ -94,6 +113,19 @@ export default class MusicPlayer extends Component {
         this.props.onDismiss();
     }
 
+    onPaymentSuccess = () => {
+        if(window.location.href.includes("/User/MySubscriptions")){
+            window.location.reload();
+        }
+        else{
+            this.setState({
+                isSubscribeClicked: false,
+                showAlert: true,
+                alertMessage: "Payment Success."
+            })
+        }
+    }
+
     continueToPay = () => {
         if (this.state.isPay) {
             let options = {
@@ -102,8 +134,8 @@ export default class MusicPlayer extends Component {
                 "name": this.props.playlistData.title,
                 "order_id": this.state.paymentDetails.id,
                 "handler": function (response) {
-                    alert("Payment Success.")
-                },
+                    this.onPaymentSuccess()
+                }.bind(this),
                 "theme": {
                     "color": "#F37254"
                 }
@@ -181,6 +213,7 @@ export default class MusicPlayer extends Component {
                             </div>
                             <div className="col-md-7 text-left">
                                 <h2><b>{this.props.playlistData.title}</b></h2>
+                                <h6><b><span style={{ color: '#6eb1c2' }}>DJ Name: </span>{this.state.djName}</b></h6>
                                 <h6><b><span style={{ color: '#6eb1c2' }}>Subscription Cost: </span>Rs {this.props.playlistData.price}</b></h6>
                                 <h6><b><span style={{ color: '#6eb1c2' }}>Duration: </span>
                                     {this.props.playlistData.duration ? this.props.playlistData.duration : "1"} mins

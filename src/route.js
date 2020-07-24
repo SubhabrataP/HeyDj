@@ -11,7 +11,6 @@ import DjSection from "./components/LazyLoading/DjSection";
 import AdminSection from "./components/LazyLoading/AdminSection";
 import LoginSuccess from "./components/LoginPages/LoginSuccess";
 import ArtistViewProfile from "./components/Users/GuestUser/ArtistViewProfile"
-import Subscription from './components/Subscription/Subscription';
 import SearchList from './components/DashboardElements/SearchList'
 import GenrePlaylists from './components/Users/GuestUser/GenrePlaylists';
 
@@ -33,7 +32,6 @@ const createRoutes = (props) => (
 
             <Route exact path="/Profile/:artistname" render={(props) => <ArtistViewProfile history={props.history} />} />
             <Route exact path="/Genre/:genrename" render={(props) => <GenrePlaylists history={props.history} />} />
-            <Route exact path="/Subscription" render={(props) => <Subscription history={props.history} />} />
 
             <Route path="/**" component={PageNotFound} />
         </Switch>
