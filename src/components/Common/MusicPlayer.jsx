@@ -214,7 +214,7 @@ export default class MusicPlayer extends Component {
                             <div className="col-md-7 text-left">
                                 <h2><b>{this.props.playlistData.title}</b></h2>
                                 <h6><b><span style={{ color: '#6eb1c2' }}>DJ Name: </span>{this.state.djName}</b></h6>
-                                <h6><b><span style={{ color: '#6eb1c2' }}>Subscription Cost: </span>Rs {this.props.playlistData.price}</b></h6>
+                                <h6><b><span style={{ color: '#6eb1c2' }}>Subscription Cost: </span>Rs {this.props.playlistData.price} <span> / hour </span></b></h6>
                                 <h6><b><span style={{ color: '#6eb1c2' }}>Duration: </span>
                                     {this.props.playlistData.duration ? this.props.playlistData.duration : "1"} mins
                                 </b></h6>
