@@ -256,7 +256,7 @@ export default class UserSubscriptions extends Component {
                                             style={{ color: '#fff', marginBottom: "15px" }}
                                             onClick={() => { this.onTracksClick(item) }}
                                         >
-                                            <img src={item.thumbnail} style={{ width: "100%" }} />
+                                            <img src={item.thumbnail} style={{ height: "230px", width: "100%" }} />
                                             <h5 className="m-0 mt-2"><b>{item.title}</b></h5>
                                         </div>
                                     )
@@ -282,7 +282,7 @@ export default class UserSubscriptions extends Component {
                                             style={{ color: '#fff', marginBottom: "15px" }}
                                             onClick={() => { this.onImageClick(item, "upcoming") }}
                                         >
-                                            <img src={item.thumbnail} style={{ width: "100%" }} />
+                                            <img src={item.thumbnail} style={{ height: "230px", width: "100%" }} />
                                             <h5 className="m-0 mt-2"><b>{item.title}</b></h5>
                                         </div>
                                     )
