@@ -40,7 +40,6 @@ export default class DjDashboard extends Component {
             }
         )
             .then((res) => {
-                console.log(res.data)
                 if (res.data) {
                     if (res.data.spotify) {
                         if (res.data.spotify.indexOf('https://open.spotify.com/embed/') === -1) {

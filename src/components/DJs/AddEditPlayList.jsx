@@ -416,8 +416,6 @@ export default class AddEditPlaylist extends Component {
     onRemove = (selectedList, removedItem) => {
         this.setState({
             selectedContent: this.state.selectedContent.filter(x=> x.id !== removedItem.id)
-        }, ()=>{
-            console.log(this.state.selectedContent)
         })
     }
 
