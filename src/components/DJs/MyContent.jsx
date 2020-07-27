@@ -99,7 +99,11 @@ export default class MyContent extends Component{
             }
         })
         .then((response) => {
-            this.onDismissAlert();
+            this.setState({
+                showAlert: true,
+                alertMessage: "Content" + Constants.DELETE_SUCCESS_MESSAGE,
+                isMultiButton: false
+            })
             this.getContentList();
         })
         .catch((error) => {
@@ -109,7 +113,7 @@ export default class MyContent extends Component{
                     showAlert: true,
                     alertMessage: "Sorry!! Cannot Delete",
                     secondaryMessage: "This Content is part of active playlists.",
-                    multiButton: false
+                    isMultiButton: false
                 })
             }
         })

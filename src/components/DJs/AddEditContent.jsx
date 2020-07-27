@@ -6,6 +6,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Popups from "../Common/Popups";
+import * as Constants from "../Common/Constants"
 
 export default class AddEditContent extends Component {
     constructor(props) {
@@ -31,7 +33,12 @@ export default class AddEditContent extends Component {
             contentError: "",
             previewContent: "",
             showSpinner: false,
-            duration: 0
+            duration: 0,
+            showPopup: false,
+            popupMessage: "",
+            isMultiButton: false,
+            button1Text: "",
+            button2Text: "",
         }
     }
 
@@ -201,7 +208,7 @@ export default class AddEditContent extends Component {
                     }
                 })
                     .then((res) => {
-                        this.addContentUrl(res.data.contentUploadUrl)
+                        this.addContentUrl(res.data.contentUploadUrl, res.data.content.id)
                     })
                     .catch((error) => {
                         console.log(error.response);
@@ -222,7 +229,10 @@ export default class AddEditContent extends Component {
                 })
                     .then((response) => {
                         this.setState({
-                            showSpinner: false
+                            showSpinner: false,
+                            showPopup: true,
+                            isMultiButton: false,
+                            popupMessage: "Content " + Constants.UPDATE_SUCCESS_MESSAGE
                         })
                         this.onDismiss();
                     })
@@ -236,20 +246,47 @@ export default class AddEditContent extends Component {
         }
     }
 
-    addContentUrl = (url) => {
+    addContentUrl = (url, contentId) => {
         apiAxios.put(url, this.state.contentBlob)
             .then((res) => {
                 this.setState({
-                    showSpinner: false
+                    showSpinner: false,
+                    showPopup: true,
+                    isMultiButton: false,
+                    popupMessage: "Content " + Constants.CREATE_SUCCESS_MESSAGE
                 })
                 this.onDismiss();
             })
             .catch((error) => {
                 console.log(error.response);
                 this.setState({
-                    showSpinner: false
+                    showSpinner: false,
+                    showPopup: true,
+                    isMultiButton: false,
+                    popupMessage: Constants.SOMETHING_WRONG
                 })
+                this.deleteContent(contentId);
             })
+    }
+
+    deleteContent = (contentId) => {
+        apiAxios.delete('/api/dj/content/' + contentId, {
+            headers: {
+                'Authorization': localStorage.getItem('Token')
+            }
+        })
+        .then((response) => {
+            this.onDismiss();
+        })
+        .catch((error) => {
+            this.onDismiss();
+        })
+    }
+
+    dismissPopup = () => {
+        this.setState({
+            showPopup: false
+        })
     }
 
     onDismiss = () => {
@@ -285,7 +322,8 @@ export default class AddEditContent extends Component {
                 >
                     {this.state.showSpinner ?
                         <div style={{ margin: '0', paddingTop: "4%", paddingBottom: "4%", textAlign: "center", color: '#fff', backgroundColor: '#252133' }}>
-                            <CircularProgress size={"80px"} />
+                            <CircularProgress size={"80px"} label={"Please do not refesh while uploading."} />
+                            <div><labe>Please do not refesh this page.</labe></div>
                         </div>
                         :
                         <React.Fragment>
@@ -370,6 +408,14 @@ export default class AddEditContent extends Component {
                             </div>
                         </React.Fragment>}
                 </Modal>
+
+                <Popups
+                    showModal={this.state.showPopup}
+                    message={this.state.popupMessage}
+                    isMultiButton={this.state.isMultiButton}
+                    button1Click={() => { this.dismissPopup() }}
+                    button1Text={this.state.button1Text}
+                />
             </div>
         )
     }

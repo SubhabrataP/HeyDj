@@ -8,6 +8,7 @@ import { Multiselect } from 'multiselect-react-dropdown';
 import Popups from "../Common/Popups";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from "axios";
+import * as Constants from "../Common/Constants"
 
 const priceRegex = RegExp(/^\s*(?=.*[1-9])\d*(?:\.\d{2})?\s*$/);
 
@@ -287,7 +288,7 @@ export default class AddEditPlaylist extends Component {
                             .then((res) => {
                                 this.onDismiss();
                                 this.setState({
-                                    alertMessage: 'Playlist updated succesfully',
+                                    alertMessage: "Playlist " + Constants.UPDATE_SUCCESS_MESSAGE,
                                     showAlert: true,
                                     showSpinner: false
                                 })
@@ -431,6 +432,7 @@ export default class AddEditPlaylist extends Component {
                         {this.state.showSpinner ?
                             <div style={{ margin: '0', paddingTop: "4%", paddingBottom: "4%", textAlign: "center", color: '#fff', backgroundColor: '#252133' }}>
                                 <CircularProgress size={"80px"} />
+                                <div><labe>Please do not refesh this page.</labe></div>
                             </div>
                             :
                             <React.Fragment>

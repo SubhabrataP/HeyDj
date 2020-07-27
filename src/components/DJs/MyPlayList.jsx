@@ -50,7 +50,11 @@ export default class MyPlayList extends Component{
             }
         })
         .then((response) => {
-            this.onDismissAlert();
+            this.setState({
+                showAlert: true,
+                alertMessage: "Playlist" + Constants.DELETE_SUCCESS_MESSAGE,
+                isMultiButton: false
+            })
             this.getPlaylist();
         })
         .catch((error) => {
