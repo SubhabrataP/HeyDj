@@ -17,10 +17,91 @@ export default class AdminDashboard extends Component{
 			fromDate: "",
 			toDate: "",
 			showAlert: false,
-            alertMessage: ""
+			alertMessage: "",
+			curveData: [['Months', 'Total Revenue']]
 		}
 
 		this.getTotalData();
+		this.createCurveData();
+	}
+
+	getCurveValues = (from, to, count) => {
+		if (count === 4) {
+			apiAxios.get("/api/admin/report",
+				{
+					params: {
+						"from": from,
+						"to": to
+					},
+					headers: {
+						'Authorization': localStorage.getItem('Token')
+					},
+				})
+				.then((res) => {
+					this.setState(prevState => ({
+						curveData: [...prevState.curveData, [count, res.data.report.earnings]]
+					}), () => { this.getCurveValues(from, to, count - 1) })
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+		if (count > 0 && count < 4) {
+			let month = new Date(from).getMonth() + 1;
+			let year = new Date(from).getFullYear();
+			let date = new Date(from).getDate();
+
+			let toNew = from;
+
+			if (month <= 1) {
+				month = 12;
+				year = year - 1;
+			}
+			else {
+				month = month - 1;
+			}
+
+			let fromNew = year + "-" + (month < 10 ? ("0" + month) : month) + "-" + (date < 10 ? "0" + date : date);
+
+			apiAxios.get("/api/admin/report",
+				{
+					params: {
+						"from": fromNew,
+						"to": toNew
+					},
+					headers: {
+						'Authorization': localStorage.getItem('Token')
+					},
+				})
+				.then((res) => {
+					this.setState(prevState => ({
+						curveData: [...prevState.curveData, [count, res.data.report.earnings]]
+					}), () => { this.getCurveValues(fromNew, toNew, count - 1) })
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+	}
+
+	createCurveData = () => {
+		let month = new Date().getMonth() + 1;
+		let year = new Date().getFullYear();
+		let date = new Date().getDate();
+
+		let to = year + "-" + (month < 10 ? ("0" + month) : month) + "-" + (date < 10 ? "0" + date : date);
+
+		if (month - 1 < 1) {
+			month = 12;
+			year = year - 1;
+		}
+		else {
+			month = month - 1;
+		}
+
+		let from = year + "-" + (month < 10 ? ("0" + month) : month) + "-" + (date < 10 ? "0" + date : date);
+
+		this.getCurveValues(from, to, 4);
 	}
 
 	getTotalData = () => {
@@ -154,11 +235,11 @@ export default class AdminDashboard extends Component{
 						  height={'300px'}
 						  chartType="ScatterChart"
 						  loader={<div>Loading Chart</div>}
-						  data={[['Months', 'Total Revenue'], [0, 1], [1, 33], [2, 269], [3, 2013]]}
+						  data={this.state.curveData}
 						  options={{
-						    title: 'Revenue Generated',
-						    hAxis: { title: 'Months', minValue: 0, maxValue: 3 },
-						    vAxis: { title: 'Total Revenue', minValue: 0, maxValue: 2100 },
+						    title: 'Last 4 months Revenue',
+						    hAxis: { title: 'Months', minValue: 0, maxValue: 4 },
+						    vAxis: { title: 'Total Revenue', minValue: 0, maxValue: 10000 },
 						    trendlines: {
 						      0: {
 						        type: 'exponential',
@@ -189,7 +270,8 @@ export default class AdminDashboard extends Component{
 						    ],
 						    ['DJs', this.state.isMonthlyData ? this.state.monthlyData.djs : this.state.totalData.totalDjs, '#b87333', null],
 						    ['Users', this.state.isMonthlyData ? this.state.monthlyData.users : this.state.totalData.totalUsers, 'silver', null],
-							[this.state.isMonthlyData ? 'Active Subscriptions' : 'Total Subscriptions', this.state.isMonthlyData ? this.state.monthlyData.subscriptions : this.state.totalData.totalSubscriptions, 'gold', null],
+							['Subscriptions', this.state.isMonthlyData ? this.state.monthlyData.subscriptions : this.state.totalData.totalSubscriptions, 'gold', null],
+							['Revenue (* K)', this.state.isMonthlyData ? (this.state.monthlyData.earnings/1000) : (this.state.totalData.totalEarnings/1000), 'red', null],
 						  ]}
 						  options={{
 						    title: 'Overview',

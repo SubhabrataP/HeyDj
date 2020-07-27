@@ -324,6 +324,7 @@ export default class AddPlaylistModal extends Component {
                         {this.state.showSpinner ?
                             <div style={{ margin: '0', paddingTop: "4%", paddingBottom: "4%", textAlign: "center", color: '#fff', backgroundColor: '#252133' }}>
                                 <CircularProgress size={"80px"} />
+                                <div><labe>Please do not refesh this page.</labe></div>
                             </div>
                             :
                             <React.Fragment>
