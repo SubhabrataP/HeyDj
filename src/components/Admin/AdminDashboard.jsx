@@ -229,61 +229,63 @@ export default class AdminDashboard extends Component{
 				</div>
 
                 <div className="row">
-                	<div className="col-md-6 offset-md-1 dj-play-list p-3 text-center" style={{height:'800px'}}>
-                    	<Chart
-						  width={'500px'}
-						  height={'300px'}
-						  chartType="ScatterChart"
-						  loader={<div>Loading Chart</div>}
-						  data={this.state.curveData}
-						  options={{
-						    title: 'Last 4 months Revenue',
-						    hAxis: { title: 'Months', minValue: 0, maxValue: 4 },
-						    vAxis: { title: 'Total Revenue', minValue: 0, maxValue: 10000 },
-						    trendlines: {
-						      0: {
-						        type: 'exponential',
-						        color: '#6eb1c2',
-						      },
-						    },
-						  }}
-						  rootProps={{ 'data-testid': '3' }}
+					<div className="col-md-6 offset-md-1 dj-play-list p-3 text-center" style={{ height: '800px' }}>
+
+						<Chart
+							className="mt-3"
+							width={'500px'}
+							height={'300px'}
+							chartType="BarChart"
+							loader={<div>Loading Chart</div>}
+							data={[
+								[
+									'Element',
+									'Density',
+									{ role: 'style' },
+									{
+										sourceColumn: 0,
+										role: 'annotation',
+										type: 'string',
+										calc: 'stringify',
+									},
+								],
+								['DJs', this.state.isMonthlyData ? this.state.monthlyData.djs : this.state.totalData.totalDjs, '#b87333', null],
+								['Users', this.state.isMonthlyData ? this.state.monthlyData.users : this.state.totalData.totalUsers, 'silver', null],
+								['Subscriptions', this.state.isMonthlyData ? this.state.monthlyData.subscriptions : this.state.totalData.totalSubscriptions, 'gold', null],
+								['Revenue (* K)', this.state.isMonthlyData ? (this.state.monthlyData.earnings / 1000) : (this.state.totalData.totalEarnings / 1000), 'red', null],
+							]}
+							options={{
+								title: 'Overview',
+								width: 600,
+								height: 400,
+								bar: { groupWidth: '95%' },
+								legend: { position: 'none' },
+							}}
+							// For tests
+							rootProps={{ 'data-testid': '6' }}
 						/>
 
 						<Chart
-						  className="mt-3"	
-						  width={'500px'}
-						  height={'300px'}
-						  chartType="BarChart"
-						  loader={<div>Loading Chart</div>}
-						  data={[
-						    [
-						      'Element',
-						      'Density',
-						      { role: 'style' },
-						      {
-						        sourceColumn: 0,
-						        role: 'annotation',
-						        type: 'string',
-						        calc: 'stringify',
-						      },
-						    ],
-						    ['DJs', this.state.isMonthlyData ? this.state.monthlyData.djs : this.state.totalData.totalDjs, '#b87333', null],
-						    ['Users', this.state.isMonthlyData ? this.state.monthlyData.users : this.state.totalData.totalUsers, 'silver', null],
-							['Subscriptions', this.state.isMonthlyData ? this.state.monthlyData.subscriptions : this.state.totalData.totalSubscriptions, 'gold', null],
-							['Revenue (* K)', this.state.isMonthlyData ? (this.state.monthlyData.earnings/1000) : (this.state.totalData.totalEarnings/1000), 'red', null],
-						  ]}
-						  options={{
-						    title: 'Overview',
-						    width: 600,
-						    height: 400,
-						    bar: { groupWidth: '95%' },
-						    legend: { position: 'none' },
-						  }}
-						  // For tests
-						  rootProps={{ 'data-testid': '6' }}
+							width={'500px'}
+							height={'300px'}
+							chartType="ScatterChart"
+							loader={<div>Loading Chart</div>}
+							data={this.state.curveData}
+							options={{
+								title: 'Last 4 months Revenue',
+								hAxis: { title: 'Months', minValue: 0, maxValue: 4 },
+								vAxis: { title: 'Total Revenue', minValue: 0, maxValue: 10000 },
+								trendlines: {
+									0: {
+										type: 'exponential',
+										color: '#6eb1c2',
+									},
+								},
+							}}
+							rootProps={{ 'data-testid': '3' }}
 						/>
-                    </div>
+
+					</div>
                     <div className="col-md-4 dj-play-list p-3 ml-2">
                     	<div className="p-3 pl-4 mb-3" style={{backgroundColor:'#6eb1c2'}}>
 							<h3><b>{this.state.totalData.totalDjs}</b></h3>
