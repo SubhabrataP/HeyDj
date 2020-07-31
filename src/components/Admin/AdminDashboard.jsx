@@ -18,7 +18,7 @@ export default class AdminDashboard extends Component{
 			toDate: "",
 			showAlert: false,
 			alertMessage: "",
-			curveData: [['Months', 'Total Revenue']]
+			curveData: [['Months', 'Revenue']]
 		}
 
 		this.getTotalData();
@@ -275,7 +275,7 @@ export default class AdminDashboard extends Component{
 							options={{
 								title: 'Last 4 months Revenue',
 								hAxis: { title: 'Months', minValue: 0, maxValue: 4 },
-								vAxis: { title: 'Total Revenue', minValue: 0, maxValue: 10000 },
+								vAxis: { title: 'Revenue per month', minValue: 0, maxValue: 10000 },
 								trendlines: {
 									0: {
 										type: 'exponential',
