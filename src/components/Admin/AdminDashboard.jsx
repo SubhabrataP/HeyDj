@@ -266,6 +266,7 @@ export default class AdminDashboard extends Component{
 						/>
 
 						<Chart
+							style={{ marginTop: "25%", marginLeft: "5%" }}
 							width={'500px'}
 							height={'300px'}
 							chartType="ScatterChart"
