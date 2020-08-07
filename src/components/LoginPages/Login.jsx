@@ -130,7 +130,7 @@ export default class Login extends Component {
 
     onOTPChange = (event, value) => {
         this.emptyErrors();
-        if(value.length < 5)
+        if(value.length < 7)
         {
             this.setState({
                 OTP: value
