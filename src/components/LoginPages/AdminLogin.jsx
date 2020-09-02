@@ -13,7 +13,8 @@ export default class AdminLogin extends Component{
             input:{
                 type: "password",
                 isMasked: true
-            }
+            },
+            errorMessage: ""
         }
     }
 
@@ -30,20 +31,23 @@ export default class AdminLogin extends Component{
     onDismiss = () => {
         this.setState({
             email: "",
-            password: ""
+            password: "",
+            errorMessage: ""
         })
         this.props.dismissModalProps();
     }
 
     onEmailChange = (event) => {
         this.setState({
-            email: event.target.value
+            email: event.target.value,
+            errorMessage: ""
         })
     }
 
     onPasswordChange = (event) => {
         this.setState({
-            password: event.target.value
+            password: event.target.value,
+            errorMessage: ""
         })
     }
 
@@ -67,6 +71,9 @@ export default class AdminLogin extends Component{
             this.props.history.push('/Admin');
         })
         .catch((error) => {
+            this.setState({
+                errorMessage: error.response.data
+            })
             console.log(error.response.data);
         });
     }
@@ -105,6 +112,11 @@ export default class AdminLogin extends Component{
                                     :
                                     <i className="fa fa-eye-slash" aria-hidden="true" style={{ margin: "0%", padding: "0%" }} onClick={this.showHidePassword}></i>
                                 }
+                            </span>
+                        </div>
+                        <div>
+                            <span style={{ color: "red" }}>
+                                {this.state.errorMessage}
                             </span>
                         </div>
                         <div style={{ textAlign: "center", marginTop: "10%", marginBottom: "5px" }}>
