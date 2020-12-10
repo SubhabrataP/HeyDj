@@ -132,7 +132,7 @@ button:focus{
     color: #fff !important;
     margin: 0 5px;
     font-size: 15px;
-    padding: 14px 1px;
+    padding: 0px 1px;
 }
 
 .genreCardBorder {

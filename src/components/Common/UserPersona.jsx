@@ -43,7 +43,7 @@ export default class UserPersona extends Component {
             showAdminLoginModal: false,
             showEditProfile: false,
         });
-        window.location.reload();
+        // window.location.reload();
     }
 
     showModals = (modalType) => {

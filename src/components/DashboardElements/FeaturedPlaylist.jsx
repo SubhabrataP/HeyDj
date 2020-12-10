@@ -44,7 +44,7 @@ export default class FeaturedPlaylist extends Component {
                         </div>
                         <div>
                             {this.state.playlistItems.slice(0,6).map((data) => (
-                                <div className="col-md-3 m-3">
+                                <div className="m-3">
                                     <CardTemplate
                                         history={this.props.history}
                                         playlistData={data}
