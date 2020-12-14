@@ -37,6 +37,13 @@ export default class HeaderNavLink extends Component {
                         }}>
                         Download App
                     </Link>
+                    <Link to={{ pathname: "/register" }}
+                        href="#"
+                        style={{
+                            textDecoration: 'none'
+                        }}>
+                        Nightclub Registration
+                    </Link>
                 </div>
             </React.Fragment>
 

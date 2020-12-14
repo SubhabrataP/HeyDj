@@ -13,6 +13,7 @@ import LoginSuccess from "./components/LoginPages/LoginSuccess";
 import ArtistViewProfile from "./components/Users/GuestUser/ArtistViewProfile"
 import SearchList from './components/DashboardElements/SearchList'
 import GenrePlaylists from './components/Users/GuestUser/GenrePlaylists';
+import Register from './components/DashboardElements/NightclubRegistration';
 
 const createRoutes = (props) => (
     <Router>
@@ -22,7 +23,9 @@ const createRoutes = (props) => (
             <Route exact path="/FeaturedPlaylists" component={FeaturedPlaylistFullPage} />
             <Route exact path="/Artists" component={ArtistsFullPage} />
             <Route exact path="/Genres" component={GenreFullPage} />
+            <Route exact path="/register" component={Register} />
             <Route exact path="/login/success" render={(props) => <LoginSuccess history={props.history} />} />
+            
 
             <Route path="/User" component={UserSection} />
             <Route path="/Dj" component={DjSection} />
