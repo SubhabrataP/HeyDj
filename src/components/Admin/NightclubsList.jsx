@@ -7,17 +7,19 @@ import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import Popups from "../Common/Popups";
 import * as Constants from "../Common/Constants";
 import { SelectDjModal } from "./SelectDjModal";
+import Swal from "sweetalert2";
+import AddEditNightclub from "./AddEditNightclub";
 
 const sampleObject = {
   fullName: "Indroneel",
   phoneNumber: "7058637206",
   emailId: "indroneelray@gmail.com",
   city: "gurgaon",
-  status:1,
-  id:1
+  status: 1,
+  id: 1,
 };
 
-export default class DjList extends Component {
+export default class NightClubList extends Component {
   constructor(props) {
     super(props);
 
@@ -33,6 +35,7 @@ export default class DjList extends Component {
       filteredDjList: [],
       showDjModal: false,
       alertType: "",
+      showModal:false
     };
     this.columns = [
       {
@@ -77,28 +80,42 @@ export default class DjList extends Component {
           return (
             <div className="nightclub-options">
               <button
-                className="customBtn"
+                className="customBtnWhite ml-1"
+                onClick={() => this.toggleStatus(item)}
+              >
+                {item.status == 1 ? (
+                  <i
+                    className="fa fa-check-circle text-success"
+                    title="Deactivate account?"
+                  />
+                ) : (
+                  <i
+                    className="fa fa-times text-warning"
+                    title="Activate Account?"
+                  />
+                )}
+              </button>
+              <button
+                className="customBtn mx-1"
                 onClick={() => this.editProfile(item)}
+                title="Edit Account"
               >
                 <i className="fa fa-edit" />
               </button>
               <button
-                className="customBtnWhite ml-1"
+                className="customBtnWhite"
                 onClick={() => this.showDeleteAlert(item.id)}
+                title="Delete Account"
               >
                 <i className="fa fa-trash" />
               </button>
-              <button
-                className="customBtnWhite ml-1"
-                onClick={() => this.toggleStatus(item)}
-              >{item.status == 1 ? <i className="fa fa-check-circle" title="Deactivate account?"/> : <i className="fa fa-times" title="Activate Account?" />}</button>
             </div>
           );
         },
       },
     ];
 
-    this.getAllDjsList();
+    this.getAllNightclubsList();
   }
 
   showDeleteAlert = (id) => {
@@ -119,34 +136,34 @@ export default class DjList extends Component {
 
   deleteProfile = () => {
     apiAxios
-      .delete("/api/admin/user/" + this.state.deleteId, {
+      .delete("/api/admin/user/nightclub/" + this.state.deleteId, {
         headers: {
           Authorization: localStorage.getItem("Token"),
         },
       })
       .then((res) => {
         this.onDismissAlert();
-        this.getAllDjsList();
+        this.getAllNightclubsList();
+        Swal.fire("", "Nightclub deleted!", "success");
       })
       .catch((error) => {
         console.log(error.response);
       });
   };
 
-  getAllDjsList = () => {
+  getAllNightclubsList = () => {
     apiAxios
       .get("/api/admin/user", {
         headers: {
           Authorization: localStorage.getItem("Token"),
         },
         params: {
-          role: "dj",
+          role: "nightclub",
         },
       })
       .then((res) => {
-        console.log("djs: ", res.data);
         res.data.map((val) => {
-          val.fullName = val.firstName + " " + val.lastName;
+          val.fullName = val.firstName;
         });
         this.setState({
           djDetails: res.data,
@@ -156,8 +173,8 @@ export default class DjList extends Component {
       .catch((error) => {
         console.log(error.response);
         this.setState({
-          djDetails: [{ ...sampleObject }],
-          filteredDjList: [{ ...sampleObject }],
+          djDetails: [],
+          filteredDjList: [],
         });
       });
   };
@@ -174,13 +191,13 @@ export default class DjList extends Component {
     this.setState({
       showAddEditDj: false,
     });
-    this.getAllDjsList();
+    this.getAllNightclubsList();
   };
 
-  editProfile = (item) => {
+  editProfile = (item) => { //used
     this.setState({
       isAdd: false,
-      showAddEditDj: true,
+      showModal: true,
       editProfileData: item,
     });
   };
@@ -220,24 +237,31 @@ export default class DjList extends Component {
     });
   };
 
-
-
   toggleStatus = (item) => {
-    apiAxios.put(
-        "/api/admin/user/" + item.id, {...item, status: item.status == 1 ? 0 : 1},
+
+    delete item["license"]
+    apiAxios
+      .put(
+        "/api/admin/user/nightclub/" + item.id,
+        { data: { ...item, status: item.status == 1 ? 0 : 1 } },
         {
-            headers: {
-                'Authorization': localStorage.getItem('Token')
-            },
+          headers: {
+            Authorization: localStorage.getItem("Token"),
+          },
         }
-    )
-        .then((res) => {
-            this.getAllDjsList()
-        })
-        .catch((error) => {
-            console.log(error.response === undefined ? error.response : error.response.data);
-        });
-  }
+      )
+      .then((res) => {
+        this.getAllNightclubsList();
+        Swal.fire(
+          "",
+          `Nightclub is now ${item.status == 1 ? "inactive" : "active"}`,
+          "success"
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   render() {
     return (
@@ -251,10 +275,15 @@ export default class DjList extends Component {
                   type="search"
                   placeholder="Search Nightclubs"
                   onChange={this.onSearchDj}
+                  className="px-1 form-control col-md-5"
                 />
-                <button className="customBtn" style={{ marginLeft: "5%" }} onClick={() => (this.onAddDjClick())}>Add Nightclub</button>
-                                {/* <button className="customBtn" style={{ marginLeft: "2%" }} onClick={() => (this.showDjModal("playlist"))}>Add Playlist</button>
-                                <button className="customBtn" style={{ marginLeft: "2%" }} onClick={() => (this.showDjModal("content"))}>Add Content</button> */}
+                {/* <button
+                  className="customBtn"
+                  style={{ marginLeft: "5%" }}
+                  onClick={() => this.onAddDjClick()}
+                >
+                  Add Nightclub
+                </button> */}
               </div>
             </div>
 
@@ -274,12 +303,13 @@ export default class DjList extends Component {
               ) : null}
             </div>
           </div>
-          <AddEditProfile
-            showModal={this.state.showAddEditDj}
-            dismissModalProps={() => this.dismissAddEditModalProps()}
+          <AddEditNightclub
+            showModal={this.state.showModal}
+            dismissModal={()=>this.setState({showModal:false})}
             isAdd={this.state.isAdd}
             roleToBeAdded={"nightclub"}
             profileData={this.state.editProfileData}
+            refetchData={this.getAllNightclubsList}
           />
           <Popups
             showModal={this.state.showAlert}

@@ -14,6 +14,7 @@ import ArtistViewProfile from "./components/Users/GuestUser/ArtistViewProfile"
 import SearchList from './components/DashboardElements/SearchList'
 import GenrePlaylists from './components/Users/GuestUser/GenrePlaylists';
 import Register from './components/DashboardElements/NightclubRegistration';
+import NightclubSection from './components/LazyLoading/NightClubSection';
 
 const createRoutes = (props) => (
     <Router>
@@ -30,6 +31,7 @@ const createRoutes = (props) => (
             <Route path="/User" component={UserSection} />
             <Route path="/Dj" component={DjSection} />
             <Route path="/Admin" component={AdminSection} />
+            <Route path="/Nightclub" component={NightclubSection} />
 
             <Route exact path="/Search" render={(props) => <SearchList history={props.history} />} />
 

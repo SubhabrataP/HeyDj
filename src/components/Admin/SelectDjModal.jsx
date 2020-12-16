@@ -21,6 +21,7 @@ export class SelectDjModal extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
+       if(nextProps.djDetails.length !== 0) {
         var x = nextProps.djDetails.map((data) => {
             return {
                 id: data.id,
@@ -32,6 +33,7 @@ export class SelectDjModal extends Component {
             djs: x,
             selectedDjId: x[0].id
         })
+       }
     }
 
     onDropDownChange = (ev) => {

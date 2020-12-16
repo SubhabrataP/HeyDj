@@ -99,6 +99,8 @@ export default class AddEditProfile extends Component {
                 console.error("Image is not Selected");
                 return;
             }
+
+            console.log(file)
             // Encodes Image to upload and Preview
             let reader = new FileReader();
             reader.readAsDataURL(file);

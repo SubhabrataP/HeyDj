@@ -6,33 +6,74 @@ import * as Yup from "yup";
 import "bootstrap/dist/css/bootstrap.css";
 import Swal from "sweetalert2";
 import Layout from "../Home/Layout";
+import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 
 const RegisterSchema = Yup.object().shape({
   email: Yup.string()
     .trim()
     .email("Invalid email address format")
     .required("Email is required"),
-  password: Yup.string()
-    .min(3, "Password must be 3 characters at minimum")
-    .required("Password is required"),
-  name: Yup.string().trim().required(`Please provide your Nightclub's name`),
+  // password: Yup.string()
+  //   .min(3, "Password must be 3 characters at minimum")
+  //   .required("Password is required"),
+  name: Yup.string().trim().min(5, "Name must be at least 5 characters long").required(`Please provide your Nightclub's name`),
   contact: Yup.string()
     .required()
     .matches(/^[0-9]+$/, "Must be only digits")
     .min(10, "Must be exactly 10 digits")
     .max(10, "Must be exactly 10 digits"),
-  bio: Yup.string().trim().required("Please fill in your bio"),
-  address: Yup.string().trim().required("Please fill in your address"),
+  // bio: Yup.string().trim().required("Please fill in your bio"),
+  address: Yup.string().min(10,"Address mnust be at least 10 characters").trim().required("Please fill in your address"),
   licenseno: Yup.string().required("Your Nighclub License number is mandatory"),
-  license: Yup.mixed().required(),
+  city:Yup.string().required("Please enter your city")
+  // license: Yup.mixed().required(),
 });
 
 export default class Register extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      file: null,
+    };
   }
+
+  addNightClub = (values) => {
+
+
+    let details = {
+      firstName: values.name,
+      emailId: values.email,
+      phoneNumber: `91${values.contact}`,
+      address: values.address,
+      licenseno: values.licenseno,
+      role: "nightclub",
+      city:values.city
+    };
+
+    let formData = new FormData()
+    formData.append('data', JSON.stringify(details))
+    formData.append('license', this.state.file) 
+
+    apiAxios
+      .post("/api/user/nightclub", formData)
+      .then((response) => {
+        if(response.data.status === 200 ) {
+          return Swal.fire("","Account registered successfully", "success")
+          .then(()=>{
+            this.props.history.push('/')
+          })
+        }
+        else{
+          return Swal.fire("", response.data.message, "info")
+        }
+
+        
+      })
+      .catch((error) => {
+          return Swal.fire("",error.message,"info" )
+      });
+  };
 
   render() {
     return (
@@ -49,11 +90,16 @@ export default class Register extends React.Component {
             <Formik
               initialValues={{ email: "", password: "" }}
               validationSchema={RegisterSchema}
-              onSubmit={({ setSubmitting }) => {
-                // setSubmitting(false);
-                Swal.fire("", "Registered Successfully", "success").then(() => {
-                  this.props.history.push("/");
-                });
+              onSubmit={(values) => {
+                console.log(values);
+                if (this.state.file == null) {
+                  return Swal.fire(
+                    "",
+                    "Please upload your license for verification",
+                    "info"
+                  );
+                }
+                this.addNightClub(values);
               }}
             >
               {({ touched, errors, isSubmitting }) => (
@@ -90,7 +136,7 @@ export default class Register extends React.Component {
                       className="invalid-feedback"
                     />
                   </div>
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <label htmlFor="password">Password*</label>
                     <Field
                       type="password"
@@ -105,7 +151,7 @@ export default class Register extends React.Component {
                       name="password"
                       className="invalid-feedback"
                     />
-                  </div>
+                  </div> */}
                   <div className="form-group">
                     <label htmlFor="contact">Contact*</label>
                     <Field
@@ -122,23 +168,7 @@ export default class Register extends React.Component {
                       className="invalid-feedback"
                     />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="bio">Bio*</label>
-                    <Field
-                      as="textarea"
-                      type="text"
-                      name="bio"
-                      placeholder="Enter Bio"
-                      className={`form-control ${
-                        touched.bio && errors.bio ? "is-invalid" : ""
-                      }`}
-                    />
-                    <ErrorMessage
-                      component="div"
-                      name="bio"
-                      className="invalid-feedback"
-                    />
-                  </div>
+
                   <div className="form-group">
                     <label htmlFor="address">Address*</label>
                     <Field
@@ -153,6 +183,24 @@ export default class Register extends React.Component {
                     <ErrorMessage
                       component="div"
                       name="address"
+                      className="invalid-feedback"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="address">City*</label>
+                    <Field
+                      as="textarea"
+                      type="text"
+                      name="city"
+                      placeholder="Enter City"
+                      className={`form-control ${
+                        touched.city && errors.city ? "is-invalid" : ""
+                      }`}
+                    />
+                    <ErrorMessage
+                      component="div"
+                      name="city"
                       className="invalid-feedback"
                     />
                   </div>
@@ -180,6 +228,9 @@ export default class Register extends React.Component {
                     <Field
                       type="file"
                       name="license"
+                      onChange={(e) =>
+                        this.setState({ file: e.target.files[0] })
+                      }
                       placeholder="Enter license Number"
                       className={`form-control ${
                         touched.license && errors.license ? "is-invalid" : ""
@@ -195,9 +246,9 @@ export default class Register extends React.Component {
                   <button
                     type="submit"
                     className="btn btn-primary btn-block"
-                    disabled={isSubmitting}
+                    // disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Please wait..." : "Submit"}
+                    Submit
                   </button>
                 </Form>
               )}

@@ -8,6 +8,14 @@ export const ProtectedRouteAdmin = (props) => {
   return <UnAuthorizedPage />;
 };
 
+
+export const ProtectedRouteNightclub = (props) => {
+  if (localStorage.getItem("Token") && localStorage.getItem("Role") === "nightclub") return <Route {...props} />;
+  return <UnAuthorizedPage />;
+};
+
+
+
 export const ProtectedRouteDj = (props) => {
   if (localStorage.getItem("Token") && localStorage.getItem("Role") === "dj") return <Route {...props} />;
   return <UnAuthorizedPage />;
