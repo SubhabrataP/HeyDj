@@ -229,7 +229,7 @@ export default class Login extends Component {
                 style={{
                   padding: "1px",
                   color: "#fff",
-                  backgroundColor: "#6eb1c2",
+                  backgroundColor: "#0c0c0c",
                   borderRadius: "40px",
                 }}
                 disabled={this.state.isSendOTPDisabled}

@@ -10,8 +10,10 @@ body {
   height: auto;
   box-sizing: border-box;
   /*background: #202020 !important;*/
-  background-image: url("../images/appBg.jpg");
+  background-image: url("../images/appBg2.jpg");
   background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   color: #fff !important;
 }
@@ -155,8 +157,7 @@ button:focus {
 }
 
 .cardBorder {
-  border: 2px solid #fff;
-  border-radius: 10px;
+  border-radius: 20px;
   position: relative;
 }
 
@@ -224,7 +225,8 @@ button:focus {
 }
 .dj-play-list {
   width: 100%;
-  background: linear-gradient(to right, #242232, #33284c90); /*#242232;*/
+  /*background: linear-gradient(to right, #242232, #33284c90);*/ /*#242232;*/
+  background: linear-gradient(to right, #d4d4d414, #002a9d7d);
 }
 
 .ms-SearchBox {
@@ -237,7 +239,7 @@ button:focus {
 
 .featured-play {
   width: 100%;
-  border-bottom: 3px solid #42414d;
+  border-bottom: 1px solid #ffffff42;
   padding: 10px 15px;
 }
 .featured-playlist {
@@ -260,11 +262,11 @@ button:focus {
 .genrs-list a {
   text-decoration: none;
   color: #fff;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   padding: 1px 25px;
   font-size: 17px;
   border-radius: 50px;
-  background: #34566a;
+  background: #111312;
   margin-left: 20px;
 }
 .featured-playlist ul li {
@@ -805,15 +807,17 @@ img {
 }
 
 .popupModal {
+  background: url("../images/appBg2.jpg");
   background-color: #242232;
   margin: 0;
 }
 
 .customBtn {
-  background-color: #5cb2c6;
+  background-color: #0c0c0c;
   color: #fff;
   padding: 6px 20px;
   border-radius: 40px;
+  border: none;
 }
 
 .customBtn.nightClubOptions {
@@ -888,13 +892,14 @@ button:focus {
 
 .customBtnWhite {
   background-color: #fff;
-  color: #5cb2c6;
+  color: #0c0c0c;
   padding: 6px 20px;
   border-radius: 40px;
+  border: none;
 }
 
 .loginBg {
-  background: url("../images/login.png");
+  background: url("../images/appBg2.jpg");
   background-size: cover;
 }
 
@@ -903,7 +908,7 @@ button:focus {
 }
 
 .listView .ms-Viewport {
-  background: url("../images/login.jpg");
+  background: url("../images/appBg2.jpg");
 }
 
 .owl-carousel .owl-nav button.owl-next,
@@ -911,4 +916,10 @@ button:focus {
 .owl-carousel button.owl-dot {
   display: block !important;
   outline: none;
+}
+
+.getStarted {
+  text-align: center;
+  background-color: #202020;
+  color: #fff;
 }

@@ -46,7 +46,7 @@ export default class Genre extends Component {
                         </div>
                         <div className="row">
                             {this.state.genreItems.slice(0,3).map((data) => (
-                                <div className="col-md-3 m-3">
+                                <div className="col-md-4">
                                     <CardTemplate
                                         history={this.props.history}
                                         playlistData={data}

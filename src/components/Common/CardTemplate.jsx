@@ -54,7 +54,7 @@ export default class CardTemplate extends Component {
               <React.Fragment>
                 <img
                   className="w-100"
-                  style={{ height: "220px" }}
+                  style={{ height: "150px", borderRadius: "20px", boxShadow: "0px 0px 4px 6px #0c0c0c1f" }}
                   src={
                     this.props.playlistData.thumbnail === undefined
                       ? process.env.PUBLIC_URL + "/images/playlist-5.png"
@@ -76,9 +76,8 @@ export default class CardTemplate extends Component {
               <React.Fragment>
                 <img
                   style={{
-                    width: "150px",
                     height: "150px",
-                    borderRadius: "100px",
+                    borderRadius: "20px",
                   }}
                   src={process.env.PUBLIC_URL + "/images/genre background.jpg"}
                   alt="image"
@@ -97,7 +96,7 @@ export default class CardTemplate extends Component {
               <React.Fragment>
                 <img
                   className="w-100"
-                  style={{ height: "220px" }}
+                  style={{ height: "150px", borderRadius: "20px", boxShadow: "0px 0px 4px 6px #0c0c0c1f" }}
                   src={
                     this.props.playlistData.profileImage === undefined ||
                     this.props.playlistData.profileImage === "undefined"
