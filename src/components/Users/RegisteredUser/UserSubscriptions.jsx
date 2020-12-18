@@ -93,10 +93,12 @@ export default class UserSubscriptions extends Component {
             .catch((error) => {
                 if (error.response.status === 404) {
                     this.setState({
+                        expiredSubscriptions:[],
                         showAlert: true,
                         alertMessage: Constants.NO_DATA_FOUND,
                         isMultiButton: false,
-                    })
+                        
+                    },()=>this.getFilteredPlaylists())
                 }
             })
     }

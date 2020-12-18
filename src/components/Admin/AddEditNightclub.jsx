@@ -52,6 +52,13 @@ export default class AddEditNightclub extends Component {
       },
       showModal: false,
       isAdd: false,
+      file: null,
+      userRole: localStorage.getItem("Role"),
+      profile_picture: {
+        value: null,
+        name: null,
+      },
+      previewImage: null,
     };
   }
 
@@ -68,6 +75,7 @@ export default class AddEditNightclub extends Component {
         city: data.city,
       },
       isAdd: props.isAdd,
+      previewImage:data.profileImage
     });
   };
 
@@ -84,16 +92,21 @@ export default class AddEditNightclub extends Component {
       role: "nightclub",
       status: this.props.profileData.status,
     };
+
+    let formData = new FormData();
+    formData.append("data", JSON.stringify(details));
+    formData.append("profileImage", this.state.profile_picture.value);
+
+    let url =
+      this.state.userRole == "Admin"
+        ? `/api/admin/user/nightclub/${this.props.profileData.id}`
+        : `/api/user/nightclub/${this.props.profileData.id}`;
     apiAxios
-      .put(
-        "/api/admin/user/nightclub/" + this.props.profileData.id,
-        { data: { ...details } },
-        {
-          headers: {
-            Authorization: localStorage.getItem("Token"),
-          },
-        }
-      )
+      .put(url, formData, {
+        headers: {
+          Authorization: localStorage.getItem("Token"),
+        },
+      })
       .then((res) => {
         this.props.refetchData();
         Swal.fire("", `Nightclub information has been updated`, "success");
@@ -109,6 +122,108 @@ export default class AddEditNightclub extends Component {
     if (Object.entries(error).length == 0) {
       this.state.isAdd ? this.addNightClub(values) : this.editNightclub(values);
     }
+  };
+
+  renderAdminFileInput = () => {
+    return (
+      <div className="row" style={{ marginBottom: "5%" }}>
+        <Label
+          className="col-md-5"
+          style={{
+            paddingLeft: "0%",
+            paddingRight: "0%",
+            textAlign: "center",
+            color: "#fff",
+            fontSize: "18px",
+          }}
+        >
+          License File:
+        </Label>
+        {this.props.profileData.license ? (
+          <a
+            className={`col-md-6 align-self-center`}
+            href={this.props.profileData.license}
+            download
+            target="_blank"
+          >
+            Download File
+          </a>
+        ) : (
+          <span className="col-md-6 align-self-center">No file uploaded</span>
+        )}
+      </div>
+    );
+  };
+
+  renderNightclubFileInput = () => {
+    return (
+      <div className="row" style={{ marginBottom: "5%" }}>
+        <Label
+          className="col-md-5"
+          style={{
+            paddingLeft: "0%",
+            paddingRight: "0%",
+            textAlign: "center",
+            color: "#fff",
+            fontSize: "18px",
+          }}
+        >
+          License File:
+        </Label>
+        {this.props.profileData.license ? (
+          <a
+            className={`col-md-6 align-self-center`}
+            href={this.props.profileData.license}
+            download
+            target="_blank"
+          >
+            Download File
+          </a>
+        ) : (
+          <span className="col-md-6 align-self-center">No file uploaded</span>
+        )}
+
+        <input
+          type="file"
+          accept="image/*, .pdf"
+          className="col-md-6 offset-md-6"
+          onChange={(e) => this.setState({ file: e.target.files[0] })}
+        />
+      </div>
+    );
+  };
+
+  editOnChangeHandler = (event, element) => {
+    if (element === "image") {
+      let file = event.target.files[0];
+      if (!file.type.includes("image")) {
+        //TODO: Show Error
+        console.error("Image is not Selected");
+        return;
+      }
+
+      console.log(file);
+      // Encodes Image to upload and Preview
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = function () {
+        this.setState({
+          profile_picture: {
+            value: file,
+            name: file.name,
+          },
+          previewImage: reader.result,
+        });
+      }.bind(this);
+    }
+
+    // else {
+    //   console.log(element, event.target.value);
+    //   this.setState({
+    //     editState: { ...this.state.editState, [element]: event.target.value },
+    //   });
+    // }
   };
   render() {
     return (
@@ -139,6 +254,33 @@ export default class AddEditNightclub extends Component {
                 Nightclub Details
               </h4>
             </div>
+
+            <div
+              className={"image-edit circle"}
+              style={{ marginBottom: "3%", border: "solid 0.5px black" }}
+            >
+              <span className="overlay_profile">
+                <i
+                  className="fa fa-plus upload-button"
+                  onClick={() => {
+                    this.upload.click();
+                  }}
+                ></i>
+              </span>
+              <Image
+                className="profile-pic"
+                src={this.state.previewImage ? this.state.previewImage : ""}
+                roundedCircle
+              />
+              <FormControl
+                aria-label="Image"
+                type={"file"}
+                ref={(ref) => (this.upload = ref)}
+                style={{ padding: "4px", marginBottom: "16px", width: "100%" }}
+                onChange={(event) => this.editOnChangeHandler(event, "image")}
+                accept={"image/*"}
+              />
+            </div>
             <div className="col-sm-12">
               <Formik
                 initialValues={{ ...this.state.nightclubItem }}
@@ -160,11 +302,12 @@ export default class AddEditNightclub extends Component {
                           fontSize: "18px",
                         }}
                       >
-                        Nightclub:
+                        Name:
                       </Label>
                       <Field
                         type="text"
                         name="nightclub"
+                        disabled={this.state.userRole == "nightclub"}
                         placeholder="Enter Nightclub Name"
                         className={`form-control col-md-6 ${
                           touched.nightclub && errors.nightclub
@@ -307,6 +450,7 @@ export default class AddEditNightclub extends Component {
                       </Label>
                       <Field
                         type="text"
+                        disabled={this.state.userRole == "nightclub"}
                         name="licenseno"
                         placeholder="Enter License Number"
                         className={`form-control col-md-6 ${
@@ -322,34 +466,10 @@ export default class AddEditNightclub extends Component {
                       />
                     </div>
 
-                    <div className="row" style={{ marginBottom: "5%" }}>
-                      <Label
-                        className="col-md-5"
-                        style={{
-                          paddingLeft: "0%",
-                          paddingRight: "0%",
-                          textAlign: "center",
-                          color: "#fff",
-                          fontSize: "18px",
-                        }}
-                      >
-                        License File:
-                      </Label>
-                      {this.props.profileData.license ? (
-                        <a
-                          className={`col-md-6 align-self-center`}
-                          href={this.props.profileData.license}
-                          download
-                          target="_blank"
-                        >
-                          Download File
-                        </a>
-                      ) : (
-                        <span className="col-md-6 align-self-center">
-                          No file uploaded
-                        </span>
-                      )}
-                    </div>
+                    {/* {localStorage.getItem("Role") == "Admin" */}
+                    {/* ? this.renderAdminFileInput() */}
+                    {/* : this.renderNightclubFileInput()} */}
+                    {this.renderAdminFileInput()}
 
                     <div style={{ textAlign: "center", margin: "15px 0" }}>
                       <button

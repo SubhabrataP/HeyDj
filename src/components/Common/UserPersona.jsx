@@ -27,12 +27,13 @@ export default class UserPersona extends Component {
       showAlert: false,
       alertMessage: "",
       showNightClubModal: false,
+      editProfileData: {},
     };
     if (
       !(localStorage.getItem("Token") === null) &&
       this.state.userData === ""
     ) {
-      this.onEditProfile();
+      localStorage.getItem('Role') == "Admin" ? this.onEditProfile(): this.onEditNightclub();
     }
   }
 
@@ -109,23 +110,21 @@ export default class UserPersona extends Component {
   };
 
   onEditNightclub = () => {
-    this.setState({
-        showEditProfile: true,
-      });
-      apiAxios
-        .get("/api/user/" + localStorage.getItem("Id"), {
-          headers: {
-            Authorization: localStorage.getItem("Token"),
-          },
-        })
-        .then((res) => {
-          this.setState({
-            userData: res.data,
-          });
-        })
-        .catch((error) => {
-          console.log(error.response);
+    apiAxios
+      .get("/api/user/" + localStorage.getItem("Id"), {
+        headers: {
+          Authorization: localStorage.getItem("Token"),
+        },
+      })
+      .then((res) => {
+        this.setState({
+          editProfileData: res.data,
+          userData:{...this.state.userData, profileImage:res.data.profileImage}
         });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   };
 
   onLogout = () => {
@@ -168,7 +167,7 @@ export default class UserPersona extends Component {
                     className="loginDropdown"
                     onClick={() =>
                       localStorage.getItem("Role") == "nightclub"
-                        ? this.onEditNightclub()
+                        ? this.setState({ showNightClubModal: true }, ()=>this.onEditNightclub())
                         : this.onEditProfile()
                     }
                   >
@@ -233,14 +232,14 @@ export default class UserPersona extends Component {
           profileData={this.state.userData}
         />
 
-        {/* <AddEditNightclub
+        <AddEditNightclub
           showModal={this.state.showNightClubModal}
           dismissModal={() => this.setState({ showNightClubModal: false })}
           isAdd={false}
           roleToBeAdded={"nightclub"}
           profileData={this.state.editProfileData}
-          refetchData={()=>{}}
-        /> */}
+          refetchData={() => {}}
+        />
 
         <Popups
           showModal={this.state.showAlert}
