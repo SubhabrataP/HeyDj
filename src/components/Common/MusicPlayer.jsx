@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import * as Constants from "./Constants";
 
+let validRoles = ["user", "nightclub", null]
+
 export default class MusicPlayer extends Component {
     constructor(props) {
         super(props);
@@ -226,7 +228,7 @@ export default class MusicPlayer extends Component {
                                     :
                                     <video style={{ height: "90%", width: "100%" }} src={this.props.playlistData.sampleContent} controls></video>}
                             </span>
-                            {(localStorage.getItem('Role') === "user" || localStorage.getItem('Role') === null) ?
+                            {validRoles.includes(localStorage.getItem('Role')) ?
                                 this.state.isSubscribeClicked ?
                                     <React.Fragment>
                                         <div className="col-md-12 text-right mt-3 mb-3">
