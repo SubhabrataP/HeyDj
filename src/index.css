@@ -11,3 +11,64 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.account-btn{ width: 150px; border-radius: 4px; font-weight: 600; background: #fff; padding: 5px 10px; text-align: center; display: inline-block; margin-right: 15px;}
+.top-col{ display: flex; align-items: center;}
+.top-col h5{ margin-right: 20px;}
+.custome-input{ width: 250px !important;}
+.submit-btn{ background: #1479f5; display: block; border-radius: 5px; width: 50%; text-align: center; padding: 10px; color: #fff; border: none; margin: 0px auto;}
+.custom-choose
+{
+    display: flex;
+    justify-content: normal;
+    align-items: center;
+}
+.custom-choose input[type='radio'],.custom-choose input[type='checkbox']
+{
+    display: none;
+}
+.custom-choose input[type='radio'] + label,.custom-choose input[type='radio']:not(checked) + label
+,.custom-choose input[type='checkbox'] + label,.custom-choose input[type='checkbox']:not(checked) + label
+{
+    padding: 15px;
+    border-radius:7px;
+    text-align: center;
+    font-size: 14px;
+    margin-right:0;
+    transition: .4s;
+    width: 100%;
+}
+.custom-choose input[type='radio'] + label h2{ font-size: 24px; font-weight: 600; text-align: center; color: #fff; margin-bottom: 20px;}
+.custom-choose input[type='radio'] + label h3{ font-size: 24px; font-weight: 600; text-align: center; color: #fff; margin-bottom: 20px;}
+.custom-choose input[type='radio'] + label p{ font-size: 16px; margin:0;}
+.custom-choose input.plan1[type='radio'] + label,.custom-choose input[type='radio']:not(checked) + label{
+  background: #336be5;
+}
+.custom-choose input.plan2[type='radio'] + label,.custom-choose input[type='radio']:not(checked) + label{
+  background: #224eac;
+}
+.custom-choose input.plan3[type='radio'] + label,.custom-choose input[type='radio']:not(checked) + label{
+  background: #496090;
+}
+.custom-choose input[type='radio']:checked + label,
+.custom-choose input[type='checkbox']:checked + label
+{
+    position: relative;
+    color: #FFF;
+    transition: .4s;
+}
+.custom-choose input[type='radio']:checked + label::before,
+.custom-choose input[type='checkbox']:checked + label::before
+{
+    content:'✓';
+    position: absolute;
+    left: 16px;
+}
+.package-list h4{ font-size: 18px; margin-bottom: 40px; margin-top: 40px;}
+.package-list{ margin-bottom: 20px;}
+
+
+
+
+
+
+
