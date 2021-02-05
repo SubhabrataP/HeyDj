@@ -65,8 +65,57 @@ code {
 }
 .package-list h4{ font-size: 18px; margin-bottom: 40px; margin-top: 40px;}
 .package-list{ margin-bottom: 20px;}
+.category-top{ width: 100%; display: flex; justify-content: flex-end; align-items: center;}
+.categories-btn{ width: 160px; background: #000; border-radius: 40px; line-height: 40px; height: 40px; border: none; color: #fff; text-align: center; padding: 0 20px; margin-left: 15px;}
+.categories-btn:focus{ border: none; outline: none;}
+.edit-btn{background: #000; border-radius: 40px; line-height:35px; display: inline-block; height:35px; border: none; color: #fff; text-align: center; padding: 0 20px; margin-right: 15px;}
+.width-auto{ width: auto !important;}
+.profile-pic-col {
+  border-radius: 50%;
+  height: 120px;
+  width: 120px;
+  background-size: cover !important;
+  background-position: center;
+  background-blend-mode: multiply;
+  vertical-align: middle;
+  text-align: center;
+  color: transparent;
+  transition: all .3s ease;
+  text-decoration: none;
+  cursor: pointer;
+  background-repeat: no-repeat;
+}
 
+.profile-pic-col:hover {
+  background-color: rgba(0,0,0,.5);
+  z-index: 10000;
+  color: #fff;
+  transition: all .3s ease;
+  text-decoration: none;
+}
 
+.profile-pic-col span {
+  display: inline-block;
+}
+
+.profile-picture input[type="file"] {
+        display: none;
+        cursor: pointer;
+}
+.profile-picture{ position: relative; display: flex; justify-content: center;}
+.edit-icon{ width: 40px; height: 40px; background: #ccc; line-height: 35px;
+  color: #000;
+  font-size: 24px;
+  font-weight: bold; bottom: 14px; border-radius: 50%; text-align: center; position: absolute;}
+  .modal-content{ border-radius: 0px !important; background: #012aa0 !important;}
+  .modal-header{ padding: 5px 1rem !important;     border-bottom: 1px solid #2654d0 !important;}
+  .btn-col{ display: flex; justify-content: center; align-items: center;}
+  .btn-col button{ border: none; border-radius: 40px; padding: 7px 20px;}
+  .btn-col .update-btn{ background: #0d0d0d; color: #fff; margin-right: 15px;}
+  .btn-col .cancel-btn{ background: #fff; color: #0d0d0d;}
+  .close{ color: #fff !important;}
+  .modal-body{ padding: 1rem 40px;}
+  .modal-header h4{ font-size: 20px;}
 
 
 

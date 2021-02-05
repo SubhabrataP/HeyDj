@@ -242,7 +242,45 @@ export default class Register extends React.Component {
                       className="invalid-feedback"
                     />
                   </div>
-
+                  <div className="row">
+                  <div className="col-md-12 package-list">
+                                <h4>Select Package</h4>
+                                <div class="custom-choose row">
+                                    <div className="col-md-3">
+                                    <input type="radio" id="opt-1" className="plan1" value="Male" name="gender"/>
+     <label for="opt-1">
+         <h2>Basic Plan<br/>Rs. 8,000</h2>
+         <h3>100 Hrs</h3>
+         <p>Category A - 25Hrs</p>
+         <p>Category B - 25Hrs</p>
+         <p>Category C - 25Hrs</p>
+     </label>
+                                    </div>
+                                    <div className="col-md-3">
+                                    <input type="radio" id="opt-2" className="plan2" value="Female" name="gender"/>
+     <label for="opt-2">
+     <h2>Basic Plan<br/>Rs. 8,000</h2>
+         <h3>100 Hrs</h3>
+         <p>Category A - 25Hrs</p>
+         <p>Category B - 25Hrs</p>
+         <p>Category C - 25Hrs</p>
+     </label>
+                                    </div>
+     
+                                    <div className="col-md-3">
+                                    <input type="radio" id="opt-3" className="plan3" value="Other" name="gender"/>
+     <label for="opt-3">
+     <h2>Basic Plan<br/>Rs. 8,000</h2>
+         <h3>100 Hrs</h3>
+         <p>Category A - 25Hrs</p>
+         <p>Category B - 25Hrs</p>
+         <p>Category C - 25Hrs</p>
+     </label>
+                                        </div>    
+     
+  </div>
+                            </div>
+                  </div>
                   <button
                     type="submit"
                     className="btn btn-primary btn-block"

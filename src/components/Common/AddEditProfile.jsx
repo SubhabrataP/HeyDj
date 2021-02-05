@@ -386,6 +386,14 @@ export default class AddEditProfile extends Component {
                                     onChange={(ev, city) => (this.setState({ city }))}
                                 />
                             </div>
+                            <div className="row" style={{ marginBottom: "5%" }}>
+                                <Label className="col-md-5" style={{ paddingLeft: "0%", paddingRight: "0%", textAlign: "center", color: "#fff", fontSize: '18px' }}>Category:</Label>
+                                <div className="col-md-6">
+                                    <select style={{width:'100%'}}>
+                                        <option>Category1</option>
+                                    </select>
+                                </div>
+                            </div>
 
                             {localStorage.getItem('Role') === "dj" ?
                                 <React.Fragment>
