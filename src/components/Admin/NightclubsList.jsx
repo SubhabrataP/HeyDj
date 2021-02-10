@@ -240,10 +240,13 @@ export default class NightClubList extends Component {
   toggleStatus = (item) => {
 
     delete item["license"]
+    delete item["profileImage"]
+    let formData = new FormData()
+    formData.append('data', JSON.stringify(...item, item.status == 1 ? 0 : 1 ))
     apiAxios
       .put(
         "/api/admin/user/nightclub/" + item.id,
-        { data: { ...item, status: item.status == 1 ? 0 : 1 } },
+        formData,
         {
           headers: {
             Authorization: localStorage.getItem("Token"),
