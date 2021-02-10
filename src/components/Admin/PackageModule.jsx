@@ -9,7 +9,7 @@ import * as Constants from "../Common/Constants"
 import { SelectDjModal } from "./SelectDjModal";
 import { Link } from "react-router-dom";
 
-export default class CategoryModule extends Component{
+export default class PackageModule extends Component{
     render(){
         return(
             <React.Fragment>
