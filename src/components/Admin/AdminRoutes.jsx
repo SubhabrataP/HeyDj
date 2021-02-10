@@ -9,6 +9,7 @@ import NightclubsList from "./NightclubsList";
 import Accounts from "./Accounts";
 import NightclubsAdminlist from "./NightclubsAdminlist";
 import CategoryModule from "./CategoryModule";
+import PackageModule from "./PackageModule";
 
 const AdminRoutes = () => {
     return (
@@ -19,6 +20,7 @@ const AdminRoutes = () => {
             <ProtectedRouteAdmin path={"/Admin/Genres"} exact component={GenreList} />
             <ProtectedRouteAdmin path={"/Admin/Featured"} exact component={FeaturedList} />
             <ProtectedRouteAdmin path={"/Admin/Accounts"} exact component={Accounts} />
+            <ProtectedRouteAdmin path={"/Admin/Package-List"} exact component={PackageModule} />
             <ProtectedRouteAdmin path={"/Admin/Night-club-admin-list"} exact component={NightclubsAdminlist} />
             <ProtectedRouteAdmin path={"/Admin/Category-module"} exact component={CategoryModule} />
             
