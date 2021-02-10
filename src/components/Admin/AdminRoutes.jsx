@@ -6,6 +6,9 @@ import DjList from "./DjList";
 import GenreList from "./GenreList";
 import FeaturedList from "./FeaturedList";
 import NightclubsList from "./NightclubsList";
+import Accounts from "./Accounts";
+import NightclubsAdminlist from "./NightclubsAdminlist";
+import CategoryModule from "./CategoryModule";
 
 const AdminRoutes = () => {
     return (
@@ -15,6 +18,10 @@ const AdminRoutes = () => {
             <ProtectedRouteAdmin path="/Admin/Nightclubs" exact component={NightclubsList} />
             <ProtectedRouteAdmin path={"/Admin/Genres"} exact component={GenreList} />
             <ProtectedRouteAdmin path={"/Admin/Featured"} exact component={FeaturedList} />
+            <ProtectedRouteAdmin path={"/Admin/Accounts"} exact component={Accounts} />
+            <ProtectedRouteAdmin path={"/Admin/Night-club-admin-list"} exact component={NightclubsAdminlist} />
+            <ProtectedRouteAdmin path={"/Admin/Category-module"} exact component={CategoryModule} />
+            
         </Switch>
     );
 };
