@@ -1,77 +1,130 @@
 import React, { Component } from "react";
 import Layout from "../Home/Layout";
-import { DetailsList, SelectionMode } from 'office-ui-fabric-react';
-import Search from '../Common/Search';
-import AddEditProfile from '../Common/AddEditProfile';
+// import { DetailsList, SelectionMode } from "office-ui-fabric-react";
+// import Search from "../Common/Search";
+// import AddEditProfile from "../Common/AddEditProfile";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
-import Popups from "../Common/Popups";
-import * as Constants from "../Common/Constants"
-import { SelectDjModal } from "./SelectDjModal";
+// import Popups from "../Common/Popups";
+// import * as Constants from "../Common/Constants";
+// import { SelectDjModal } from "./SelectDjModal";
 import { Link } from "react-router-dom";
+import AddPackage from './AddPackageModal'
+export default class PackageModule extends Component {
+  constructor() {
+    super();
+    this.state = {
+      plans: [],
+      showModal:false
+    };
+  }
 
-export default class PackageModule extends Component{
-    render(){
-        return(
-            <React.Fragment>
-                <Layout history={this.props.history}>
-                    <div className="container" style={{ marginTop: "1%" }}>
-                        <div className="row" style={{ marginBottom: "1%" }}>
-                            <h5 className={"col-md-3"}>Package</h5>
-                            <div className={"col-md-9"}>
-                                <div className="category-top">
-                                <input type="search" className="form-control custome-input" placeholder="Search Nightclubs" />
-                                <button type="button" className="categories-btn">Add Package</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="responsive-table" style={{background:'#fff'}}>
-                                <table className="table table-borderless">
-    <thead>
-      <tr>
-        <th>Package Name</th>
-        <th>Total Hrs</th>
-        <th>Category Hrs</th>
-        <th>Price</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Premium Plan</td>
-        <td>100</td>
-        <td>25 = Category A, 20 = Category B, 15 = Category C</td>
-        <td>1,00,000</td>
-        <td><Link to="" className="edit-btn">Edit</Link> <Link>Delete</Link></td>
-      </tr>
-      <tr>
-      <td>Basic Plan</td>
-        <td>100</td>
-        <td>25 = Category A, 20 = Category B, 15 = Category C</td>
-        <td>1,00,000</td>
-        <td><Link to="" className="edit-btn">Edit</Link> <Link>Delete</Link></td>
-      </tr>
-      <tr>
-      <td>Gold Plan</td>
-        <td>100</td>
-        <td>25 = Category A, 20 = Category B, 15 = Category C</td>
-        <td>1,00,000</td>
-        <td><Link to="" className="edit-btn">Edit</Link> <Link>Delete</Link></td>
-      </tr>
-    </tbody>
-  </table>
-                                </div>
-                            </div>
-                        </div>
+  componentDidMount() {
+    this.fetchPlans();
+  }
 
-                        
-                       
-                    </div>
-                   
-                </Layout>
-            </React.Fragment>
-        )
-    }
+  fetchPlans() {
+    apiAxios
+      .get("/api/admin/package", {
+        headers: {
+          Authorization: localStorage.getItem("Token"),
+        },
+      })
+      .then((res) =>
+        this.setState({
+          plans: res.data.subscriptions,
+        })
+      );
+  }
+
+  getCategoryHours(planConfig = {}) {
+    let text = [];
+    let total = 0;
+    Object.keys(planConfig).forEach(function (item) {
+      text.push(` ${planConfig[item]} - ${item}`);
+      total += Number(planConfig[item]);
+    });
+    return (
+      <>
+        <td>{total} Hours</td>
+        <td>{text.join(", ")}</td>
+      </>
+    );
+  }
+
+
+
+  onPackageAdd = (values) => {
+    console.log(values)
+  }
+
+  dismissModal = () => {
+    this.setState({showModal:false})
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Layout history={this.props.history}>
+          <div className="container" style={{ marginTop: "1%" }}>
+            <div className="row" style={{ marginBottom: "1%" }}>
+              <h5 className={"col-md-3"}>Package</h5>
+              <div className={"col-md-9"}>
+                <div className="category-top">
+                  <input
+                    type="search"
+                    className="form-control custome-input"
+                    placeholder="Search Nightclubs"
+                  />
+                  <button type="button" className="categories-btn" onClick={()=>this.setState({showModal:true})}>
+                    Add Package
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <div
+                  className="responsive-table"
+                  style={{ background: "#fff" }}
+                >
+                  <table className="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th>Package Name</th>
+                        <th>Total Hrs</th>
+                        <th>Category Hrs</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.plans &&
+                        this.state.plans.map((item) => {
+                          return (
+                            <tr>
+                              <td>{item.planName}</td>
+                              {this.getCategoryHours(item.planConfig)}
+
+                              <td>{item.cost}</td>
+                              <td>
+                                <Link to="" className="edit-btn">
+                                  Edit
+                                </Link>{" "}
+                                <Link>Delete</Link>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <AddPackage showModal={this.state.showModal} submitPackage={this.onPackageAdd} dismissModal={this.dismissModal}/>
+        </Layout>
+      </React.Fragment>
+    );
+  }
 }
-
