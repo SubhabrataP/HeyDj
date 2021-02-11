@@ -14,29 +14,41 @@ const onlyDigitRegex = RegExp(/^[0-9]{12}$/);
 const emailRegex = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.([A-Za-z]{2,})+$/);
 
 const RegisterSchema = Yup.object().shape({
-  planName: Yup.string()
+  categoryName: Yup.string()
     .trim()
     .min(1)
     .max(50)
     .required("Package Name is required"),
-  cost: Yup.string().trim().required(`Please provide a cost for this package`),
-  description: Yup.string().trim().required("Please fill in a description"),
-  planConfig: Yup.object(),
+  costPerHour: Yup.string()
+    .trim()
+    .required(`Please provide a cost for this package`),
 });
+
+let initialItem = {
+  categoryName: "",
+  costPerHour: 0,
+};
 
 export default class AddEditCategory extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
-      subscriptionItem: {
-        categoryName: ""
-      },
+      isAdd: true,
+      subscriptionItem: { ...initialItem },
     };
   }
 
-  componentWillReceiveProps = (props) => {
-      this.setState({showModal:props.showModal})
+  componentWillReceiveProps = ({
+    showModal,
+    isAdd,
+    categoryItem = { ...initialItem },
+  }) => {
+    this.setState({
+      showModal,
+      isAdd,
+      subscriptionItem: isAdd ? initialItem : categoryItem,
+    });
   };
 
   render() {
@@ -65,7 +77,7 @@ export default class AddEditCategory extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
               <h4 style={{ margin: "2%", textAlign: "left", color: "#fff" }}>
-                Package Details
+                Category Details
               </h4>
             </div>
 
@@ -74,8 +86,7 @@ export default class AddEditCategory extends Component {
                 initialValues={{ ...this.state.subscriptionItem }}
                 validationSchema={RegisterSchema}
                 onSubmit={(values) => {
-                
-                  this.props.submit(values)
+                  this.props.submit(values);
                 }}
               >
                 {({ values, touched, errors, isSubmitting }) => (
@@ -95,17 +106,17 @@ export default class AddEditCategory extends Component {
                       </Label>
                       <Field
                         type="text"
-                        name="planName"
-                        placeholder="Enter Package Name"
+                        name="categoryName"
+                        placeholder="Enter Category Name"
                         className={`form-control col-md-6 ${
-                          touched.planName && errors.planName
+                          touched.categoryName && errors.categoryName
                             ? "is-invalid"
                             : ""
                         }`}
                       />
                       <ErrorMessage
                         component="div"
-                        name="planName"
+                        name="categoryName"
                         className="invalid-feedback col-md-6 offset-md-5"
                       />
                     </div>
@@ -125,15 +136,17 @@ export default class AddEditCategory extends Component {
                       </Label>
                       <Field
                         type="text"
-                        name="cost"
+                        name="costPerHour"
                         placeholder="Enter Cost"
                         className={`form-control col-md-6 ${
-                          touched.cost && errors.cost ? "is-invalid" : ""
+                          touched.costPerHour && errors.costPerHour
+                            ? "is-invalid"
+                            : ""
                         }`}
                       />
                       <ErrorMessage
                         component="div"
-                        name="cost"
+                        name="costPerHour"
                         className="invalid-feedback col-md-6 offset-md-5"
                       />
                     </div>
@@ -142,7 +155,7 @@ export default class AddEditCategory extends Component {
                       <button
                         type="submit"
                         className="customBtn"
-                        onClick={() => this.submit(errors, values)}
+                        onClick={this.state.isAdd ? () => this.props.submit(values) : ()=>this.props.edit(values)}
                       >
                         {this.state.isAdd ? "Add" : "Update"}
                       </button>

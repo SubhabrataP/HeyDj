@@ -23,7 +23,8 @@ export default class DjList extends Component{
             alertMessage: "",
             filteredDjList: [],
             showDjModal: false,
-            alertType: ""
+            alertType: "",
+            categories:[]
         }
         this.columns= [
             {
@@ -77,6 +78,27 @@ export default class DjList extends Component{
 
         this.getAllDjsList();
     }
+
+
+    fetchCategories = () => {
+        apiAxios
+          .get("/api/admin/category", {
+            headers: {
+              Authorization: localStorage.getItem("Token"),
+            },
+          })
+          .then((res) =>
+            this.setState({
+              categories: res.data.data.subscriptions,
+            })
+          );
+      };
+
+
+      componentDidMount(){
+          this.fetchCategories()
+      }
+
 
     showDeleteAlert = (id) => {
         this.setState({
@@ -228,6 +250,7 @@ export default class DjList extends Component{
                         isAdd={this.state.isAdd}
                         roleToBeAdded={"dj"}
                         profileData={this.state.editProfileData}
+                        categories={this.state.categories}
                     />
                     <Popups
                         showModal={this.state.showAlert} 

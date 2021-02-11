@@ -35,7 +35,7 @@ export default class NightClubList extends Component {
       filteredDjList: [],
       showDjModal: false,
       alertType: "",
-      showModal:false
+      showModal: false,
     };
     this.columns = [
       {
@@ -226,7 +226,8 @@ export default class NightClubList extends Component {
     this.getAllNightclubsList();
   };
 
-  editProfile = (item) => { //used
+  editProfile = (item) => {
+    //used
     this.setState({
       isAdd: false,
       showModal: true,
@@ -270,21 +271,19 @@ export default class NightClubList extends Component {
   };
 
   toggleStatus = (item) => {
-
-    delete item["license"]
-    delete item["profileImage"]
-    let formData = new FormData()
-    formData.append('data', JSON.stringify(...item, item.status == 1 ? 0 : 1 ))
+    delete item["license"];
+    delete item["profileImage"];
+    let formData = new FormData();
+    formData.append(
+      "data",
+      JSON.stringify({ ...item, status: item.status == 1 ? 0 : 1 })
+    );
     apiAxios
-      .put(
-        "/api/admin/user/nightclub/" + item.id,
-        formData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("Token"),
-          },
-        }
-      )
+      .put("/api/admin/user/nightclub/" + item.id, formData, {
+        headers: {
+          Authorization: localStorage.getItem("Token"),
+        },
+      })
       .then((res) => {
         this.getAllNightclubsList();
         Swal.fire(
@@ -340,7 +339,7 @@ export default class NightClubList extends Component {
           </div>
           <AddEditNightclub
             showModal={this.state.showModal}
-            dismissModal={()=>this.setState({showModal:false})}
+            dismissModal={() => this.setState({ showModal: false })}
             isAdd={this.state.isAdd}
             roleToBeAdded={"nightclub"}
             profileData={this.state.editProfileData}
