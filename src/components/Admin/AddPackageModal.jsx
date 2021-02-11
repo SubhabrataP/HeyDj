@@ -141,6 +141,30 @@ export default class AddPackage extends Component {
                         className="invalid-feedback col-md-6 offset-md-5"
                       />
                     </div>
+                    
+                    <div className="row" style={{ marginBottom: "5%" }}>
+                      <Label
+                        className="col-md-5"
+                        style={{
+                          paddingLeft: "0%",
+                          paddingRight: "0%",
+                          textAlign: "center",
+                          color: "#fff",
+                          fontSize: "18px",
+                        }}
+                      >
+                        Select Package:
+                      </Label>
+                      <select className="form-control col-md-6">
+                        <option>Select1</option>
+                        <option>Select2</option>
+                      </select>
+                      <ErrorMessage
+                        component="div"
+                        name="cost"
+                        className="invalid-feedback col-md-6 offset-md-5"
+                      />
+                    </div>
 
                     <div style={{ textAlign: "center", margin: "15px 0" }}>
                       <button

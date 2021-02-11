@@ -165,6 +165,43 @@ export default class DjDashboard extends Component {
           </div>
           <div className="col-sm-8 ml-2 dj-play-list p-3">
             <h2 style={{ marginBottom: "2%" }}>My Portfolio</h2>
+            {/* 3 card add start */}
+            <div className="row card-col">
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <div className="card-body">
+                  <h3>Heading here</h3>
+                  <div className="card-bottom-text">
+                    <p>Text1</p>
+                    <p>Text2</p>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <div className="card-body">
+                  <h3>Heading here</h3>
+                  <div className="card-bottom-text">
+                    <p>Text1</p>
+                    <p>Text2</p>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <div className="card-body">
+                  <h3>Heading here</h3>
+                  <div className="card-bottom-text">
+                    <p>Text1</p>
+                    <p>Text2</p>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+             {/* 3 card add end */}
             <h4>My Videos</h4>
             <div className="row col-sm-12" style={{ marginBottom: "2%" }}>
               <Label
