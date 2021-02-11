@@ -116,6 +116,9 @@ code {
   .close{ color: #fff !important;}
   .modal-body{ padding: 1rem 40px;}
   .modal-header h4{ font-size: 20px;}
+  .card-col h3{ font-size: 20px; color: #000; margin-top: 0px;}
+  .card-bottom-text{ display: flex; justify-content: space-between;}
+  .card-bottom-text p{ font-size: 16px; color: rgb(77, 75, 75); margin: 0px;}
 
 
 
