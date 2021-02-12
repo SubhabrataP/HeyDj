@@ -9,5 +9,8 @@ export const UPDATE_SUCCESS_MESSAGE= " updated successfully!!!"
 export const DELETE_SUCCESS_MESSAGE= " deleted successfully!!!"
 
 
-export const PAY_KEY_ID= "rzp_test_ZuG4AsF333ZWT4"
+export const PAY_KEY_ID= "rzp_test_kF08P9dw2jR2oi"
+
+export const UNLIMITED_HOURS_CAP = 200;
+
 

@@ -8,6 +8,7 @@ import Popups from "../Common/Popups";
 import * as Constants from "../Common/Constants";
 import { SelectDjModal } from "./SelectDjModal";
 import Swal from "sweetalert2";
+import * as moment from "moment";
 import AddEditNightclub from "./AddEditNightclub";
 
 const sampleObject = {
@@ -73,7 +74,7 @@ export default class NightClubList extends Component {
       {
         key: "column5",
         name: "Plan",
-        fieldName: "plan",
+        fieldName: "plan_name",
         isResizable: false,
         minWidth: 125,
         maxWidth: 125,
@@ -81,7 +82,7 @@ export default class NightClubList extends Component {
       {
         key: "column6",
         name: "Valid Till",
-        fieldName: "validtill",
+        fieldName: "end_date",
         isResizable: false,
         minWidth: 125,
         maxWidth: 125,
@@ -89,7 +90,7 @@ export default class NightClubList extends Component {
       {
         key: "column7",
         name: "Total Hrs",
-        fieldName: "totalhrs",
+        fieldName: "total_hours",
         isResizable: false,
         minWidth: 125,
         maxWidth: 125,
@@ -97,7 +98,7 @@ export default class NightClubList extends Component {
       {
         key: "column8",
         name: "Hrs Used",
-        fieldName: "hrsused",
+        fieldName: "hours_used",
         isResizable: false,
         minWidth: 125,
         maxWidth: 125,
@@ -183,6 +184,79 @@ export default class NightClubList extends Component {
       });
   };
 
+  getAccounts = () => {
+    apiAxios
+      .get("/api/admin/account-tracker", {
+        headers: {
+          Authorization: localStorage.getItem("Token"),
+        },
+      })
+      .then((res) => {
+        let accounts = {};
+        res.data.subscriptions.forEach((item) => {
+          accounts[item.id] = item;
+        });
+        console.log(accounts);
+        let djDetails = [...this.state.djDetails];
+        djDetails.forEach((item) => {
+          item.account = accounts[item.id];
+          if (item.account) {
+            item["start_date"] = moment(item?.account?.startDate).format(
+              "DD/MM/YYYY"
+            );
+            item["end_date"] = moment(item?.account?.endDate).format(
+              "DD/MM/YYYY"
+            );
+            item["total_hours"] = this.getHours(item.account.plan);
+            item["hours_used"] = this.getRemainingHours(item.account.plan);
+            item["plan_name"] = item?.account?.plan?.planName;
+          } else {
+            item["start_date"] = "N/A";
+            item["end_date"] = "N/A";
+
+            item["total_hours"] = 0;
+            item["hours_used"] = 0;
+            item["plan_name"] = "N/A";
+          }
+        });
+        console.log(djDetails);
+        this.setState({ djDetails, filteredDjList: djDetails });
+      });
+  };
+
+  getHours = (item) => {
+    let unlimited = false;
+    let count = 0;
+    item.categories.forEach((element) => {
+      if (unlimited !== true) {
+        if (element.unlimited === true) {
+          unlimited = true;
+          return;
+        }
+        count += Number(element.hours);
+      }
+    });
+
+    return unlimited ? "Unlimited" : count;
+  };
+
+  getRemainingHours = (item) => {
+    let unlimited = false;
+    let count = 0;
+    item.categories.forEach((element) => {
+      if (unlimited !== true) {
+        if (element.unlimited === true) {
+          unlimited = true;
+          return;
+        }
+
+        count += (element.usedHours || 0);
+      }
+    });
+
+    return unlimited ? "Unlimited" : count;
+  };
+
   getAllNightclubsList = () => {
     apiAxios
       .get("/api/admin/user", {
@@ -197,10 +271,13 @@ export default class NightClubList extends Component {
         res.data.map((val) => {
           val.fullName = val.firstName;
         });
-        this.setState({
-          djDetails: res.data,
-          filteredDjList: res.data,
-        });
+        this.setState(
+          {
+            djDetails: res.data,
+            filteredDjList: res.data,
+          },
+          () => this.getAccounts()
+        );
       })
       .catch((error) => {
         console.log(error.response);
@@ -273,6 +350,14 @@ export default class NightClubList extends Component {
   toggleStatus = (item) => {
     delete item["license"];
     delete item["profileImage"];
+    delete item["start_date"];
+    delete item["end_date"];
+    delete item["total_hours"];
+    delete item["hours_used"];
+    delete item["plan_name"];
+    delete item["account"];
+    delete item["data"];
+
     let formData = new FormData();
     formData.append(
       "data",
@@ -293,7 +378,7 @@ export default class NightClubList extends Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        formData = null
       });
   };
 

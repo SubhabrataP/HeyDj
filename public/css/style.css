@@ -831,8 +831,8 @@ img {
 
 .menu-options {
   color: black;
-  width:100%;
-  padding:5px 10px
+  width: 100%;
+  padding: 5px 10px;
   /* border: 1px solid white; */
 }
 
@@ -841,50 +841,47 @@ img {
   padding: 10px 0;
   width: 100%;
   text-align: left;
-  font-size:18px;
-  border-bottom:1px solid #cecece;
+  font-size: 18px;
+  border-bottom: 1px solid #cecece;
 }
 
 .menu-options li:first-child {
   text-align: right;
   font-size: 20px;
-  padding-top:5px;
-  border:none
-  
+  padding-top: 5px;
+  border: none;
 }
 
 button:focus {
   display: inline-block;
 }
 
-.nightclub-options button{
-    font-size: 16px;
-    border: none;
-    background: white;
-    border-radius: 5px;
-    padding:0px
+.nightclub-options button {
+  font-size: 16px;
+  border: none;
+  background: white;
+  border-radius: 5px;
+  padding: 0px;
 }
 
-.nightclub-options button:focus{
-    display:inline-block
+.nightclub-options button:focus {
+  display: inline-block;
 }
-.nightclub-options button i{
-    padding:0px
-}
-
-.nightclub-options .fa-edit{
-
-    color:grey
+.nightclub-options button i {
+  padding: 0px;
 }
 
-.nightclub-options .fa-trash{
-    color:red
+.nightclub-options .fa-edit {
+  color: grey;
+}
+
+.nightclub-options .fa-trash {
+  color: red;
 }
 
 /* .nightclub-options .fa-check-circle, .nightclub-options .fa-times{
     color:green
 } */
-
 
 .customBtn.nightClubOptions i {
   padding: unset;
@@ -922,4 +919,25 @@ button:focus {
   text-align: center;
   background-color: #202020;
   color: #fff;
+}
+
+.add-category {
+  margin: 0 auto !important;
+  display: block !important;
+  margin-top: 10px !important;
+}
+
+.add-category::before {
+  content: "\f067";
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.active-plan {
+  border: 3px solid white;
+  transition: 0.2s all ease-in-out;
 }

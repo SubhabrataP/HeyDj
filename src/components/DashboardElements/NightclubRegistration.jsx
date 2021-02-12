@@ -7,6 +7,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import Swal from "sweetalert2";
 import Layout from "../Home/Layout";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
+import { UNLIMITED_HOURS_CAP, PAY_KEY_ID } from "../Common/Constants";
+import Loader from "../Common/Loader";
 
 const RegisterSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,16 +18,22 @@ const RegisterSchema = Yup.object().shape({
   // password: Yup.string()
   //   .min(3, "Password must be 3 characters at minimum")
   //   .required("Password is required"),
-  name: Yup.string().trim().min(5, "Name must be at least 5 characters long").required(`Please provide your Nightclub's name`),
+  name: Yup.string()
+    .trim()
+    .min(5, "Name must be at least 5 characters long")
+    .required(`Please provide your Nightclub's name`),
   contact: Yup.string()
     .required()
     .matches(/^[0-9]+$/, "Must be only digits")
     .min(10, "Must be exactly 10 digits")
     .max(10, "Must be exactly 10 digits"),
   // bio: Yup.string().trim().required("Please fill in your bio"),
-  address: Yup.string().min(10,"Address mnust be at least 10 characters").trim().required("Please fill in your address"),
+  address: Yup.string()
+    .min(10, "Address must be at least 10 characters")
+    .trim()
+    .required("Please fill in your address"),
   licenseno: Yup.string().required("Your Nighclub License number is mandatory"),
-  city:Yup.string().required("Please enter your city")
+  city: Yup.string().required("Please enter your city"),
   // license: Yup.mixed().required(),
 });
 
@@ -35,12 +43,26 @@ export default class Register extends React.Component {
 
     this.state = {
       file: null,
+      plans: [],
+      selectedPlan: null,
+      loading: false,
     };
   }
 
+  componentDidMount() {
+    this.fetchPlans();
+  }
+
+  fetchPlans() {
+    apiAxios.get("/api/plans").then((res) =>
+      this.setState({
+        plans: res.data.plans,
+        // count: res.data.data.count,
+      })
+    );
+  }
   addNightClub = (values) => {
-
-
+    this.setState({ loading: true });
     let details = {
       firstName: values.name,
       emailId: values.email,
@@ -48,36 +70,118 @@ export default class Register extends React.Component {
       address: values.address,
       licenseno: values.licenseno,
       role: "nightclub",
-      city:values.city
+      city: values.city,
     };
 
-    let formData = new FormData()
-    formData.append('data', JSON.stringify(details))
-    formData.append('license', this.state.file) 
+    let formData = new FormData();
+    formData.append("data", JSON.stringify(details));
+    formData.append("license", this.state.file);
 
     apiAxios
       .post("/api/user/nightclub", formData)
       .then((response) => {
-        if(response.data.status === 200 ) {
-          return Swal.fire("","Account registered successfully", "success")
-          .then(()=>{
-            this.props.history.push('/')
-          })
+        if (response.data.status === 200) {
+          this.getTransactionDetails(response.data, values);
+        } else {
+          return Swal.fire("", response.data.message, "info");
         }
-        else{
-          return Swal.fire("", response.data.message, "info")
-        }
-
-        
       })
       .catch((error) => {
-          return Swal.fire("",error.message,"info" )
+        return Swal.fire("", error.message, "info");
+      });
+  };
+
+  getCost = (plan) => {
+    let count = Number(plan.additionalCost) || 0;
+    plan.categories.forEach((element) => {
+      count +=
+        Number(element.costPerHour) *
+        (element.unlimited == true
+          ? Number(UNLIMITED_HOURS_CAP)
+          : Number(element.hours));
+    });
+    return count;
+  };
+
+  getHours = (item) => {
+    let unlimited = false;
+    let count = 0;
+    item.categories.forEach((element) => {
+      if (unlimited !== true) {
+        if (element.unlimited === true) {
+          unlimited = true;
+          return;
+        }
+        count += Number(element.hours);
+      }
+    });
+
+    return unlimited ? "Unlimited" : count;
+  };
+
+  verifyPayment = (order_id, user_id, payment_successfull) => {
+    apiAxios
+      .post("/api/payment/verify-subscription", {
+        success: payment_successfull,
+        order_id,
+        user_id,
+      })
+      .then((res) => {
+        return Swal.fire(
+          "Success",
+          "Account successfully registered",
+          "success"
+        ).then(() => {
+          this.setState({ loading: false });
+          this.props.history.push("/");
+        });
+      })
+      .catch((err) =>
+        Swal.fire("Failed", err.message, "warning").then(() =>
+          this.setState({ loading: false })
+        )
+      );
+  };
+
+  paySubscriptionFees = (values, name, user_id) => {
+    console.log("opening rzp");
+    let options = {
+      key: PAY_KEY_ID,
+      amount: values.amount_due,
+      name: name,
+      order_id: values.id,
+      handler: function (response) {
+        this.verifyPayment(values.id, user_id, true);
+      }.bind(this),
+      theme: {
+        color: "#F37254",
+      },
+    };
+
+    let rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
+  getTransactionDetails = (details, values) => {
+    console.log(details);
+    let data = {
+      user_id: details.id,
+      planId: this.state.selectedPlan.id,
+      cost: this.getCost(this.state.selectedPlan),
+    };
+    apiAxios
+      .put(`/api/playlist/nightclub/${data.user_id}/subscribe`, data)
+      .then((res) => {
+        let { transactionDetails } = res.data;
+        this.paySubscriptionFees(transactionDetails, values.name, details.id);
       });
   };
 
   render() {
     return (
       <Layout history={this.props.history}>
+        <Loader isLoading={this.state.loading} />
+
         <div
           className="container"
           style={{ marginTop: "1%", marginBottom: "2%" }}
@@ -88,7 +192,7 @@ export default class Register extends React.Component {
             </div>
 
             <Formik
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ email: "" }}
               validationSchema={RegisterSchema}
               onSubmit={(values) => {
                 console.log(values);
@@ -98,8 +202,9 @@ export default class Register extends React.Component {
                     "Please upload your license for verification",
                     "info"
                   );
+                } else {
+                  this.addNightClub(values);
                 }
-                this.addNightClub(values);
               }}
             >
               {({ touched, errors, isSubmitting }) => (
@@ -243,43 +348,57 @@ export default class Register extends React.Component {
                     />
                   </div>
                   <div className="row">
-                  <div className="col-md-12 package-list">
-                                <h4>Select Package</h4>
-                                <div class="custom-choose row">
-                                    <div className="col-md-3">
-                                    <input type="radio" id="opt-1" className="plan1" value="Male" name="gender"/>
-     <label for="opt-1">
-         <h2>Basic Plan<br/>Rs. 8,000</h2>
-         <h3>100 Hrs</h3>
-         <p>Category A - 25Hrs</p>
-         <p>Category B - 25Hrs</p>
-         <p>Category C - 25Hrs</p>
-     </label>
-                                    </div>
-                                    <div className="col-md-3">
-                                    <input type="radio" id="opt-2" className="plan2" value="Female" name="gender"/>
-     <label for="opt-2">
-     <h2>Basic Plan<br/>Rs. 8,000</h2>
-         <h3>100 Hrs</h3>
-         <p>Category A - 25Hrs</p>
-         <p>Category B - 25Hrs</p>
-         <p>Category C - 25Hrs</p>
-     </label>
-                                    </div>
-     
-                                    <div className="col-md-3">
-                                    <input type="radio" id="opt-3" className="plan3" value="Other" name="gender"/>
-     <label for="opt-3">
-     <h2>Basic Plan<br/>Rs. 8,000</h2>
-         <h3>100 Hrs</h3>
-         <p>Category A - 25Hrs</p>
-         <p>Category B - 25Hrs</p>
-         <p>Category C - 25Hrs</p>
-     </label>
-                                        </div>    
-     
-  </div>
+                    <div className="col-md-12 package-list">
+                      <h4>Select Package</h4>
+                      <div class="custom-choose row">
+                        {(this.state.plans || []).map((item) => {
+                          return (
+                            <div
+                              className={`col-md-3`}
+                              key={item.id}
+                              onClick={() =>
+                                this.setState({ selectedPlan: item })
+                              }
+                            >
+                              <input
+                                type="radio"
+                                id={`opt-${item.id}`}
+                                className="plan1"
+                                value={item.id}
+                                name={item.planName}
+                              />
+                              <label
+                                for="opt-1"
+                                className={`${
+                                  this.state.selectedPlan?.id == item.id
+                                    ? "active-plan"
+                                    : ""
+                                }`}
+                              >
+                                <h2>
+                                  {item.planName}
+                                  <br />
+                                  Rs. {this.getCost(item)}
+                                </h2>
+
+                                <h3>{this.getHours(item)} Hrs</h3>
+                                {item.categories.map((item) => {
+                                  return (
+                                    <p>
+                                      {item.categoryName}:{" "}
+                                      {item.unlimited == true
+                                        ? "Unlimited"
+                                        : item.hours}{" "}
+                                      Hrs
+                                    </p>
+                                  );
+                                })}
+                              </label>
                             </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                   <button
                     type="submit"

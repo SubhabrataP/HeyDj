@@ -21,6 +21,7 @@
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-google-charts": "^3.0.15",
+    "react-loading": "^2.0.3",
     "react-phone-input-2": "^2.13.5",
     "react-player": "^2.5.0",
     "react-router": "^5.2.0",
