@@ -180,7 +180,7 @@ export default class Register extends React.Component {
   render() {
     return (
       <Layout history={this.props.history}>
-        <Loader isLoading={this.state.loading} />
+       {this.state.loading &&  <div className="registration-loader-container"><Loader isLoading={this.state.loading} /></div>}
 
         <div
           className="container"
