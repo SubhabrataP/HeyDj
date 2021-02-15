@@ -33,7 +33,7 @@ const AdminRoutes = () => {
         component={Accounts}
       />
       <ProtectedRouteAdmin
-        path={"/Admin/Package-List"}
+        path={"/Admin/Packages"}
         exact
         component={PackageModule}
       />
@@ -43,7 +43,7 @@ const AdminRoutes = () => {
         component={NightclubsAdminlist}
       />
       <ProtectedRouteAdmin
-        path={"/Admin/Category-module"}
+        path={"/Admin/Categories"}
         exact
         component={CategoryModule}
       />

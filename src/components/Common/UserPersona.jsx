@@ -29,11 +29,11 @@ export default class UserPersona extends Component {
       showNightClubModal: false,
       editProfileData: {},
     };
-    if (
-      !(localStorage.getItem("Token") === null) &&
-      this.state.userData === ""
-    ) {
-      localStorage.getItem('Role') == "Admin" ? this.onEditProfile(): this.onEditNightclub();
+
+    this.token = localStorage.getItem("Token");
+    this.userRole = localStorage.getItem("Role")?.toLowerCase() || null;
+    if (!(this.token === null) && this.state.userData === "") {
+      this.userRole == "admin" ? this.onEditProfile() : this.onEditNightclub();
     }
   }
 
@@ -82,7 +82,7 @@ export default class UserPersona extends Component {
     apiAxios
       .get("/api/user/" + localStorage.getItem("Id"), {
         headers: {
-          Authorization: localStorage.getItem("Token"),
+          Authorization: this.token,
         },
       })
       .then((res) => {
@@ -113,13 +113,16 @@ export default class UserPersona extends Component {
     apiAxios
       .get("/api/user/" + localStorage.getItem("Id"), {
         headers: {
-          Authorization: localStorage.getItem("Token"),
+          Authorization: this.token,
         },
       })
       .then((res) => {
         this.setState({
           editProfileData: res.data,
-          userData:{...this.state.userData, profileImage:res.data.profileImage}
+          userData: {
+            ...this.state.userData,
+            profileImage: res.data.profileImage,
+          },
         });
       })
       .catch((error) => {
@@ -131,6 +134,31 @@ export default class UserPersona extends Component {
     localStorage.clear();
     this.props.history.push("/");
     window.location.reload();
+  };
+
+  renderOtherAdminOptions = () => {
+    if (this.userRole == "admin") {
+      return (
+        <>
+          <hr />
+          <span
+            role="listitem"
+            className="loginDropdown"
+            onClick={() => this.props.history.push('/Admin/Categories') }
+          >
+            DJ Categories
+          </span>
+          <hr />
+          <span
+            role="listitem"
+            className="loginDropdown"
+            onClick={() => this.props.history.push('/Admin/Packages')}
+          >
+            Nightclub Plans
+          </span>
+        </>
+      );
+    }
   };
 
   render() {
@@ -160,19 +188,22 @@ export default class UserPersona extends Component {
             className="p-4"
           >
             <span role="list">
-              {localStorage.getItem("Token") ? (
+              {this.token ? (
                 <React.Fragment>
                   <span
                     role="listitem"
                     className="loginDropdown"
                     onClick={() =>
-                      localStorage.getItem("Role") == "nightclub"
-                        ? this.setState({ showNightClubModal: true }, ()=>this.onEditNightclub())
+                      this.userRole == "nightclub"
+                        ? this.setState({ showNightClubModal: true }, () =>
+                            this.onEditNightclub()
+                          )
                         : this.onEditProfile()
                     }
                   >
                     Edit Profile
                   </span>
+                  {this.renderOtherAdminOptions()}
                   <hr />
                   <span
                     className="loginDropdown"
@@ -228,7 +259,7 @@ export default class UserPersona extends Component {
           showModal={this.state.showEditProfile}
           dismissModalProps={() => this.onDismissFromProps()}
           isAdd={false}
-          roleToBeAdded={localStorage.getItem("Role")}
+          roleToBeAdded={this.userRole}
           profileData={this.state.userData}
         />
 

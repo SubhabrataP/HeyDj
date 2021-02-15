@@ -232,7 +232,9 @@ export default class AddEditProfile extends Component {
       this.state.mobileError == "" &&
       this.state.firstNameError == "" &&
       this.state.emailError == "" &&
-      this.state.selectedCategory !== null
+      (this.props.roleToBeAdded == "Dj" && this.state.selectedCategory !== null
+        ? false
+        : true)
     ) {
       isValid = true;
     } else {
@@ -278,7 +280,7 @@ export default class AddEditProfile extends Component {
                   : error.response.data
               );
 
-              Swal.fire("Failed", error.response.data.error, "warning")
+              Swal.fire("Failed", error.response.data.error, "warning");
             }
           });
       } else {
@@ -290,10 +292,10 @@ export default class AddEditProfile extends Component {
               },
             })
             .then((res) => {
-                if (res.status == 201) {
-                    Swal.fire("Success", "Dj edited successfully", "success");
-                    this.onDismiss();
-                  }
+              if (res.status == 201) {
+                Swal.fire("Success", "Dj edited successfully", "success");
+                this.onDismiss();
+              }
             })
             .catch((error) => {
               console.log(
