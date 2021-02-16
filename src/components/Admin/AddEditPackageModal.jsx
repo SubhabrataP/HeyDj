@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { Label } from "office-ui-fabric-react/lib/Label";
 import _ from "lodash";
 
-import {UNLIMITED_HOURS_CAP} from '../Common/Constants'
+import { UNLIMITED_HOURS_CAP } from "../Common/Constants";
 const onlyDigitRegex = RegExp(/^[0-9]{12}$/);
 const emailRegex = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.([A-Za-z]{2,})+$/);
 
@@ -36,6 +36,8 @@ export default class AddPackage extends Component {
       subscriptionItem: {
         planName: "",
         additionalCost: 0,
+        description: "",
+        finalCost: 0,
       },
       selectedCategories: [],
       isAdd: true,
@@ -43,14 +45,15 @@ export default class AddPackage extends Component {
   }
 
   componentWillReceiveProps = (props) => {
-
     const getCategories = () => {
       let categories = props.selectedItem.categories.map((item) => {
-        let {costPerHour} = props.categories.filter(element=>element.id == item.category)[0]
-        return {...item, costPerHour}
-    })
-    return categories
-  }
+        let { costPerHour } = props.categories.filter(
+          (element) => element.id == item.category
+        )[0];
+        return { ...item, costPerHour };
+      });
+      return categories;
+    };
     this.setState({
       showModal: props.showModal,
       categories: props.categories,
@@ -64,7 +67,6 @@ export default class AddPackage extends Component {
       selectedCategories: props.isAdd ? [] : getCategories(),
     });
   };
-  
 
   renderCategories = () => {
     return this.state.categories.map((item) => {
@@ -148,6 +150,22 @@ export default class AddPackage extends Component {
     this.setState({ selectedCategories });
   };
 
+  deleteCategory = (id) => {
+    console.log(id);
+    let selectedCategories = this.state.selectedCategories.filter(
+      (item) => item.category !== id
+    );
+    this.setState({ selectedCategories });
+  };
+
+  checkDisabled = (isFinalCost = false) => {
+    let isDisabled = false;
+    this.state.selectedCategories.forEach((element) => {
+      if (element.unlimited == true) isDisabled = true;
+    });
+    return isFinalCost ? !isDisabled : isDisabled;
+  };
+
   render() {
     let cost = 0;
     this.state.selectedCategories.forEach((item) => {
@@ -226,7 +244,35 @@ export default class AddPackage extends Component {
                         className="invalid-feedback col-md-6 offset-md-5"
                       />
                     </div>
-
+                    <div className="row" style={{ marginBottom: "5%" }}>
+                      <Label
+                        className="col-md-5"
+                        style={{
+                          paddingLeft: "0%",
+                          paddingRight: "0%",
+                          textAlign: "center",
+                          color: "#fff",
+                          fontSize: "18px",
+                        }}
+                      >
+                        Package Description:
+                      </Label>
+                      <Field
+                        as="textarea"
+                        name="description"
+                        placeholder="Enter description"
+                        className={`form-control col-md-6 ${
+                          touched.description && errors.description
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                      <ErrorMessage
+                        component="div"
+                        name="description"
+                        className="invalid-feedback col-md-6 offset-md-5"
+                      />
+                    </div>
                     <div className="row" style={{ marginBottom: "5%" }}>
                       <Label
                         className="col-md-5"
@@ -242,6 +288,7 @@ export default class AddPackage extends Component {
                       </Label>
                       <Field
                         type="text"
+                        disabled={this.checkDisabled()}
                         name="additionalCost"
                         placeholder="Enter Cost"
                         className={`form-control col-md-6 ${
@@ -314,6 +361,12 @@ export default class AddPackage extends Component {
                                 <label for={`unlimited-${index}`}>
                                   Unlimited
                                 </label>
+                                <i
+                                  className="fa fa-minus delete-category"
+                                  onClick={() =>
+                                    this.deleteCategory(item.category)
+                                  }
+                                ></i>
                               </div>
                             </React.Fragment>
                           );
@@ -364,9 +417,14 @@ export default class AddPackage extends Component {
                       {console.log(values)}
                       <Field
                         type="number"
-                        disabled
+                        name="finalCost"
+                        disabled={this.checkDisabled(true)}
                         placeholder="Final Cost"
-                        value={cost + Number(values.additionalCost)}
+                        value={
+                          this.checkDisabled()
+                            ? values.finalCost
+                            : cost + Number(values.additionalCost)
+                        }
                         className={`form-control col-md-6 `}
                       />
                     </div>
@@ -382,11 +440,13 @@ export default class AddPackage extends Component {
                             ? () =>
                                 this.props.submitPackage({
                                   ...values,
+                                  finalCost: values.finalCost,
                                   categories: this.state.selectedCategories,
                                 })
                             : () =>
                                 this.props.editPackage({
                                   ...values,
+                                  finalCost: values.finalCost,
                                   categories: this.state.selectedCategories,
                                 })
                         }

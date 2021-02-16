@@ -1,12 +1,6 @@
 import React, { Component } from "react";
 import Layout from "../Home/Layout";
-// import { DetailsList, SelectionMode } from "office-ui-fabric-react";
-// import Search from "../Common/Search";
-// import AddEditProfile from "../Common/AddEditProfile";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
-// import Popups from "../Common/Popups";
-// import * as Constants from "../Common/Constants";
-// import { SelectDjModal } from "./SelectDjModal";
 import { Link } from "react-router-dom";
 import AddEditPackage from "./AddEditPackageModal";
 import Swal from "sweetalert2";
@@ -121,17 +115,26 @@ export default class PackageModule extends Component {
   getCost(plan) {
     if (this.state.categories.length !== 0) {
       let count = Number(plan.additionalCost) || 0;
+      let unlimited = false;
       plan.categories.forEach((element) => {
-        console.log(element);
-        let catIndex = this.state.categories.findIndex((item) => {
-          if (item.id == element.category) return item;
-        });
-        let costPerHour = this.state.categories[catIndex].costPerHour;
+        if (unlimited) {
+          return;
+        } else {
+          if (element.unlimited == true) {
+            count = plan.finalCost;
+            return;
+          }
+          console.log(element);
+          let catIndex = this.state.categories.findIndex((item) => {
+            if (item.id == element.category) return item;
+          });
+          let costPerHour = this.state.categories[catIndex].costPerHour;
 
-        let hours =
-          element.unlimited == true ? UNLIMITED_HOURS_CAP : element?.hours;
+          let hours =
+            element.unlimited == true ? UNLIMITED_HOURS_CAP : element?.hours;
 
-        count += Number(costPerHour) * Number(hours);
+          count += Number(costPerHour) * Number(hours);
+        }
       });
       return count;
     }

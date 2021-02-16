@@ -22,6 +22,11 @@ export default class MusicPlayer extends Component {
       isPay: false,
       paymentDetails: "",
       djName: "",
+      djCategory: {
+        name: "",
+        id: "",
+      },
+      buttonClick: true,
     };
 
     this.subscriptionHours = [
@@ -30,12 +35,32 @@ export default class MusicPlayer extends Component {
       { id: 8, name: 8 },
       { id: 12, name: 12 },
       { id: 24, name: 24 },
+      { id: 36, name: 36 },
     ];
   }
 
   UNSAFE_componentWillReceiveProps() {
     this.getDjName();
   }
+
+  componentDidMount() {
+    if (localStorage.getItem("Role") == "nightclub") {
+      this.getAccountTracker();
+    }
+  }
+
+  getAccountTracker = () => {
+    let account = localStorage.getItem("account");
+    if (account) {
+      let plan = JSON.parse(account).plan;
+      let obj = {};
+      plan.categories.forEach((element) => {
+        obj[element.category] = element;
+      });
+      plan.categories = obj;
+      this.setState({ plan });
+    }
+  };
 
   getDjName = () => {
     if (this.props.playlistData !== undefined) {
@@ -44,6 +69,10 @@ export default class MusicPlayer extends Component {
         .then((res) => {
           this.setState({
             djName: res.data.firstName + " " + res.data.lastName,
+            djCategory: {
+              name: res.data.category.name,
+              id: res.data.category.id,
+            },
           });
         })
         .catch((error) => {
@@ -167,7 +196,7 @@ export default class MusicPlayer extends Component {
 
         apiAxios
           .put(
-            "/api/playlist/" + this.props.playlistData.id + "/subscribe",
+            "/api/playlist/" + this.props.playlistData.id + "/subscribe?wallet=false",
             {
               hours: this.state.selectedHours,
               dateTime: dateTime,
@@ -193,7 +222,7 @@ export default class MusicPlayer extends Component {
           .put(
             "/api/playlist/" +
               this.props.playlistData.id +
-              "/subscribe?now=true",
+              "/subscribe?now=true&wallet=false",
             {
               hours: this.state.selectedHours,
             },
@@ -214,6 +243,101 @@ export default class MusicPlayer extends Component {
             console.log(error);
           });
       }
+    }
+  };
+
+  deductFromWallet = () => {
+    apiAxios
+      .put(
+        "/api/playlist/" +
+          this.props.playlistData.id +
+          "/subscribe?now=true&wallet=true",
+        {
+          hours: this.state.selectedHours,
+          category: this.state.djCategory.id,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("Token"),
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          this.setState({
+            showAlert: true,
+            alertMessage: "You have successfully subscribed to this playlist!",
+            redirect: true,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  renderBuyingOptions = () => {
+    if (localStorage.getItem("Role") == "nightclub") {
+      let shouldPay = false; //Should pay if total used hours >= total allowed hours
+      let plan = { ...this.state.plan };
+      let chosenCategory = plan.categories[this.state.djCategory.id];
+      if (chosenCategory == undefined) {
+        shouldPay = false;
+      } else {
+        if (chosenCategory.unlimited == true) shouldPay = false;
+        if (!chosenCategory.used) chosenCategory.used = 0;
+        if (
+          Number(chosenCategory.used) + Number(this.state.selectedHours) >
+          Number(chosenCategory.hours)
+        ) {
+          shouldPay = true;
+        }
+
+        console.log(
+          Number(chosenCategory.used),
+          Number(this.state.selectedHours),
+          Number(chosenCategory.hours)
+        );
+        console.log("SHOULD PAY", shouldPay);
+      }
+
+      if (shouldPay == false) {
+        return (
+          <button
+            className="customBtn"
+            style={{ marginTop: "2%" }}
+            onClick={() => {
+              this.deductFromWallet();
+            }}
+          >
+            Deduct from wallet
+          </button>
+        );
+      } else {
+        return (
+          <button
+            className="customBtn"
+            style={{ marginTop: "2%" }}
+            onClick={() => {
+              this.continueToPay();
+            }}
+          >
+            {this.state.isPay ? "Pay" : "Continue To Pay"}
+          </button>
+        );
+      }
+    } else {
+      return (
+        <button
+          className="customBtn"
+          style={{ marginTop: "2%" }}
+          onClick={() => {
+            this.continueToPay();
+          }}
+        >
+          {this.state.isPay ? "Pay" : "Continue To Pay"}
+        </button>
+      );
     }
   };
 
@@ -258,6 +382,12 @@ export default class MusicPlayer extends Component {
                   <b>
                     <span style={{ color: "#6eb1c2" }}>DJ Name: </span>
                     {this.state.djName}
+                  </b>
+                </h6>
+                <h6>
+                  <b>
+                    <span style={{ color: "#6eb1c2" }}>DJ Category: </span>
+                    {this.state.djCategory.name}
                   </b>
                 </h6>
                 <h6>
@@ -323,6 +453,30 @@ export default class MusicPlayer extends Component {
                         ) : (
                           <React.Fragment>
                             <h5>Subscription Details</h5>
+                            {localStorage.getItem("Role") == "nightclub" && (
+                              <h6>
+                                <b>
+                                  <span style={{ color: "#6eb1c2" }}>
+                                    Your Remaining Hours:{" "}
+                                  </span>
+                                  {this.state?.plan?.categories[
+                                    this.state.djCategory.id
+                                  ].unlimited == true
+                                    ? "Unlimited"
+                                    : Number(
+                                        this.state?.plan?.categories[
+                                          this.state.djCategory.id
+                                        ].hours
+                                      ) -
+                                      Number(
+                                        this.state?.plan?.categories[
+                                          this.state.djCategory.id
+                                        ].used || 0
+                                      )}
+                                  <span style={{ color: "white" }}> Hours</span>
+                                </b>
+                              </h6>
+                            )}
                             {this.state.subscribeLater ? (
                               <h6>
                                 <b>
@@ -380,15 +534,7 @@ export default class MusicPlayer extends Component {
                         )}
                       </div>
 
-                      <button
-                        className="customBtn"
-                        style={{ marginTop: "2%" }}
-                        onClick={() => {
-                          this.continueToPay();
-                        }}
-                      >
-                        {this.state.isPay ? "Pay" : "Continue To Pay"}
-                      </button>
+                      {this.renderBuyingOptions()}
                     </div>
                   </React.Fragment>
                 ) : (
@@ -421,9 +567,15 @@ export default class MusicPlayer extends Component {
           showModal={this.state.showAlert}
           message={this.state.alertMessage}
           isMultiButton={false}
-          button1Click={() => {
-            this.alertOkClick();
-          }}
+          button1Click={
+            this.state.redirect == true
+              ? () => {
+                  this.props.history.push("/nightclub/MySubscriptions");
+                }
+              : () => {
+                  this.alertOkClick();
+                }
+          }
         />
       </React.Fragment>
     );

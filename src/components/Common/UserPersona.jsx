@@ -117,6 +117,7 @@ export default class UserPersona extends Component {
         },
       })
       .then((res) => {
+        localStorage.setItem('account', JSON.stringify(res.data.account))
         this.setState({
           editProfileData: res.data,
           userData: {

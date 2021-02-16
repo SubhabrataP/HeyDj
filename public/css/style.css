@@ -938,8 +938,8 @@ button:focus {
 }
 
 .active-plan {
-  border: 3px solid white;
-  transition: 0.2s all ease-in-out;
+  border: 2px solid white;
+  background: black !important;
 }
 
 .registration-loader-container {
@@ -959,4 +959,20 @@ button:focus {
 
 .registration-loader-container > div {
   margin:0 auto
+}
+.nightclub-wallet .plan-name{
+  font-size:24px
+}
+
+.nightclub-wallet p {
+  font-size:20px
+}
+
+.delete-category::before{
+  color: red;
+  content: "\f068";
+  border: 2px solid white;
+  border-radius: 50%;
+  padding: 0px 2px;
+  cursor: pointer;
 }

@@ -93,12 +93,21 @@ export default class Register extends React.Component {
 
   getCost = (plan) => {
     let count = Number(plan.additionalCost) || 0;
+    let unlimited = false;
     plan.categories.forEach((element) => {
-      count +=
-        Number(element.costPerHour) *
-        (element.unlimited == true
-          ? Number(UNLIMITED_HOURS_CAP)
-          : Number(element.hours));
+      if (unlimited) {
+        return;
+      } else {
+        if (element.unlimited == true) {
+          count = plan.finalCost;
+        } else {
+          count +=
+            Number(element.costPerHour) *
+            (element.unlimited == true
+              ? Number(UNLIMITED_HOURS_CAP)
+              : Number(element.hours));
+        }
+      }
     });
     return count;
   };
@@ -180,7 +189,11 @@ export default class Register extends React.Component {
   render() {
     return (
       <Layout history={this.props.history}>
-       {this.state.loading &&  <div className="registration-loader-container"><Loader isLoading={this.state.loading} /></div>}
+        {this.state.loading && (
+          <div className="registration-loader-container">
+            <Loader isLoading={this.state.loading} />
+          </div>
+        )}
 
         <div
           className="container"

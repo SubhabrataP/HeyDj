@@ -3,6 +3,7 @@ import { Switch } from "react-router-dom";
 import { ProtectedRouteNightclub } from "../Util/ProtectedRoute";
 import NightClubDashboard from "../Nightclubs/NightclubDashboard";
 import UserSubscriptions from "../Users/RegisteredUser/UserSubscriptions";
+import NightclubWallet from '../Nightclubs/NightclubWallet'
 // import GuestUserDashboard from "../Users/GuestUser/GuestUserDashboard";
 
 const DjRoutes = () => {
@@ -17,6 +18,11 @@ const DjRoutes = () => {
         path="/nightclub/MySubscriptions"
         exact
         component={UserSubscriptions}
+      />
+       <ProtectedRouteNightclub
+        path="/nightclub/my-wallet"
+        exact
+        component={NightclubWallet}
       />
     </Switch>
   );

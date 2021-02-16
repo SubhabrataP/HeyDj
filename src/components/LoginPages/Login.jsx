@@ -7,10 +7,11 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import "../Styles/Icons.css";
 import Swal from "sweetalert2";
+import { UserState } from "../Util/store";
 
 const onlyDigitRegex = RegExp(/^[0-9]+$/);
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +25,12 @@ export default class Login extends Component {
       },
       isSendOTPDisabled: false,
     };
+
+    this.userContext = null
+  }
+
+  componentDidMount(){
+    this.userContext = this.context
   }
 
   isFormValid = () => {
@@ -155,17 +162,28 @@ export default class Login extends Component {
                 response.data.role === undefined ? null : response.data.role
               );
               localStorage.setItem("Token", response.headers["x-auth-token"]);
+              try{
+                console.log(this.userContext)
+                this.userContext.handleUserUpdate({
+                  userRole:
+                    response.data.role === undefined ? null : response.data.role,
+                  userToken: response.headers["x-auth-token"],
+                });
+              }
+              catch(err){
+                console.log(err)
+              }
+              this.onDismiss();
+              response.data.role === "dj"
+                ? this.props.history.push("/Dj")
+                : response.data.role == "nightclub"
+                ? this.props.history.push("/Nightclub")
+                : this.props.history.push("/User");
             }
           }
-          this.onDismiss();
-          response.data.role === "dj"
-            ? this.props.history.push("/Dj")
-            : response.data.role == "nightclub"
-            ? this.props.history.push("/Nightclub")
-            : this.props.history.push("/User");
         })
         .catch((error) => {
-          console.log(error.response.data);
+          return Swal.fire("", "Account could not be found", "info");
         });
     }
   };
@@ -296,3 +314,7 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.contextType = UserState;
+
+export default Login;

@@ -22,8 +22,7 @@ export default class UserHeaderNavLinks extends Component {
                         }}>
                         My Subscriptions
                     </Link>
-                    <Link to={{ pathname: "/" }}
-                        href="#"
+                    <Link to={{ pathname: "/nightclub/my-wallet" }}
                         style={{
                             textDecoration: 'none'
                         }}>
