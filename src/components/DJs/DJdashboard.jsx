@@ -27,7 +27,10 @@ export default class DjDashboard extends Component {
 
   componentDidMount() {
     this.getDjPortfolio();
+ 
   }
+
+
 
   getDjPortfolio = () => {
     apiAxios
@@ -38,7 +41,7 @@ export default class DjDashboard extends Component {
       })
       .then((res) => {
         if (res.data) {
-          if (res.data.spotify) {
+          if (res.data.spotify.spotify) {
             if (
               res.data.spotify.indexOf("https://open.spotify.com/embed/") === -1
             ) {
@@ -51,7 +54,9 @@ export default class DjDashboard extends Component {
             }
           }
           this.setState({
-            portfolioData: res.data,
+            portfolioData: res.data.spotify,
+            totalHoursSubscribed: res.data.totalHoursSubscribed,
+            revenueEarned: res.data.revenueEarned,
           });
         }
       })
@@ -170,15 +175,24 @@ export default class DjDashboard extends Component {
               <div className="col-md-4">
                 <div className="card mb-3">
                   <div className="card-body">
-                  <h3>Heading here</h3>
+                  <h3>Total Hours Subscribed</h3>
                   <div className="card-bottom-text">
-                    <p>Text1</p>
-                    <p>Text2</p>
+                    <p>{this.state.totalHoursSubscribed || 0}</p>
                   </div>
                   </div>
                 </div>
               </div>
               <div className="col-md-4">
+                <div className="card mb-3">
+                  <div className="card-body">
+                  <h3>Total Revenue Earned</h3>
+                  <div className="card-bottom-text">
+                    <p>{this.state.revenueEarned || 0}</p>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              {/* <div className="col-md-4">
                 <div className="card mb-3">
                   <div className="card-body">
                   <h3>Heading here</h3>
@@ -188,18 +202,7 @@ export default class DjDashboard extends Component {
                   </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card mb-3">
-                  <div className="card-body">
-                  <h3>Heading here</h3>
-                  <div className="card-bottom-text">
-                    <p>Text1</p>
-                    <p>Text2</p>
-                  </div>
-                  </div>
-                </div>
-              </div>
+              </div> */}
             </div>
              {/* 3 card add end */}
             <h4>My Videos</h4>
