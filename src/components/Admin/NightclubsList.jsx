@@ -250,7 +250,7 @@ export default class NightClubList extends Component {
           return;
         }
 
-        count += (element.usedHours || 0);
+        count += (element.used || 0);
       }
     });
 
