@@ -41,7 +41,7 @@ export default class DjDashboard extends Component {
       })
       .then((res) => {
         if (res.data) {
-          if (res.data.spotify.spotify) {
+          if (res.data.portfolio.spotify) {
             if (
               res.data.spotify.indexOf("https://open.spotify.com/embed/") === -1
             ) {
@@ -54,7 +54,7 @@ export default class DjDashboard extends Component {
             }
           }
           this.setState({
-            portfolioData: res.data.spotify,
+            portfolioData: res.data.portfolio,
             totalHoursSubscribed: res.data.totalHoursSubscribed,
             revenueEarned: res.data.revenueEarned,
           });
@@ -177,7 +177,7 @@ export default class DjDashboard extends Component {
                   <div className="card-body">
                   <h3>Total Hours Subscribed</h3>
                   <div className="card-bottom-text">
-                    <p>{this.state.totalHoursSubscribed || 0}</p>
+                    <p>{this.state.totalHoursSubscribed || 0} Hours</p>
                   </div>
                   </div>
                 </div>
@@ -187,7 +187,7 @@ export default class DjDashboard extends Component {
                   <div className="card-body">
                   <h3>Total Revenue Earned</h3>
                   <div className="card-bottom-text">
-                    <p>{this.state.revenueEarned || 0}</p>
+                    <p>Rs.{this.state.revenueEarned || 0}</p>
                   </div>
                   </div>
                 </div>
