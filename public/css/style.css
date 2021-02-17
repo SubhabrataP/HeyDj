@@ -939,6 +939,7 @@ button:focus {
 
 .active-plan {
   border: 2px solid white;
+  transition: all 0.1s ease-in-out;
   background: black !important;
 }
 

@@ -27,11 +27,11 @@ export default function DjMetric({ id }) {
 
   return (
     <>
-      <td>{metric.totalHoursSubscribed}</td>
-      <td>{metric.revenueEarned}</td>
-      <td>{metric.revenuePaid}</td>
+      <td>{metric.totalHoursSubscribed} Hrs</td>
+      <td>Rs. {metric.revenueEarned}</td>
+      <td>Rs. {metric.revenuePaid}</td>
       <td>{metric.lastPaid}</td>
-      <td>{metric.outstandingAmount}</td>
+      <td>Rs. {metric.outstandingAmount}</td>
     </>
   );
 }

@@ -24,7 +24,7 @@ export default class Popups extends Component {
                             </div>
                             {this.props.isMultiButton === true ?
                                 <div style={{ textAlign: "center", margin: "15px 0" }}>
-                                    <button type="button" className="customBtn" onClick={()=>{this.props.button1Click()}}>
+                                    <button type="button" className="customBtn" onClick={this.props.button1Click}>
                                         {this.props.button1Text ?
                                             this.props.button1Text === "" ?
                                                 "Ok" : this.props.button1Text : "Ok"}

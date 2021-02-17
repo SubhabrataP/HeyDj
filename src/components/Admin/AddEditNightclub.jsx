@@ -82,6 +82,7 @@ export default class AddEditNightclub extends Component {
   addNightClub = (values) => {};
 
   editNightclub = (values) => {
+    console.log(values)
     let details = {
       address: values.address,
       city: values.city,

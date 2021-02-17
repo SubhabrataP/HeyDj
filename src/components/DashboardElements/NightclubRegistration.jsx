@@ -81,13 +81,19 @@ export default class Register extends React.Component {
       .post("/api/user/nightclub", formData)
       .then((response) => {
         if (response.data.status === 200) {
-          this.getTransactionDetails(response.data, values);
+          this.setState({ loading: false }, () =>
+            this.getTransactionDetails(response.data, values)
+          );
         } else {
-          return Swal.fire("", response.data.message, "info");
+          return Swal.fire("", response.data.message, "info").then(() =>
+            this.setState({ loading: false })
+          );
         }
       })
       .catch((error) => {
-        return Swal.fire("", error.message, "info");
+        return Swal.fire("", error.message, "info").then(() =>
+          this.setState({ loading: false })
+        );
       });
   };
 
@@ -169,6 +175,9 @@ export default class Register extends React.Component {
 
     let rzp = new window.Razorpay(options);
     rzp.open();
+    rzp.on("payment.failed", (response) => {
+      this.setState({ loading: false });
+    });
   };
 
   getTransactionDetails = (details, values) => {
@@ -395,6 +404,9 @@ export default class Register extends React.Component {
                                 </h2>
 
                                 <h3>{this.getHours(item)} Hrs</h3>
+                                <hr />
+                                <p>{item.description}</p>
+                                <hr />
                                 {item.categories.map((item) => {
                                   return (
                                     <p>
