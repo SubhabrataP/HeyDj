@@ -37,7 +37,7 @@ export default class Artists extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="row col-md-12 dj-play-list">
+                <div className="row2 col-md-12 dj-play-list">
                     <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Artists
