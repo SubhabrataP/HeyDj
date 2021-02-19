@@ -149,7 +149,7 @@ export default class ArtistViewProfile extends Component {
                             <div className="col-sm-12">
                                 <h4>Playlists</h4>
                             </div>
-                            <div className="row col-sm-12">
+                            <div className="row col-sm-122">
                                 {this.state.userPlaylists.map((data) => (
                                     <div className="col-md-3 m-3">
                                         <CardTemplate

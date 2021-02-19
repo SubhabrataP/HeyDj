@@ -283,6 +283,8 @@ code {
   .responsive-navigation{ display: block;}
   .w-100{ height: auto !important;}
   .product-details-modal{ width: 98%;}
+  .dj-play-list h2{ font-size: 24px;}
+  .dj-play-list h4{ font-size: 18px;}
 }
 
 
