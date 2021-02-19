@@ -16,7 +16,6 @@ export default class Header extends Component {
     return (
       <React.Fragment>
         <div className="container headerSection">
-          
           <div className="row align-items-end">
             <div className="col-md-1 p-0 logo">
               <img

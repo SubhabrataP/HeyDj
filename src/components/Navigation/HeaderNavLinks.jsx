@@ -5,25 +5,18 @@ export default class HeaderNavLink extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="responsive-menu">
-                    <nav role="navigation">
-  <div id="menuToggle">
-    
-    <input type="checkbox" />
-    
-    <span></span>
-    <span></span>
-    <span></span>
-    
-    <ul id="menu">
-    <Link to={{ pathname: localStorage.getItem("Id") ? "/User" : "/" }}
+                <div class="responsive-navigation">
+  <input class="menu-btn" type="checkbox" id="menu-btn" />
+  <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+  <ul class="menu">
+  <li><Link to={{ pathname: localStorage.getItem("Id") ? "/User" : "/" }}
                         href="#"
                         style={{
                             paddingRight: "13px",
                             textDecoration: 'none'
-                        }}><li>
-                        Home</li>
-                    </Link>
+                        }}>
+                        Home
+                    </Link></li>
                     {/* <Link to={{ pathname: localStorage.getItem("Id") ? "/userplaylist" : "/" }}
                         href="#"
                         style={{
@@ -40,26 +33,23 @@ export default class HeaderNavLink extends Component {
                         }}>
                         Subscriptions
                     </Link> */}
-                    <Link to={{ pathname: "/" }}
+                    <li><Link to={{ pathname: "/" }}
                         href="#"
                         style={{
                             textDecoration: 'none'
-                        }}><li>
-                        Download App</li>
-                    </Link>
-                    <Link to={{ pathname: "/register" }}
+                        }}>
+                        Download App
+                    </Link></li>
+                    <li><Link to={{ pathname: "/register" }}
                         href="#"
                         style={{
                             textDecoration: 'none'
-                        }}><li>
-                        Nightclub Registration</li>
-                    </Link>
-      
-    </ul>
-  </div>
-</nav>
-                    </div>
-                <div className="row">
+                        }}>
+                        Nightclub Registration
+                    </Link></li>
+  </ul>
+</div>
+                <div className="row responsive-nav1">
                     
                     <Link to={{ pathname: localStorage.getItem("Id") ? "/User" : "/" }}
                         href="#"

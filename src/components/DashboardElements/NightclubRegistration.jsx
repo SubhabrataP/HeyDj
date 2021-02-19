@@ -331,7 +331,7 @@ export default class Register extends React.Component {
                       className="invalid-feedback"
                     />
                   </div>
-                  <div className="form-group w-25">
+                  <div className="form-group w-255">
                     <label htmlFor="licenseno">License No.*</label>
                     <Field
                       type="text"
@@ -350,7 +350,7 @@ export default class Register extends React.Component {
                     />
                   </div>
 
-                  <div className="form-group w-25">
+                  <div className="form-group w-255">
                     <label htmlFor="license">License*</label>
                     <Field
                       type="file"
