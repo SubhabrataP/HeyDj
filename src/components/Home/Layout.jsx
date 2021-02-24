@@ -7,10 +7,10 @@ export default class Layout extends Component {
     render() {
         return (
         	<div id={this.props.id || ""} className={this.props.className || ""}>
-	            <div className="col-md-12" style={{ marginTop: "3%" }}>
+	            <div className="col-md-12 responsive-header" style={{ marginTop: "3%" }}>
 	                <Header history={this.props.history} />
 	            </div>
-	            <div className="col-md-12" style={{ marginTop: "3%", padding: "0" }}>
+	            <div className="col-md-12 responsive-banner" style={{ marginTop: "3%", padding: "0" }}>
 	            	<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
 					  <div class="carousel-inner">
 					    <div class="carousel-item active">

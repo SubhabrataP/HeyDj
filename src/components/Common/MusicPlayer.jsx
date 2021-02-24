@@ -5,6 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import { apiAxios } from "../APIaxios/ApiAxiosCalls";
 import * as Constants from "./Constants";
 
+import classes from './MusicPlayer.module.css';
+
 let validRoles = ["user", "nightclub", null];
 
 export default class MusicPlayer extends Component {
@@ -411,7 +413,7 @@ export default class MusicPlayer extends Component {
         <div className="container">
           <Modal show={this.props.showPlayer} className="ml-3 mr-3">
             <div
-              className="row text-center pb-2 loginBg"
+              className="row text-center pb-2 loginBg product-details-modal"
               style={{ borderBottom: "1px solid #fff" }}
             >
               <div className="col-md-12">

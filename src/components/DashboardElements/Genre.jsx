@@ -37,7 +37,7 @@ export default class Genre extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="row col-md-12 dj-play-list">
+                <div className="row2 col-md-12 dj-play-list">
                     <div className="p-3 featured-play">
                         <div className="row" style={{ paddingBottom: "10px" }}>
                             Genres
@@ -46,7 +46,7 @@ export default class Genre extends Component {
                         </div>
                         <div className="row">
                             {this.state.genreItems.slice(0,3).map((data) => (
-                                <div className="col-md-4">
+                                <div className="col-md-4 mb-3 genres-img">
                                     <CardTemplate
                                         history={this.props.history}
                                         playlistData={data}

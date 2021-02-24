@@ -17,9 +17,8 @@ export default class Header extends Component {
       <React.Fragment>
         <div className="container headerSection">
           <div className="row align-items-end">
-            <div className="col-md-1 p-0">
+            <div className="col-md-1 p-0 logo">
               <img
-                className="w-100"
                 src={process.env.PUBLIC_URL + "/images/logoWhite.png"}
                 alt="logo"
                 onClick={this.onImageClick}
@@ -37,19 +36,19 @@ export default class Header extends Component {
                 <DjHeaderNavLinks />
               </div>
             ) : localStorage.getItem("Role") === "user" ? (
-              <div className="col-md-6">
+              <div className="col-md-6 responsive-nav">
                 <UserHeaderNavLinks />
               </div>
             ) : localStorage.getItem("Role") === "nightclub" ? (
-              <div className="col-md-6">
+              <div className="col-md-6 responsive-nav">
                 <NightclubHeaderNavLinks />
               </div>
             ) : (
-              <div className="col-md-5 offset-md-1">
+              <div className="col-md-5 offset-md-1 responsive-nav">
                 <HeaderNavLink />
               </div>
             )}
-            <div className="col-md-1">
+            <div className="col-md-1 responsive-pofile">
               <UserPersona history={this.props.history} />
             </div>
           </div>
