@@ -136,6 +136,10 @@ export default class MusicPlayer extends Component {
       showAlert: false,
       alertMessage: "",
     });
+
+    if (window.location.href.indexOf("MySubscriptions") >= 0) {
+      window.location.reload();
+    }
   };
 
   onDateChange = (event) => {
@@ -161,42 +165,69 @@ export default class MusicPlayer extends Component {
     this.props.onDismiss();
   };
 
-  onPaymentSuccess = () => {
-    if (window.location.href.includes("/User/MySubscriptions")) {
-      window.location.reload();
-    } else {
-      this.setState({
-        isSubscribeClicked: false,
-        showAlert: true,
-        alertMessage: "Payment Success.",
+  onPaymentSuccess = async () => {
+    apiAxios
+      .post(
+        `/api/subscription/activate?now=${
+          this.state.subscribeLater == true ? "false" : "true"
+        }`,
+        {
+          playlistId: this.props.playlistData.id,
+          hours: this.state.selectedHours,
+          dateTime:
+            this.state.subscribeLater == true
+              ? this.state.subscriptionDateTime.concat(":00+05:30")
+              : null,
+          orderId: this.state.paymentDetails.id,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("Token"),
+          },
+        }
+      )
+      .then(() => {
+        if (window.location.href.includes("/User/MySubscriptions")) {
+          window.location.reload();
+        } else {
+          this.setState({
+            isSubscribeClicked: false,
+            showAlert: true,
+            alertMessage: "Payment Success.",
+          });
+        }
       });
-    }
   };
 
   continueToPay = () => {
     if (this.state.isPay) {
-      let options = {
-        key: Constants.PAY_KEY_ID,
-        amount: this.state.paymentDetails.amount,
-        name: this.props.playlistData.title,
-        order_id: this.state.paymentDetails.id,
-        handler: function (response) {
-          this.onPaymentSuccess();
-        }.bind(this),
-        theme: {
-          color: "#F37254",
-        },
-      };
+      // let options = {
+      //   key: Constants.PAY_KEY_ID,
+      //   amount: this.state.paymentDetails.amount,
+      //   name: this.props.playlistData.title,
+      //   order_id: this.state.paymentDetails.id,
+      //   handler: function (response) {
+      //     this.onPaymentSuccess();
+      //   }.bind(this),
+      //   theme: {
+      //     color: "#F37254",
+      //   },
+      // };
 
-      let rzp = new window.Razorpay(options);
-      rzp.open();
+      // console.log(options);
+
+      // let rzp = new window.Razorpay(options);
+      // rzp.open();
+      this.onPaymentSuccess();
     } else {
       if (this.state.subscribeLater) {
         let dateTime = this.state.subscriptionDateTime.concat(":00+05:30");
 
         apiAxios
           .put(
-            "/api/playlist/" + this.props.playlistData.id + "/subscribe?wallet=false",
+            "/api/playlist/" +
+              this.props.playlistData.id +
+              "/subscribe?wallet=false&now=false",
             {
               hours: this.state.selectedHours,
               dateTime: dateTime,
@@ -247,33 +278,66 @@ export default class MusicPlayer extends Component {
   };
 
   deductFromWallet = () => {
-    apiAxios
-      .put(
-        "/api/playlist/" +
-          this.props.playlistData.id +
-          "/subscribe?now=true&wallet=true",
-        {
-          hours: this.state.selectedHours,
-          category: this.state.djCategory.id,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem("Token"),
+    if (!this.state.subscribeLater) {
+      apiAxios
+        .put(
+          "/api/playlist/" +
+            this.props.playlistData.id +
+            "/subscribe?now=true&wallet=true",
+          {
+            hours: this.state.selectedHours,
+            category: this.state.djCategory.id,
           },
-        }
-      )
-      .then((res) => {
-        if (res.status == 200) {
-          this.setState({
-            showAlert: true,
-            alertMessage: "You have successfully subscribed to this playlist!",
-            redirect: true,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+          {
+            headers: {
+              Authorization: localStorage.getItem("Token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            this.setState({
+              showAlert: true,
+              alertMessage:
+                "You have successfully subscribed to this playlist!",
+              redirect: true,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      apiAxios
+        .put(
+          "/api/playlist/" +
+            this.props.playlistData.id +
+            "/subscribe?now=false&wallet=true",
+          {
+            dateTime: this.state.subscriptionDateTime.concat(":00+05:30"),
+            hours: this.state.selectedHours,
+            category: this.state.djCategory.id,
+          },
+          {
+            headers: {
+              Authorization: localStorage.getItem("Token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            this.setState({
+              showAlert: true,
+              alertMessage:
+                "You have successfully subscribed to this playlist!",
+              redirect: true,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   renderBuyingOptions = () => {
@@ -570,7 +634,9 @@ export default class MusicPlayer extends Component {
           button1Click={
             this.state.redirect == true
               ? () => {
-                  this.props.history.push("/nightclub/MySubscriptions");
+                  if (window.location.href.indexOf("MySubscriptions") >= 0) {
+                    window.location.reload();
+                  } else this.props.history.push("/nightclub/MySubscriptions");
                 }
               : () => {
                   this.alertOkClick();

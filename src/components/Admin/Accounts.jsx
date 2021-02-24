@@ -9,12 +9,15 @@ import * as Constants from "../Common/Constants";
 import { SelectDjModal } from "./SelectDjModal";
 import { Link } from "react-router-dom";
 import DjMetric from "./DjMetric";
+import PayoutModal from "./PayoutModal";
 
 export default class Accounts extends Component {
   constructor() {
     super();
     this.state = {
       djList: [],
+      selectedItem: null,
+      showModal: null,
     };
   }
 
@@ -45,6 +48,26 @@ export default class Accounts extends Component {
       .catch((error) => {
         console.log(error.response);
       });
+  };
+
+  getPayouts = () => {};
+
+  updatePayout = (item) => () => {
+    this.setState({
+      selectedItem: item,
+      showModal: true,
+    });
+  };
+
+  dismissModal = () => {
+    this.setState({
+      selectedItem: null,
+      showModal: false,
+    });
+  };
+
+  submitPayoutForm = (values) => {
+    console.log(values);
   };
 
   render() {
@@ -101,7 +124,9 @@ export default class Accounts extends Component {
                             <td>{item.fullName}</td>
                             <DjMetric id={item.id} />
                             <td>
-                              <Link to="">UPDATE</Link>
+                              <Link onClick={this.updatePayout(item)}>
+                                UPDATE
+                              </Link>
                             </td>
                           </tr>
                         );
@@ -112,6 +137,13 @@ export default class Accounts extends Component {
               </div>
             </div>
           </div>
+
+          <PayoutModal
+            dismissModal={this.dismissModal}
+            showModal={this.state.showModal}
+            selectedDj={this.state.selectedItem}
+            id={this.state?.selectedItem?.id}
+          />
         </Layout>
       </React.Fragment>
     );

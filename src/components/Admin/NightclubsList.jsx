@@ -250,7 +250,7 @@ export default class NightClubList extends Component {
           return;
         }
 
-        count += (element.used || 0);
+        count += element.used || 0;
       }
     });
 
@@ -378,7 +378,7 @@ export default class NightClubList extends Component {
         );
       })
       .catch((error) => {
-        formData = null
+        formData = null;
       });
   };
 
@@ -418,9 +418,16 @@ export default class NightClubList extends Component {
             </div>
             <div>
               {this.state.filteredDjList.length > this.state.itemsPerPage ? (
-                <button onClick={this.onLoadMoreClick}>Load More</button>
+                <button
+                  className="customBtn my-3"
+                  onClick={this.onLoadMoreClick}
+                >
+                  Load More
+                </button>
               ) : null}
             </div>
+            <br />
+            <br />
           </div>
           <AddEditNightclub
             showModal={this.state.showModal}

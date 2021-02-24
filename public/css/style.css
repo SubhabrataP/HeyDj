@@ -959,21 +959,101 @@ button:focus {
 }
 
 .registration-loader-container > div {
-  margin:0 auto
+  margin: 0 auto;
 }
-.nightclub-wallet .plan-name{
-  font-size:24px
+.nightclub-wallet .plan-name {
+  font-size: 24px;
 }
 
 .nightclub-wallet p {
-  font-size:20px
+  font-size: 20px;
 }
 
-.delete-category::before{
+.delete-category::before {
   color: red;
   content: "\f068";
   border: 2px solid white;
   border-radius: 50%;
   padding: 0px 2px;
   cursor: pointer;
+}
+
+.player-sidebar {
+  /* background: rgb(16,19,21); */
+  background: -moz-linear-gradient(
+    236deg,
+    rgba(16, 19, 21, 1) 0%,
+    rgba(1, 64, 205, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    236deg,
+    rgba(16, 19, 21, 1) 0%,
+    rgba(1, 64, 205, 1) 100%
+  );
+  background: linear-gradient(
+    236deg,
+    rgba(16, 19, 21, 1) 0%,
+    rgba(1, 64, 205, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#101315",endColorstr="#0140cd",GradientType=1);
+  height: 100vh;
+  width: 40vw;
+  position: fixed;
+  right: -40vw;
+  top: 0;
+  bottom: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.player-toggle-container button {
+  color: white;
+  font-size: 50px;
+  border: none;
+  padding: 0;
+  font-weight: bolder;
+  position: relative;
+  left: -34px;
+  background: #0a255d;
+  top: 20px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.player-toggle-container button:focus {
+  outline: none;
+}
+
+.no-content-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.music-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.music-controls span {
+  cursor: pointer;
+}
+
+.music-player-heading{
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+}
+
+.music-player{
+margin-top: 20%;
+}
+
+
+#my-jwplayer{
+  width:90% !important;
+  margin:0 auto
 }

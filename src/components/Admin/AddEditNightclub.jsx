@@ -92,6 +92,7 @@ export default class AddEditNightclub extends Component {
       phoneNumber: values.mobile,
       role: "nightclub",
       status: this.props.profileData.status,
+      // profileImage:this.state.previewImage
     };
 
     let formData = new FormData();
@@ -99,7 +100,7 @@ export default class AddEditNightclub extends Component {
     formData.append("profileImage", this.state.profile_picture.value);
 
     let url =
-      this.state.userRole == "Admin"
+      this.state.userRole.toLowerCase() == "admin"
         ? `/api/admin/user/nightclub/${this.props.profileData.id}`
         : `/api/user/nightclub/${this.props.profileData.id}`;
     apiAxios
@@ -214,7 +215,7 @@ export default class AddEditNightclub extends Component {
             value: file,
             name: file.name,
           },
-          previewImage: reader.result,
+          previewImage:reader.result
         });
       }.bind(this);
     }
